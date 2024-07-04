@@ -15,11 +15,13 @@ profilRouter.route('/authentication')
 // Check with the JWT, the id from session and check password from DB. If correct change new password in DB (use middleware to check user)
   .patch(profilController.update);
 
+  // To handle favorites of the user
 profilRouter.route('/favorite')
   .get(profilController.index)
   .post(profilController.store)
   .delete(profilController.destroy);
 
+  // To handle favorites of the user
 profilRouter.route('/activity')
   .get(profilController.index)
   .post(profilController.store)
