@@ -3,8 +3,9 @@ import { Router } from "express";
 
 // EXTERNAL MODULES
 import Controller from "../controllers/index.controller.js";
+import SigninController from "../controllers/signin.controller.js";
 
-// TODO : Implement SigninController because he has its own class because it has additional methods. He extends the Controller class (Singleton)
+// SigninController has its own class because it has additional methods. He extends the Controller class (Singleton)
 const signinController = new SigninController({datamapper: 'to do'})
 
 const signinRouter = Router();
