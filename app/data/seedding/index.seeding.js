@@ -11,10 +11,13 @@ const API_DEP_URL = 'https://geo.api.gouv.fr/departements';
 
 // 1- Insert all countries into DB
 insertCountries(client,countries)
+console.log('countries inserted');
 
 // 2- Insert all departments into DB
 const allDepartmentsFromAPI = fetchDepartments(API_DEP_URL);
-insertDepartments(client, allDepartmentsFromAPI)
+insertDepartments(client, allDepartmentsFromAPI);
+console.log('departments inserted');
+
 
 // 3- Insert all cities from one department into DB
 const country = getCountryFromDB('france');
@@ -23,6 +26,7 @@ allDepartments.forEach(department => {
   const citiesFromDepartment = fetchCitiesFromDepartement(department.code);
   insertCities(client, country, department, citiesFromDepartment)
 });
-  
+console.log('cities inserted');
+
 
 // 4- Insert activities
