@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // EXTERNAL MODULES
-import activityRouter from "./activity.router";
+import activityRouter from "./activity.router.js";
 
 
 
