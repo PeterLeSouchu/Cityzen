@@ -1,9 +1,11 @@
 // TIERCE MODULES
 import { Router } from "express";
+import CoreController from "../controllers/core.controller.js";
 
 // EXTERNAL MODULES
-import activityController from "../controllers/activity.controller.js";
+// import activityController from "../controllers/activity.controller.js";
 
+const activityController = new CoreController()
 
 const activityRouter = Router();
 
