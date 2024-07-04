@@ -1,6 +1,9 @@
 // TIERCE MODULES
 import express from 'express';
 
+// EXTERNAL MODULES
+import router from './routers/index.router.js';
+
 
 
 const app = express();

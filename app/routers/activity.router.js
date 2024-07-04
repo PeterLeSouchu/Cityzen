@@ -1,10 +1,11 @@
 // TIERCE MODULES
 import { Router } from "express";
 
+// EXTERNAL MODULES
+import activityController from "../controllers/activity.controller.js";
+
 
 const activityRouter = Router();
-
-// TODO: Code activityController module
 
 activityRouter.route('/')
   .post(activityController.store);
