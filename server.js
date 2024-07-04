@@ -5,7 +5,7 @@ import 'dotenv/config';
 import { createServer } from 'node:http';
 
 // EXTERNAL MODULES
-import app from './app/app';
+import app from './app/app.js';
 
 
 const server = createServer(app);

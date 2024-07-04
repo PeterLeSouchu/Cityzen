@@ -1,0 +1,42 @@
+# @url = http://localhost:{{$dotenv PORT}}
+@url = http://localhost:3000
+@mainEndpoint = activity
+
+### POST /activity
+POST {{url}}/{{mainEndpoint}}
+Content-Type: application/json
+
+{
+  "title": "parc rouge",
+  "url": "parc-rouge",
+  "description": "il s’agit du parc rouge blabla",
+  "avg_rate": 4.8,
+  "image": "https://image.com",
+  "address": "rue du JS ",
+  "phone": "0785475126",
+  "longitude": 4.25154789,
+  "latitude": 45.14789315,
+  "city": "paris"
+}
+
+### PATCH /activity/:id
+PATCH {{url}}/{{mainEndpoint}}/{{$randomInt 1 12}}
+Content-Type: application/json
+
+{
+  "description": "il s’agit d'une modif"
+}
+
+### DELETE /activity/:id
+DELETE {{url}}/{{mainEndpoint}}/{{$randomInt 1 12}}
+
+### GET /activity/rating
+GET {{url}}/{{mainEndpoint}}/rating
+
+### GET /activity/recent
+GET {{url}}/{{mainEndpoint}}/recent
+
+### GET /country/city
+@country = France
+@city = Aulnay-sous-bois
+GET {{url}}/{{mainEndpoint}}/{{country}}/{{city}}
