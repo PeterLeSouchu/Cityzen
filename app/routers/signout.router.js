@@ -8,7 +8,7 @@ const signoutController = new signoutController();
 const signoutRouter = Router();
 
 signoutRouter.route('/')
-  // For check user identity with his email and password
-  .post(signoutController.store);
+  // For disconnect the user and remove the session and destroy the JWT
+  .post(signoutController.disconnect);
   
 export default signoutRouter;
