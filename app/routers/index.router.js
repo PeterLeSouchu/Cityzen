@@ -7,6 +7,7 @@ import signinRouter from "./signin.router.js";
 import signoutRouter from "./signout.router.js";
 import unsubscribeRouter from "./unsubscribe.router.js";
 import profilRouter from "./profil.router.js";
+import forgotPasswordRouter from "./forgot-password.router.js";
 
 
 
@@ -17,6 +18,8 @@ router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use('/unsubscribe', unsubscribeRouter);
 router.use('/profil', profilRouter);
+router.use('/forgot-password', forgotPasswordRouter);
+
 
 
 // TODO : Handler error middleware here 👇
