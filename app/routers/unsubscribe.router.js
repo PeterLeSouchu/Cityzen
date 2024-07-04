@@ -8,7 +8,11 @@ const unsubscribeController = new unsubscribeController({datamapper: 'to do'});
 const unsubscribeRouter = Router();
 
 unsubscribeRouter.route('/')
-  // F  or remove the user in the DB
-  .post(unsubscribeController.deleteUser);
+// To send OTP code (OTP stocked in the session)
+.post(unsubscribeController.sendOTP);
+
+unsubscribeRouter.route('/confirmation')
+// For check the user and remove the user in the DB if the code is correct
+  .post(unsubscribeController.checkUser);
   
 export default unsubscribeRouter;
