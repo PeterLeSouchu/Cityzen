@@ -1,0 +1,178 @@
+{
+  "activities": [
+    {
+      "slug": "la-vieille-tour-plérin",
+      "url": "https://www.yelp.com/biz/la-vieille-tour-pl%C3%A9rin?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "La Vieille Tour",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/-tyR5c_paNYpw5TDn7iydw/o.jpg",
+      "address": "75 rue de la Tour",
+      "phone": "+33296331030",
+      "latitude": 48.5307786172477,
+      "longitude": -2.7262376342449
+    },
+    {
+      "slug": "le-vivier-erquy",
+      "url": "https://www.yelp.com/biz/le-vivier-erquy?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Vivier",
+      "urlImage": "https://s3-media4.fl.yelpcdn.com/bphoto/GL38-y3nymuYKF3Q_c7RKA/o.jpg",
+      "address": "64 rue du Port",
+      "phone": "+33296723424",
+      "latitude": 48.6363367,
+      "longitude": -2.4717452
+    },
+    {
+      "slug": "char-à-bancs-plélo",
+      "url": "https://www.yelp.com/biz/char-%C3%A0-bancs-pl%C3%A9lo?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Char à Bancs",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/pS3wCFEpYhC9-18XHfRKQw/o.jpg",
+      "address": "Moulin de la Ville Geffroy",
+      "phone": "+33296741363",
+      "latitude": 48.557252,
+      "longitude": -2.961945
+    },
+    {
+      "slug": "le-chantier-saint-philibert-2",
+      "url": "https://www.yelp.com/biz/le-chantier-saint-philibert-2?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Chantier",
+      "urlImage": "https://s3-media4.fl.yelpcdn.com/bphoto/znsRD8zidNOn5OsjxD952w/o.jpg",
+      "address": "13 Chemin Du Pasteur",
+      "phone": "+33297551742",
+      "latitude": 47.58573,
+      "longitude": -3.00497
+    },
+    {
+      "slug": "l-air-du-temps-st-brieuc",
+      "url": "https://www.yelp.com/biz/l-air-du-temps-st-brieuc?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "L'Air du Temps",
+      "urlImage": "https://s3-media4.fl.yelpcdn.com/bphoto/4SFzOAyeASdGFfD2FWRywg/o.jpg",
+      "address": "4 rue Gouët",
+      "phone": "+33296685840",
+      "latitude": 48.5152502,
+      "longitude": -2.7630325
+    },
+    {
+      "slug": "la-table-de-jeanne-vannes",
+      "url": "https://www.yelp.com/biz/la-table-de-jeanne-vannes?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "La Table de Jeanne",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/5liPHji51OJA64ibN-tY3Q/o.jpg",
+      "address": "13 place de la Poissonnerie",
+      "phone": "+33297473491",
+      "latitude": 47.654961,
+      "longitude": -2.758633
+    },
+    {
+      "slug": "crêperie-ty-billig-quimperlé-3",
+      "url": "https://www.yelp.com/biz/cr%C3%AAperie-ty-billig-quimperl%C3%A9-3?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Crêperie Ty Billig",
+      "urlImage": "https://s3-media3.fl.yelpcdn.com/bphoto/1pJ2kdNuEAwYw2AFG-y99A/o.jpg",
+      "address": "2 place Saint-Michel",
+      "phone": "+33298964091",
+      "latitude": 47.87087,
+      "longitude": -3.5488
+    },
+    {
+      "slug": "la-proue-st-brieuc",
+      "url": "https://www.yelp.com/biz/la-proue-st-brieuc?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "La Proue",
+      "urlImage": "https://s3-media4.fl.yelpcdn.com/bphoto/Qm75yOKpBAwbgFMbTBjVMA/o.jpg",
+      "address": "7 rue Fardel",
+      "phone": "+33296611757",
+      "latitude": 48.51467,
+      "longitude": -2.76428
+    },
+    {
+      "slug": "le-jardin-gourmand-nathalie-et-arnaud-beauvais-lorient",
+      "url": "https://www.yelp.com/biz/le-jardin-gourmand-nathalie-et-arnaud-beauvais-lorient?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Jardin Gourmand Nathalie & Arnaud Beauvais",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/kmxJ_CHYLSDMTp112QvGUQ/o.jpg",
+      "address": "46 Rue Jules Simon",
+      "phone": "+33297641724",
+      "latitude": 47.7575,
+      "longitude": -3.36705
+    },
+    {
+      "slug": "amphitryon-lorient",
+      "url": "https://www.yelp.com/biz/amphitryon-lorient?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Amphitryon",
+      "urlImage": "",
+      "address": "127 rue Colonel Jean Muller",
+      "phone": "+33297833404",
+      "latitude": 47.7656286621849,
+      "longitude": -3.39974467406798
+    }
+  ],
+  "city": [
+    {
+      "name": "Plérin",
+      "zipCode": "22190"
+    },
+    {
+      "name": "Erquy",
+      "zipCode": "22430"
+    },
+    {
+      "name": "Plélo",
+      "zipCode": "22170"
+    },
+    {
+      "name": "Saint Philibert",
+      "zipCode": "56470"
+    },
+    {
+      "name": "St Brieuc",
+      "zipCode": "22000"
+    },
+    {
+      "name": "Vannes",
+      "zipCode": "56000"
+    },
+    {
+      "name": "Quimperlé",
+      "zipCode": "29300"
+    },
+    {
+      "name": "St Brieuc",
+      "zipCode": "22000"
+    },
+    {
+      "name": "Lorient",
+      "zipCode": "56100"
+    },
+    {
+      "name": "Lorient",
+      "zipCode": "56100"
+    }
+  ],
+  "department": [
+    {
+      "departmentCode": "22"
+    },
+    {
+      "departmentCode": "22"
+    },
+    {
+      "departmentCode": "22"
+    },
+    {
+      "departmentCode": "56"
+    },
+    {
+      "departmentCode": "22"
+    },
+    {
+      "departmentCode": "56"
+    },
+    {
+      "departmentCode": "29"
+    },
+    {
+      "departmentCode": "22"
+    },
+    {
+      "departmentCode": "56"
+    },
+    {
+      "departmentCode": "56"
+    }
+  ]
+}

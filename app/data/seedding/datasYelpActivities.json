@@ -1,0 +1,178 @@
+{
+  "activities": [
+    {
+      "slug": "fuxia-saint-germain-en-laye-2",
+      "url": "https://www.yelp.com/biz/fuxia-saint-germain-en-laye-2?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Fuxia",
+      "urlImage": "https://s3-media4.fl.yelpcdn.com/bphoto/PE6In4HA440gK89V_uxUPA/o.jpg",
+      "address": "22 Rue André Bonnenfant",
+      "phone": "+33139731493",
+      "latitude": 48.895568,
+      "longitude": 2.09109
+    },
+    {
+      "slug": "le-phare-saint-louis-st-germain-en-laye-2",
+      "url": "https://www.yelp.com/biz/le-phare-saint-louis-st-germain-en-laye-2?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Phare Saint Louis",
+      "urlImage": "https://s3-media3.fl.yelpcdn.com/bphoto/vCkU3BxJyL8zFIrdsXkerQ/o.jpg",
+      "address": "10 Rue André Bonnenfant",
+      "phone": "+33134516543",
+      "latitude": 48.8959789,
+      "longitude": 2.0914866
+    },
+    {
+      "slug": "japan-sakura-montesson",
+      "url": "https://www.yelp.com/biz/japan-sakura-montesson?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Japan Sakura",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/M3CxtuVrCS1ybclRopD0Pg/o.jpg",
+      "address": "21 avenue Gabriel Péri",
+      "phone": "+33139528528",
+      "latitude": 48.906866,
+      "longitude": 2.115823
+    },
+    {
+      "slug": "le-tastevin-maisons-laffitte",
+      "url": "https://www.yelp.com/biz/le-tastevin-maisons-laffitte?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Tastevin",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/Yy7pZ5NDB4eOaxdAyI2LUw/o.jpg",
+      "address": "9 avenue Eglé",
+      "phone": "+33139621167",
+      "latitude": 48.948318,
+      "longitude": 2.149162
+    },
+    {
+      "slug": "musée-d-archéologie-nationale-saint-germain-en-laye-2",
+      "url": "https://www.yelp.com/biz/mus%C3%A9e-d-arch%C3%A9ologie-nationale-saint-germain-en-laye-2?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Musée d'Archéologie Nationale",
+      "urlImage": "https://s3-media3.fl.yelpcdn.com/bphoto/AGazaufNPCGnL7vl3tbAZg/o.jpg",
+      "address": "Château Charles de Gaulle",
+      "phone": "+33139101300",
+      "latitude": 48.8977771,
+      "longitude": 2.0954363
+    },
+    {
+      "slug": "le-réfectoire-foodtruck-paris-3",
+      "url": "https://www.yelp.com/biz/le-r%C3%A9fectoire-foodtruck-paris-3?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Le Réfectoire - Foodtruck",
+      "urlImage": "https://s3-media1.fl.yelpcdn.com/bphoto/9zZ7TIA9xFSDelvFlZSUrQ/o.jpg",
+      "address": "",
+      "phone": "+33980512166",
+      "latitude": 48.8569297790527,
+      "longitude": 2.34120011329651
+    },
+    {
+      "slug": "the-bitter-end-st-germain-en-laye",
+      "url": "https://www.yelp.com/biz/the-bitter-end-st-germain-en-laye?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "The Bitter End",
+      "urlImage": "https://s3-media3.fl.yelpcdn.com/bphoto/QvgUXnTvn2Oix8HZmMNMPA/o.jpg",
+      "address": "20 Rue St Pierre",
+      "phone": "+33134519009",
+      "latitude": 48.8952879,
+      "longitude": 2.0923102
+    },
+    {
+      "slug": "fattucio-chatou",
+      "url": "https://www.yelp.com/biz/fattucio-chatou?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Fattucio",
+      "urlImage": "https://s3-media1.fl.yelpcdn.com/bphoto/ZqK40oGCqqLIDLbV9l0iww/o.jpg",
+      "address": "37 rue Auguste Renoir",
+      "phone": "+33130531616",
+      "latitude": 48.9028879,
+      "longitude": 2.1579997
+    },
+    {
+      "slug": "crêperie-larcher-saint-germain-en-laye-2",
+      "url": "https://www.yelp.com/biz/cr%C3%AAperie-larcher-saint-germain-en-laye-2?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "Crêperie Larcher",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/Fno5Izl6K6JqSSF-VncNuA/o.jpg",
+      "address": "9 rue St Pierre",
+      "phone": "+33130615125",
+      "latitude": 48.89528,
+      "longitude": 2.09248
+    },
+    {
+      "slug": "el-sol-azteca-saint-germain-en-laye",
+      "url": "https://www.yelp.com/biz/el-sol-azteca-saint-germain-en-laye?adjust_creative=dZzivn8vfgDHuwY0IfOBjg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=dZzivn8vfgDHuwY0IfOBjg",
+      "description": "El Sol Azteca",
+      "urlImage": "https://s3-media2.fl.yelpcdn.com/bphoto/Hlcr1i4oovJnAGdrUeFZhQ/o.jpg",
+      "address": "4 rue Saint-Pierre",
+      "phone": "+33134516670",
+      "latitude": 48.8954697,
+      "longitude": 2.09268
+    }
+  ],
+  "city": [
+    {
+      "name": "Saint-Germain-En-Laye",
+      "zipCode": "78100"
+    },
+    {
+      "name": "St Germain en Laye",
+      "zipCode": "78100"
+    },
+    {
+      "name": "Montesson",
+      "zipCode": "78360"
+    },
+    {
+      "name": "Maisons-Laffitte",
+      "zipCode": "78600"
+    },
+    {
+      "name": "Saint-Germain-en-Laye",
+      "zipCode": "78100"
+    },
+    {
+      "name": "Paris",
+      "zipCode": "75000"
+    },
+    {
+      "name": "St Germain en Laye",
+      "zipCode": "78100"
+    },
+    {
+      "name": "Chatou",
+      "zipCode": "78400"
+    },
+    {
+      "name": "Saint Germain en Laye",
+      "zipCode": "78100"
+    },
+    {
+      "name": "Saint-Germain-en-Laye",
+      "zipCode": "78100"
+    }
+  ],
+  "department": [
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "75"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    },
+    {
+      "departmentCode": "78"
+    }
+  ]
+}
