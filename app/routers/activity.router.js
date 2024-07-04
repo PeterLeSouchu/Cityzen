@@ -1,9 +1,8 @@
 // TIERCE MODULES
 import { Router } from "express";
-import Controller from "../controllers/index.controller.js";
 
 // EXTERNAL MODULES
-// import activityController from "../controllers/activity.controller.js";
+import Controller from "../controllers/index.controller.js";
 
 // TODO : The core datamapper
 const activityController = new Controller({datamapper: 'to do'})
