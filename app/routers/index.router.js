@@ -12,7 +12,8 @@ const router = Router();
 
 router.use('/activity', activityRouter);
 router.use('/favorite', favoriteRouter);
-router.use('/signin', signinRouter)
+router.use('/signin', signinRouter);
+router.use('/signout', signoutRouter);
 
 // TODO : Handler error middleware here 👇
 
