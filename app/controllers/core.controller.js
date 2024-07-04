@@ -48,21 +48,18 @@ class CoreController {
     // TODO : The core datamapper
     // const data = await this.datamapper.create(requestData);
 
+    // ! Simulated data
+    const data = {
+      id: 13,
+      ...requestData,
+      city_id: 78
+    }
+
+    delete data.city;
+
     res.status(201).json({data: 
       [
-        {
-          id: 13,
-          title: 'parc bleu', 
-          url: 'parc-bleu',
-          description: 'il s’agit du parc bleu blabla',
-          avg_rate: 4.8,
-          image: 'https://image.com',
-          address: 'rue du JS ',
-          phone: '0785475126',
-          longitude: 4.25154789,
-          latitude: 45.14789315,
-          city_id: 78
-        },
+        data
       ]
     });
 
