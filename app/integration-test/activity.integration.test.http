@@ -27,10 +27,8 @@ Content-Type: application/json
   "description": "il s’agit d'une modif"
 }
 
-
 ### DELETE /activity/:id
-
-
+DELETE {{url}}/{{mainEndpoint}}/{{$randomInt 1 12}}
 
 ### GET /activity/rating
 GET {{url}}/{{mainEndpoint}}/rating
@@ -42,13 +40,3 @@ GET {{url}}/{{mainEndpoint}}/recent
 @country = France
 @city = Aulnay-sous-bois
 GET {{url}}/{{mainEndpoint}}/{{country}}/{{city}}
-
-
-###
-
-
-
-activityRouter.route('/:id')
-  .patch(activityController.update)
-  .delete(activityController.destroy);
-
