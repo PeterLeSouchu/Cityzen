@@ -7,6 +7,7 @@ import favoriteRouter from "./favorite.router.js";
 import signinRouter from "./signin.router.js";
 import signoutRouter from "./signout.router.js";
 import unsubscribeRouter from "./unsubscribe.router.js";
+import profilRouter from "./profil.router.js";
 
 
 
@@ -17,6 +18,7 @@ router.use('/favorite', favoriteRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use('/unsubscribe', unsubscribeRouter);
+router.use('/profil', profilRouter);
 
 
 // TODO : Handler error middleware here 👇
