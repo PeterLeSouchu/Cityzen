@@ -10,11 +10,7 @@ const activityController = new Controller({datamapper: 'to do'})
 const activityRouter = Router();
 
 activityRouter.route('/')
-  .post(activityController.store);
-
-activityRouter.route('/:id')
-  .patch(activityController.update)
-  .delete(activityController.destroy);
+  // .post(activityController.store);
 
 activityRouter.route('/:country/:city')
   .get(activityController.index);
