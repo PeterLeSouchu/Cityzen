@@ -1,5 +1,7 @@
 // TIERCE MODULES
+import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
@@ -25,6 +27,17 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+app.use(session({
+  secret: process.env.SESSION_PASSWORD,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    maxAge: 60*60*24,
+    sameSite: 'lax',
+  }
+}));
 
 // Parser
 app.use(express.json());

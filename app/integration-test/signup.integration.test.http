@@ -2,11 +2,19 @@
 # @url = http://localhost:3000
 @mainEndpoint = signup
 
-### POST /activity
+### POST /signup
 POST {{url}}/{{mainEndpoint}}
 Content-Type: application/json
 
 {
   "email": "cityzen@cityzen.fr",
   "password": "cityzenD     6 "
+}
+
+### POST /signup
+POST {{url}}/{{mainEndpoint}}/confirmation
+Content-Type: application/json
+
+{
+  "OTP": "EuyxBl"
 }

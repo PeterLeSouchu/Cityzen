@@ -1,13 +1,19 @@
 import "dotenv/config";
+import bcrypt from 'bcrypt';
 import otpGenerator from "otp-generator";
 import nodemailer from "nodemailer";
 
 const signupController = {
 
   sendOTP(req, res) {
+    const { email, password } = req.body;
     const OTP = otpGenerator.generate(6);
-    console.log(req.body);
-    console.log(OTP);
+
+    req.session.signupDatas = {
+      email,
+      password,
+      OTP,
+    }
 
     // Make the transporter
     const transporter = nodemailer.createTransport({
@@ -43,13 +49,30 @@ const signupController = {
     }
 
     sendMail(transporter, htmlCode);
+
+    res.status(200).json({info: 'OTP sented'});
   },
 
-  checkUserByOTP(req, res) {
+  async checkUserByOTP(req, res) {
+    if(!req.session?.signupDatas) {
+      res.status(404).json({error: 'Bad Request'})
+    }
 
-    
+    const { email, password, OTP } = req.session.signupDatas;
+    const sendedOTP = req.body.OTP;
 
-    console.log('check by OTP code')
+    if(OTP !== sendedOTP) {
+      res.status(400).json({error: 'The OTP does not match'});
+    }
+
+    const SALT_ROUNDS = 10;
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const hash = await bcrypt.hash(password, salt);
+
+    // const createdUser = await userDatamapper.store(email, hash);
+    const createdUser = [{id: 2, email, hash}];
+
+    res.status(200).json({data: createdUser});
   }
 }
 
