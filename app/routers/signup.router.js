@@ -11,6 +11,8 @@ const signupRouter = Router();
 signupRouter.route('/')
   // For check user identity with his email and password
   .post(validationSchema(signupAuthenticationSchema), signupController.sendOTP)
+
+signupRouter.route('/confirmation')
   .post(signupController.checkUserByOTP);
   
 export default signupRouter;
