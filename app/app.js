@@ -31,9 +31,11 @@ app.use(session({
   secret: process.env.SESSION_PASSWORD,
   resave: false,
   saveUninitialized: true,
-  httpOnly: true,
-  maxAge: 60*60*24,
-  sameSite: 'lax',
+  cookie: {
+    httpOnly: true,
+    maxAge: 60*60*24,
+    sameSite: 'lax',
+  }
 }));
 
 // Parser
