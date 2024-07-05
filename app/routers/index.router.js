@@ -8,12 +8,14 @@ import signoutRouter from "./signout.router.js";
 import unsubscribeRouter from "./unsubscribe.router.js";
 import profilRouter from "./profil.router.js";
 import forgotPasswordRouter from "./forgot-password.router.js";
+import signupRouter from "./signup.router.js";
 
 
 
 const router = Router();
 
 router.use('/activity', activityRouter);
+router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use('/unsubscribe', unsubscribeRouter);
