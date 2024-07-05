@@ -1,0 +1,12 @@
+@url = http://localhost:{{$dotenv PORT}}
+# @url = http://localhost:3000
+@mainEndpoint = signup
+
+### POST /activity
+POST {{url}}/{{mainEndpoint}}
+Content-Type: application/json
+
+{
+  "email": "cityzen@cityzen.fr",
+  "password": "cityzen"
+}

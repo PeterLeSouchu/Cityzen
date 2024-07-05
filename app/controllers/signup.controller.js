@@ -1,8 +1,8 @@
 
 const signupController = {
 
-  sendOTP() {
-
+  sendOTP(req, res) {
+    console.log(req.body);
   },
 
   checkUserByOTP(req, res) {
