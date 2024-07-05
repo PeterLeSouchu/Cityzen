@@ -50,7 +50,7 @@ CREATE TABLE "city" (
 
 CREATE TABLE "zip_code" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "zip_code" TEXT NOT NULL UNIQUE,
+  "zip_code" TEXT NOT NULL,
   "id_city" INT NOT NULL REFERENCES "city" ("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
