@@ -2,10 +2,12 @@
 
 
 
-const SigninController = {
+const signinController = {
 
   checkUser(req, res) {
     const { email, password } = req.body;
+
+
 
     console.log(email, password)
   }
@@ -23,4 +25,4 @@ const SigninController = {
 //   }
 // }
 
-export default SigninController;
+export default signinController;
