@@ -3,18 +3,17 @@ import pg from 'pg';
 const { Pool } = pg;
 
 const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'cityzen',
+  user: process.env.PG_USER || 'postgres',
+  password: process.env.PG_PASSWORD || '',
+  host: process.env.PG_HOST || 'localhost',
+  port: process.env.PG_PORT || 5432,
+  database: process.env.PG_DB_NAME || 'cityzen',
 });
 
-
+let client = null;
 try {
-  const client = await pool.connect();
+  client = await pool.connect();
   console.log('Connected to the database');
-  return client;
 } catch (err) {
   console.error('Connection error', err.stack);
   throw err;

@@ -4,22 +4,10 @@
  * @param {*} url 
  * @returns 
  */
-function fetchDepartments(url) {
-  const departments = fetch(url)
+async function fetchDepartments(url) {
+  const departments =  await fetch(url)
     .then(response => response.json())
-    .then(data => {
-      console.log(data)
-  
-      /* Exemple from data :
-        [
-          { nom: 'Ain', code: '01', codeRegion: '84' },
-          { nom: 'Aisne', code: '02', codeRegion: '32' },
-          { nom: 'Allier', code: '03', codeRegion: '84' },
-        ]
-      */ 
-      
-      return data;
-    })
+    .then(data => data)
     .catch(err => console.error(err));
 
   return departments;
@@ -33,32 +21,19 @@ function fetchDepartments(url) {
  */
 async function insertDepartments(client, departments) {
   try {
-    const data = await client.query(`SELECT * FROM "country" WHERE "name" = 'france'`);
-    const country = data.rows;
+    const data = await client.query(`SELECT * FROM "country" WHERE "name" = 'France';`);
+    const country = data.rows[0];
     
-    let countryId = country.id;
-
     for (const department of departments) {
-      const name = department.name; 
-      const code = department.code;
-     
       
       const query = {
-        text: `BEGIN;
-        INSERT INTO department( code, name, id_country) VALUES($1, $2, $3);
-        COMMIT;`,
-        values: [name, code, countryId], 
+        text: `INSERT INTO "department"("code", "name", "id_country") VALUES($1, $2, $3);`,
+        values: [department.code, department.nom, country.id], 
       };
 
       const result = await client.query(query);
 
-      return result;
-      // if (idcountry === null) {
-      //   console.log("error: France not found in country list");
-      // } else {
-      //   console.log(idcountry);
-      //   await client.query(query);
-      // }
+      console.log(`Department inserted: ${department.code}`);
     }
 
   } catch (err) {

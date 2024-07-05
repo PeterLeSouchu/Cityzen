@@ -1,3 +1,4 @@
+import { insertZipCode } from "./zipcode.seeding.js";
 
 /**
  * 
@@ -6,10 +7,14 @@
  */
 async function fetchCitiesFromDepartement(departmentCode) {
   const API_CITY_URL = `https://geo.api.gouv.fr/departements/${departmentCode}/communes`;
-  const citiesFromDepartment = fetch(API_CITY_URL)
+  console.log('departmentCode', departmentCode);
+  const citiesFromDepartment = await fetch(API_CITY_URL)
     .then(response => response.json())
-    .then(data)
-  .catch(err => console.log(err));
+    .then(data => {
+      console.log(data.length,'est envoyé');
+     return data;
+    })
+  .catch(err => console.log('Erreur dans le fetch cities', err));
   /*
  [
     {
@@ -51,20 +56,19 @@ async function fetchCitiesFromDepartement(departmentCode) {
  */
 async function insertCities(client, country, department, citiesFromDepartment) {
   try {
-    for (const city of citiesFromDepartment) {
-      const zipCodeArray = city.codesPostaux;
+      console.log('departement.code', department.code)
+      for (const city of citiesFromDepartment) {
+        const query = {
+          text: `INSERT INTO "city"("name", "id_department", "id_country") VALUES($1, $2, $3) RETURNING *;`,
+          values: [city.nom, department.id, country.id], 
+        };
+      
+        const returningQuery = await client.query(query);
+        const insertedCity = returningQuery.rows[0]
+        console.log('insertedCity effectué');
 
-      const query = {
-        text: `BEGIN;
-        INSERT INTO "city"("name", "id_department", "id_country") VALUES($1, $2, $3);
-        COMMIT;`,
-        values: [city.nom, department.id, country.id], 
-      };
-    
-      const insertedCity = await client.query(query);
-
-      const insertedZipCode = insertZipCode(insertedCity); 
-    }
+        const insertedZipCode = await insertZipCode(client, city, insertedCity.id); 
+      }
 
   } catch (err) {
     console.error('Error inserting cities:',err);
