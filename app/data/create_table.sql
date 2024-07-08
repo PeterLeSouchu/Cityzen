@@ -76,12 +76,7 @@ CREATE TABLE "activity" (
 );
 CREATE TABLE "rating" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-<<<<<<< HEAD
-  "raiting" INT NOT NULL,
-  "raiting" INT NOT NULL,
-=======
   "rating" INT NOT NULL,
->>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
