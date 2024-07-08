@@ -17,5 +17,5 @@ POST {{url}}/{{mainEndpoint}}/confirmation
 Content-Type: application/json
 
 {
-  "OTP": "8TET3s"
+  "OTP": "#8qfZn"
 }
