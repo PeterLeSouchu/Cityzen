@@ -1,7 +1,12 @@
+// TIERCE MODULES
 import "dotenv/config";
 import bcrypt from 'bcrypt';
 import otpGenerator from "otp-generator";
 import nodemailer from "nodemailer";
+
+// EXTERNAL MODULES
+import userDatamapper from "../models/user.datamapper.js";
+
 
 const signupController = {
 
@@ -49,6 +54,7 @@ const signupController = {
 
       } catch (err) {
         console.log('Send message error:', err);
+        res.status(500).json({error: err})
       }
     }
 
@@ -73,8 +79,8 @@ const signupController = {
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hash = await bcrypt.hash(password, salt);
 
-    // const createdUser = await userDatamapper.store(email, hash);
-    const createdUser = [{id: 2, email, hash}];
+    const createdUser = await userDatamapper.store(email, hash);
+    // const createdUser = [{id: 2, email, hash}];
 
     res.status(200).json({data: createdUser});
   }
