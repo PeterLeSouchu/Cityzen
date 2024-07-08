@@ -1,10 +1,10 @@
 
 BEGIN;
 
-DROP TABLE IF EXISTS "raiting_activity" CASCADE;
-DROP TABLE IF EXISTS "user_raiting" CASCADE;
+DROP TABLE IF EXISTS "rating_activity" CASCADE;
+DROP TABLE IF EXISTS "user_rating" CASCADE;
 DROP TABLE IF EXISTS "favorite_activity" CASCADE;
-DROP TABLE IF EXISTS "raiting" CASCADE;
+DROP TABLE IF EXISTS "rating" CASCADE;
 DROP TABLE IF EXISTS "activity" CASCADE;
 DROP TABLE IF EXISTS "zip_code" CASCADE;
 DROP TABLE IF EXISTS "city" CASCADE;
@@ -66,7 +66,7 @@ CREATE TABLE "activity" (
   "url_image" TEXT NOT NULL,
   "address" TEXT NOT NULL,
   "phone" TEXT,
-  "avg_raiting" INT,
+  "avg_rating" INT,
   "latitude" NUMERIC NOT NULL,
   "longitude" NUMERIC NOT NULL,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
@@ -74,10 +74,14 @@ CREATE TABLE "activity" (
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
-CREATE TABLE "raiting" (
+CREATE TABLE "rating" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+<<<<<<< HEAD
   "raiting" INT NOT NULL,
   "raiting" INT NOT NULL,
+=======
+  "rating" INT NOT NULL,
+>>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
@@ -92,20 +96,28 @@ CREATE TABLE "favorite_activity" (
   "updated_at" TIMESTAMPTZ,
   UNIQUE (id_user, id_activity)
 );
-CREATE TABLE "user_raiting" (
+CREATE TABLE "user_rating" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
+<<<<<<< HEAD
   "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
   "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
+=======
+  "id_rating" INT NOT NULL REFERENCES "rating" ("id"),
+>>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
 
-CREATE TABLE "raiting_activity" (
+CREATE TABLE "rating_activity" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_activity" INT NOT NULL REFERENCES "activity" ("id"),
+<<<<<<< HEAD
   "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
   "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
+=======
+  "id_rating" INT NOT NULL REFERENCES "rating" ("id"),
+>>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
@@ -116,9 +128,9 @@ ALTER SEQUENCE "department_id_seq" RESTART WITH 1;
 ALTER SEQUENCE "city_id_seq" RESTART WITH 1;
 ALTER SEQUENCE "zip_code_id_seq" RESTART WITH 1;
 ALTER SEQUENCE "activity_id_seq" RESTART WITH 1;
-ALTER SEQUENCE "raiting_id_seq" RESTART WITH 1;
-ALTER SEQUENCE "user_raiting_id_seq" RESTART WITH 1;
-ALTER SEQUENCE "raiting_activity_id_seq" RESTART WITH 1;
+ALTER SEQUENCE "rating_id_seq" RESTART WITH 1;
+ALTER SEQUENCE "user_rating_id_seq" RESTART WITH 1;
+ALTER SEQUENCE "rating_activity_id_seq" RESTART WITH 1;
 
 
 COMMIT;
