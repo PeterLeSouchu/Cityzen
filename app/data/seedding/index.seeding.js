@@ -41,13 +41,22 @@ async function main() {
     }
   } catch (error) {
     console.error('Error during seeding:', error);
-  } finally {
-    
-    await client.end();
-  }
-
+  } 
   // 6- Insert rating
- 
+
+  const ratings = [1, 2, 3, 4, 5];
+
+  for (const rating of ratings) {
+    try {
+        await insertRating(client, rating);
+        console.log(`Inserted rating: ${rating}`);
+    } catch (error) {
+        console.error('Failed to insert rating:', error);
+    }
+}
+
+  // 7- Insert rating
+  // seedRaitingActivityTable(client);
 }
 
 main();

@@ -15,25 +15,9 @@ async function insertRating(client, rating) {
     }
 }
 
+
 export {
     insertRating
 };
 
 
-import client from "../../config/pg.client.js";
-
-
-const ratings = [1, 2, 3, 4, 5];
-
-async function insertRatings() {
-    for (const rating of ratings) {
-        try {
-            await insertRating(client, rating);
-            console.log(`Inserted rating: ${rating}`);
-        } catch (error) {
-            console.error('Failed to insert rating:', error);
-        }
-    }
-}
-
-insertRatings();
