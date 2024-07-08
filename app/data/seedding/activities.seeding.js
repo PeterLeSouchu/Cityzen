@@ -2,21 +2,26 @@
 
 
 async function fetchActivitiesFromCity(cityName) {
-  const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
-  const activitiesOfcity = await fetch(API_ACTIVITY_URL, {
-    headers: {
-        'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
-        'Content-Type': 'application/json'
+    const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
+    try {
+      const response = await fetch(API_ACTIVITY_URL, {
+        headers: {
+          'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erreur lors de la requête API Yelp: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      return data.businesses;
+    } catch (err) {
+      console.error('Erreur lors de la récupération des activités:', err);
     }
-  })
-    .then(response => response.json())
-    .then(data => data.businesses)
-  .catch(err => console.log(err));
-
-
-   console.log(activitiesOfcity)
-  return activitiesOfcity;
-}
+  }
+  
 
 /*
  {
@@ -70,61 +75,81 @@ async function insertUser(client, email, password, pseudo) {
     }
   }
 
-
-
-async function formatingActivity(activityFromFetch) {
-
-  // 
-  const userData = await client.query(`SELECT * FROM "user" WHERE id = $1`, [user]);
-  const utilisateurData = userData.rows[0];
-
-  if (!utilisateurData) {
-    throw new Error('User non trouvé');
+  async function getUser(client) {
+    // Récupérer les données utilisateur
+    const userData = await client.query(`SELECT * FROM "user"`);
+    const utilisateurData = userData.rows[0];
+  
+    if (!utilisateurData) {
+      throw new Error('User non trouvé');
+    }
+  
+    // Afficher l'ID de l'utilisateur pour vérification
+    console.log(utilisateurData.id);
+  
+    // Retourner l'ID de l'utilisateur
+    return utilisateurData.id;
   }
-
-  const cities = await client.query(`SELECT * FROM "city"`);
-  const cityData = cities.rows[0];
-
-  if (!cityData) {
-    throw new Error('city non trouvé');
-  }
-
-
-
-  const formatedActivity = {
-    slug: activityFromFetch.alias,
-    url: activityFromFetch.url,
-    title: activityFromFetch.name,
-    description: activityFromFetch.name,
-    url_image: activityFromFetch.image_url,
-    address: activityFromFetch.location.address1,
-    phone: activityFromFetch.phone,
-    avg_raiting: activityFromFetch.raiting,
-    latitude: activityFromFetch.coordinates.latitude,
-    longitude: activityFromFetch.coordinates.longitude,
-    id_user: utilisateurData.id,
-    id_city: city,
-  }
-  return formatedActivity;
-}
-
-
-async function insertActivitiesFromCity(client, activity) {
-  const {slug, url, title, description, url_image, address, phone, avg_raiting, latitude, longitude, userId, cityId } = activity;
-  try {
-
-    const query = {
-      text: `INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "avg_raiting", "latitude", "longitude", "id_user", "id_city") 
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
-      values: [slug, url, title, description, url_image, address, phone, avg_raiting, latitude, longitude, userId, cityId], 
+  
+  // La fonction pour formater l'activité
+  async function formatingActivity(client, activityFromFetch) {
+    // Get user ID
+    const userId = await getUser(client);
+    console.log("Utilisateur ID:", userId);
+    
+    const cities = await client.query(`SELECT * FROM "city"`);
+    const cityData = cities.rows[0];
+  
+    if (!userId) {
+      throw new Error('Utilisateur non trouvé');
+    }
+  
+    if (!cityData) {
+      throw new Error('Ville non trouvée');
+    }
+  
+    console.log('Formattage de l\'activité', activityFromFetch);
+  
+    const formatedActivity = {
+      slug: activityFromFetch.alias,
+      url: activityFromFetch.url,
+      title: activityFromFetch.name,
+      description: activityFromFetch.name,
+      url_image: activityFromFetch.image_url,
+      address: activityFromFetch.location.address1,
+      phone: activityFromFetch.phone,
+      avg_rating: activityFromFetch.rating,
+      latitude: activityFromFetch.coordinates.latitude,
+      longitude: activityFromFetch.coordinates.longitude,
+      id_user: Number(userId),
+      id_city: cityData.id,
     };
   
-    await client.query(query);
-
-  } catch (err) {
-    console.error('Error inserting activity:',err);
+    // Afficher l'activité formatée pour vérification
+    console.log('Activité formatée:', formatedActivity);
+  
+    return formatedActivity;
   }
-}
+
+
+  async function insertActivityFromCity(client, activity) {
+    const { slug, url, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city } = activity;
+    try {
+      const query = {
+        text: `INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "avg_rating", "latitude", "longitude", "id_user", "id_city") 
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
+        values: [slug, url, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city], 
+      };
+  
+      const returningQuery = await client.query(query);
+        const insertedActivities = returningQuery.rows[0]
+        console.log('insertedActivities effectué');
+    } catch (err) {
+      console.error('Erreur lors de l\'insertion de l\'activité :', err);
+    }
+  }
+  
+  
 
 
 
@@ -154,8 +179,6 @@ async function getCityActivitiesFromDB(client, cityName) {
       console.table(data);
       return data.rows;
 
-      
-
     } catch (err) {
       console.error('Error getting cities from DB:', err);
     }
@@ -168,7 +191,8 @@ export {
     fetchActivitiesFromCity,
     insertUser,
     formatingActivity,
-    insertActivitiesFromCity
+    insertActivityFromCity,
+    getUser,
 
 }
   
