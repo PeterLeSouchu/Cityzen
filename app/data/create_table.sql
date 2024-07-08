@@ -94,12 +94,7 @@ CREATE TABLE "favorite_activity" (
 CREATE TABLE "user_rating" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
-<<<<<<< HEAD
-  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
-  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
-=======
   "id_rating" INT NOT NULL REFERENCES "rating" ("id"),
->>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
@@ -107,12 +102,7 @@ CREATE TABLE "user_rating" (
 CREATE TABLE "rating_activity" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_activity" INT NOT NULL REFERENCES "activity" ("id"),
-<<<<<<< HEAD
-  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
-  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
-=======
   "id_rating" INT NOT NULL REFERENCES "rating" ("id"),
->>>>>>> profil-process
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
