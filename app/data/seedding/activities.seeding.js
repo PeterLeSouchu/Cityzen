@@ -3,17 +3,17 @@
 
 async function fetchActivitiesFromCity(cityName) {
   const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
-  const response = await fetch(API_ACTIVITY_URL, {
+  const activities = await fetch(API_ACTIVITY_URL, {
     headers: {
       'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
       'Content-Type': 'application/json'
     }
   })
   .then(response => response.json())
-  .then(data.rows[0])
+  .then(data => data.businesses)
   .catch(err => console.log(err));
 
-  return data.businesses;
+  return activities;
 }
   
 
@@ -59,7 +59,7 @@ async function fetchActivitiesFromCity(cityName) {
   
   // La fonction pour formater l'activité
   async function formatingActivity(client, activityFromFetch, cityId, userId) {
-    
+
     const formatedActivity = {
       slug: activityFromFetch.alias,
       url: activityFromFetch.url,
@@ -139,11 +139,8 @@ async function getCityActivitiesFromDB(client, cityName) {
 
 export {
     fetchActivitiesFromCity,
-    insertUser,
     formatingActivity,
     insertActivityFromCity,
-    getUser,
-
 }
   
 

@@ -76,12 +76,13 @@ async function insertCities(client, country, department, citiesFromDepartment) {
 }
 
 async function getCity(client, cityName ) {
+  console.log(cityName);
   const city = await client.query(`
   SELECT * FROM "city"
     WHERE "name" = $1
   ;`, [cityName]);
 
-  return city;
+  return city.rows[0];
 }
 
 export {

@@ -21,11 +21,11 @@ async function getOneUser(client) {
 
     const user = result.rows[0];
 
+    return user;
+    
   } catch (error) {
     console.log('User not found', error);
   }
-
-  return user;
 }
 
 export {

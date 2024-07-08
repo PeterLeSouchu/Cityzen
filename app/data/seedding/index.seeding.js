@@ -4,9 +4,9 @@ import countries from "./country.data.js";
 import { fetchCitiesFromDepartement, getCity, insertCities } from "./city.seeding.js";
 import { getCountryFromDB, insertCountries } from "./country.seeding.js";
 import { fetchDepartments, getDepartmentsFromDB, insertDepartments } from "./department.seeding.js";
-import { fetchActivitiesFromCity, formatingActivity, getUser, insertActivityFromCity, insertUser } from "./activities.seeding.js";
+import { fetchActivitiesFromCity, formatingActivity, insertActivityFromCity } from "./activities.seeding.js";
 import { insertRating } from "./rating.seeding.js";
-import { getOneUser } from "./user.seeding.js";
+import { getOneUser, insertUser } from "./user.seeding.js";
 
 const API_DEP_URL = 'https://geo.api.gouv.fr/departements';
 
@@ -32,10 +32,10 @@ for (const department of allDepartments) {
 await insertUser(client, "cityzen@cityzen.com", "Cityzen.1", "Cityzen");
 
 // 5 - Insert activities
-const cityToSearch = 'cergy';
-const user = await getOneUser();
+const cityToSearch = 'Paris';
+const user = await getOneUser(client);
 const activitiesFromApi = await fetchActivitiesFromCity(cityToSearch);
-const city = await getCity(cityToSearch);
+const city = await getCity(client, cityToSearch);
 
 for (const activity of activitiesFromApi) {
   const formatedActivity = await formatingActivity(client, activity,city.id, user.id);

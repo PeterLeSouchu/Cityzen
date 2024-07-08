@@ -51,7 +51,6 @@ CREATE TABLE "city" (
 CREATE TABLE "zip_code" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "zip_code" TEXT NOT NULL,
-  "zip_code" TEXT NOT NULL,
   "id_city" INT NOT NULL REFERENCES "city" ("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
@@ -66,7 +65,7 @@ CREATE TABLE "activity" (
   "url_image" TEXT NOT NULL,
   "address" TEXT NOT NULL,
   "phone" TEXT,
-  "avg_rating" INT,
+  "avg_rating" NUMERIC,
   "latitude" NUMERIC NOT NULL,
   "longitude" NUMERIC NOT NULL,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
@@ -76,7 +75,7 @@ CREATE TABLE "activity" (
 );
 CREATE TABLE "rating" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "rating" INT NOT NULL,
+  "rating" NUMERIC NOT NULL,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
