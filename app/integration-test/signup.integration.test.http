@@ -8,7 +8,8 @@ Content-Type: application/json
 
 {
   "email": "cityzen@cityzen.fr",
-  "password": "cityzenD     6 "
+  "password": "cityzenD     6 ",
+  "pseudo": "cityZen"
 }
 
 ### POST /signup
