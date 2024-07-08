@@ -9,10 +9,11 @@ import signupAuthenticationSchema from "../schema-validations/signup/signup.auth
 const signupRouter = Router();
 
 signupRouter.route('/')
-  // For check user identity with his email and password
+  // For check user identity with his email and password we send an OTP code by email
   .post(validationSchema(signupAuthenticationSchema), signupController.sendOTP)
 
 signupRouter.route('/confirmation')
-  .post(signupController.checkUserByOTP);
+  // For check the received OTP code and signup the user in DB if ok
+  .post(validationSchema(signupAuthenticationSchema), signupController.checkUserByOTP);
   
 export default signupRouter;

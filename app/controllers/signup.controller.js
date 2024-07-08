@@ -7,7 +7,11 @@ const signupController = {
 
   sendOTP(req, res) {
     const { email, password } = req.body;
-    const OTP = otpGenerator.generate(6);
+    const OTP = otpGenerator.generate(6, {
+
+    });
+
+    console.log(OTP);
 
     req.session.signupDatas = {
       email,
@@ -36,7 +40,7 @@ const signupController = {
         const info = await transporter.sendMail({
           from: `"Ryad - Equipe CityZen" <cef>`, // sender address
           to: "r.chair@hotmail.fr", // list of receivers
-          subject: "Hello ✔", // Subject line
+          subject: "CityZen - Votre code de confirmation", // Subject line
           // text: "Hello world?", // plain text body
           html: htmlCode, // html body
         });
@@ -48,7 +52,7 @@ const signupController = {
       }
     }
 
-    sendMail(transporter, htmlCode);
+    // sendMail(transporter, htmlCode);
 
     res.status(200).json({info: 'OTP sented'});
   },
