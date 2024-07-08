@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 const PASSWORD_REGEX = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$');
+const PSEUDO_REGEX = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]){3,}$');
 
 const signupAuthenticationSchema = Joi.alternatives()
   .try(
@@ -11,9 +12,13 @@ const signupAuthenticationSchema = Joi.alternatives()
 
     password: Joi.string()
       .pattern(PASSWORD_REGEX)
+      .required(),
+
+    pseudo: Joi.string()
+      // .pattern(PSEUDO_REGEX)
       .required()
     })
-    .length(2),
+    .length(3),
 
     Joi.object({
       OTP: Joi.string()

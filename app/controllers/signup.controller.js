@@ -11,7 +11,7 @@ import userDatamapper from "../models/user.datamapper.js";
 const signupController = {
 
   sendOTP(req, res) {
-    const { email, password } = req.body;
+    const { email, password, pseudo } = req.body;
     const OTP = otpGenerator.generate(6, {
 
     });
@@ -21,6 +21,7 @@ const signupController = {
     req.session.signupDatas = {
       email,
       password,
+      pseudo,
       OTP,
     }
 
@@ -36,7 +37,10 @@ const signupController = {
 
     const htmlCode = `
       <h1> CityZen </h1>
-      <p>Pour valider votre inscription, veuillez renseigner le code suivant sur la plateforme: <span>${OTP}</span></p>
+      <p>Bonjour ${pseudo},</p>
+      <p>Nous vous souhaitons la bienvenue chez CityZen! </p>
+      <p>Pour valider votre inscription, il ne vous suffit plus qu'à renseigner le code suivant sur la plateforme: <span>${OTP}</span></p>
+      <p>À tout de suite !</p>
     `;
 
     async function sendMail(transporter, htmlCode) {
@@ -68,7 +72,7 @@ const signupController = {
       res.status(404).json({error: 'Bad Request'})
     }
 
-    const { email, password, OTP } = req.session.signupDatas;
+    const { email, password, pseudo, OTP } = req.session.signupDatas;
     const sendedOTP = req.body.OTP;
 
     if(OTP !== sendedOTP) {
@@ -79,7 +83,7 @@ const signupController = {
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hash = await bcrypt.hash(password, salt);
 
-    const createdUser = await userDatamapper.save(email, hash);
+    const createdUser = await userDatamapper.save(email, hash, pseudo);
     // const createdUser = [{id: 2, email, hash}];
 
     res.status(200).json({data: createdUser});
