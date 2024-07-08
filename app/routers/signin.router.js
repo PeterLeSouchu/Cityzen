@@ -2,17 +2,13 @@
 import { Router } from "express";
 
 // EXTERNAL MODULES
-// import Controller from "../controllers/index.controller.js";
-import SigninController from "../controllers/signin.controller.js";
-
-
-const signinController = SigninController;
+import signinController from "../controllers/signin.controller.js";
 
 
 const signinRouter = Router();
 
 signinRouter.route('/')
   // For check user identity with his email and password
-  .post(signinController.checkUser);
+  .post(signinController.login);
   
 export default signinRouter;

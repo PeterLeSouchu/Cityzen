@@ -1,28 +1,31 @@
-// import Controller from "./index.controller.js";
+// TIERCE MODULES
+import bcrypt from 'bcrypt';
 
 
+import userDatamapper from "../models/user.datamapper.js";
 
 const signinController = {
 
-  checkUser(req, res) {
+  async login(req, res) {
     const { email, password } = req.body;
 
+    const userExist = await userDatamapper.show(email);
+    if(!userExist) {
+      console.log(userExist);
+      return res.status(400).json({error: 'The provided informations is wrong'});
+    }
 
+    const passwordHashFromDB = userExist.password;
 
-    console.log(email, password)
+    const isGoodPassword = await bcrypt.compare(password, passwordHashFromDB);
+    if(!isGoodPassword) {
+      return res.status(400).json({error: 'The provided informations is wrong'});
+    }
+
+    delete userExist.password;
+
+    res.status(200).json({data: [userExist]});
   }
 }
-
-// class SigninController extends Controller {
-
-//   constructor(datamapper) {
-//     super(instances);
-//     this.datamapper = datamapper;
-//   }
-
-//   checkUser() {
-//     console.log('we check the user')
-//   }
-// }
 
 export default signinController;
