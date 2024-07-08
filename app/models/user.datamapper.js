@@ -15,7 +15,18 @@ const userDatamapper = {
     console.log(response.rows);
 
     return response.rows;
+  },
 
+  async show(email) {
+
+    const response = await client.query(`
+      SELECT * FROM "user" 
+        WHERE "email" = $1
+      ;`, [email])
+    ;
+
+    console.log(response.rows[0]);
+    return response.rows[0];
   }
 
 }
