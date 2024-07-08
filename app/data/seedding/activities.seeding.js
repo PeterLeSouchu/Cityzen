@@ -2,25 +2,19 @@
 
 
 async function fetchActivitiesFromCity(cityName) {
-    const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
-    try {
-      const response = await fetch(API_ACTIVITY_URL, {
-        headers: {
-          'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Erreur lors de la requête API Yelp: ${response.statusText}`);
-      }
-  
-      const data = await response.json();
-      return data.businesses;
-    } catch (err) {
-      console.error('Erreur lors de la récupération des activités:', err);
+  const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
+  const response = await fetch(API_ACTIVITY_URL, {
+    headers: {
+      'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
+      'Content-Type': 'application/json'
     }
-  }
+  })
+  .then(response => response.json())
+  .then(data.rows[0])
+  .catch(err => console.log(err));
+
+  return data.businesses;
+}
   
 
 /*
@@ -60,56 +54,12 @@ async function fetchActivitiesFromCity(cityName) {
 
 */
 
-// 1- insérer un utilisateur fictif en BDD (ne lancer le script qu'un seul fois !)
-async function insertUser(client, email, password, pseudo) {
-    const query = {
-      text: `INSERT INTO "user"("email", "password", "pseudo") VALUES($1, $2, $3);`,
-      values: [email, password, pseudo]
-    };
-    
-    try {
-      await client.query(query);
-      console.log('User inserted successfully');
-    } catch (err) {
-      console.error('Error inserting user into DB:', err);
-    }
-  }
 
-  async function getUser(client) {
-    // Récupérer les données utilisateur
-    const userData = await client.query(`SELECT * FROM "user"`);
-    const utilisateurData = userData.rows[0];
-  
-    if (!utilisateurData) {
-      throw new Error('User non trouvé');
-    }
-  
-    // Afficher l'ID de l'utilisateur pour vérification
-    console.log(utilisateurData.id);
-  
-    // Retourner l'ID de l'utilisateur
-    return utilisateurData.id;
-  }
+
   
   // La fonction pour formater l'activité
-  async function formatingActivity(client, activityFromFetch) {
-    // Get user ID
-    const userId = await getUser(client);
-    console.log("Utilisateur ID:", userId);
+  async function formatingActivity(client, activityFromFetch, cityId, userId) {
     
-    const cities = await client.query(`SELECT * FROM "city"`);
-    const cityData = cities.rows[0];
-  
-    if (!userId) {
-      throw new Error('Utilisateur non trouvé');
-    }
-  
-    if (!cityData) {
-      throw new Error('Ville non trouvée');
-    }
-  
-    console.log('Formattage de l\'activité', activityFromFetch);
-  
     const formatedActivity = {
       slug: activityFromFetch.alias,
       url: activityFromFetch.url,
@@ -121,8 +71,8 @@ async function insertUser(client, email, password, pseudo) {
       avg_rating: activityFromFetch.rating,
       latitude: activityFromFetch.coordinates.latitude,
       longitude: activityFromFetch.coordinates.longitude,
-      id_user: Number(userId),
-      id_city: cityData.id,
+      id_user: userId,
+      id_city: cityId,
     };
   
     // Afficher l'activité formatée pour vérification
