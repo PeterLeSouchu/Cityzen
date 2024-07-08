@@ -12,7 +12,9 @@ const userDatamapper = {
       ;`, [email, hash, pseudo])
     ;
 
-    console.log(response);
+    console.log(response.rows);
+
+    return response.rows;
 
   }
 
