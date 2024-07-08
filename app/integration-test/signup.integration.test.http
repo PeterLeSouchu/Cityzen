@@ -12,7 +12,7 @@ Content-Type: application/json
   "pseudo": "cityZen"
 }
 
-### POST /signup
+### POST /signup/confirmation
 POST {{url}}/{{mainEndpoint}}/confirmation
 Content-Type: application/json
 
