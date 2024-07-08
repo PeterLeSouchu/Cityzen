@@ -9,6 +9,7 @@ Content-Type: application/json
 {
   "email": "cityzen@cityzen.fr",
   "password": "cityzenD     6 ",
+  "passwordConfirm": "cityzenD     6 ",
   "pseudo": "cityZen"
 }
 
@@ -17,5 +18,5 @@ POST {{url}}/{{mainEndpoint}}/confirmation
 Content-Type: application/json
 
 {
-  "OTP": "2ivF6y"
+  "OTP": "bvV#Wx"
 }

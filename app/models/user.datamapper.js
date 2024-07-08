@@ -14,7 +14,7 @@ const userDatamapper = {
 
     console.log(response.rows);
 
-    return response.rows;
+    return response.rows[0];
   },
 
   async show(email) {

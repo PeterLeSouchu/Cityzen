@@ -6,11 +6,12 @@ import nodemailer from "nodemailer";
 
 // EXTERNAL MODULES
 import userDatamapper from "../models/user.datamapper.js";
+import { hashPassword } from "../utils/bcrypt.js"
 
 
 const signupController = {
 
-  sendOTP(req, res) {
+  async sendOTP(req, res) {
     const { email, password, passwordConfirm, pseudo } = req.body;
 
     const userExist = userDatamapper.show(email);
@@ -26,11 +27,11 @@ const signupController = {
 
     console.log(OTP);
 
-    // implémenter mongo pour stocker le password pour vérifier l'inscription
+    const hash = await hashPassword(password);
+
     req.session.signupDatas = {
       email,
-      password,
-      passwordConfirm,
+      hash,
       pseudo,
       OTP,
     }
@@ -57,11 +58,11 @@ const signupController = {
       // Send mail with defined transporter object
       try {
         const info = await transporter.sendMail({
-          from: `"Ryad - Equipe CityZen" <cef>`, // sender address
-          to: "r.chair@hotmail.fr", // list of receivers
-          subject: "CityZen - Votre code de confirmation", // Subject line
-          // text: "Hello world?", // plain text body
-          html: htmlCode, // html body
+          from: `"Ryad - Equipe CityZen" <cef>`, 
+          to: "r.chair@hotmail.fr", 
+          subject: "CityZen - Votre code de confirmation", 
+          // text: "Hello world?",
+          html: htmlCode,
         });
         
         console.log("Message sent: %s", info.messageId);
@@ -72,7 +73,7 @@ const signupController = {
       }
     }
 
-    // sendMail(transporter, htmlCode);
+    sendMail(transporter, htmlCode);
 
     res.status(200).json({info: 'OTP sented'});
   },
@@ -82,22 +83,20 @@ const signupController = {
       return res.status(404).json({error: 'Bad Request'})
     }
 
-    const { email, password, pseudo, OTP } = req.session.signupDatas;
+    const { email, hash, pseudo, OTP } = req.session.signupDatas;
     const sendedOTP = req.body.OTP;
 
     if(OTP !== sendedOTP) {
       return res.status(400).json({error: 'The OTP does not match'});
     }
 
-    const SALT_ROUNDS = 10;
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    const hash = await bcrypt.hash(password, salt);
-
     const createdUser = await userDatamapper.save(email, hash, pseudo);
     delete createdUser.password;
-    // const createdUser = [{id: 2, email, hash}];
 
-    res.status(200).json({data: createdUser});
+    delete req.session.signupDatas;
+    req.session.userId = createdUser.id;
+
+    res.status(200).json({data: [createdUser]});
   }
 }
 

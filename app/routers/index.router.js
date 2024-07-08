@@ -9,6 +9,7 @@ import unsubscribeRouter from "./unsubscribe.router.js";
 import profilRouter from "./profil.router.js";
 import forgotPasswordRouter from "./forgot-password.router.js";
 import signupRouter from "./signup.router.js";
+import authenticationCheck from "../middlewares/authenticationCheck.js";
 
 
 
@@ -19,7 +20,7 @@ router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use('/unsubscribe', unsubscribeRouter);
-router.use('/profil', profilRouter);
+router.use( '/profil',authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 
 

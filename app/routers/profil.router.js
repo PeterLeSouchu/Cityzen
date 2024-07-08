@@ -1,9 +1,10 @@
 // TIERCE MODULES
 import { Router } from "express";
 
+// EXTERNAL MODULES
+import profilController from "../controllers/profil.controller.js";
 
-// profilController has a class which extends the Controller to add more method because it has additional methods.
-const profilController = {profilController: 'to do'};
+
 
 const profilRouter = Router();
 
@@ -18,7 +19,7 @@ profilRouter.route('/authentication')
   // To handle favorites of the user
 profilRouter.route('/favorite')
   // .get(profilController.index)
-  // .post(profilController.store)
+  .post(profilController.store)
   // .delete(profilController.destroy);
 
   // To handle favorites of the user

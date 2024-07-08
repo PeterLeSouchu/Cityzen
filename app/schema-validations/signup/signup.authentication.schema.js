@@ -14,11 +14,15 @@ const signupAuthenticationSchema = Joi.alternatives()
       .pattern(PASSWORD_REGEX)
       .required(),
 
+    passwordConfirm: Joi.string()
+      .pattern(PASSWORD_REGEX)
+      .required(),
+
     pseudo: Joi.string()
       // .pattern(PSEUDO_REGEX)
       .required()
     })
-    .length(3),
+    .length(4),
 
     Joi.object({
       OTP: Joi.string()

@@ -11,7 +11,6 @@ const signinController = {
 
     const userExist = await userDatamapper.show(email);
     if(!userExist) {
-      console.log(userExist);
       return res.status(400).json({error: 'The provided informations is wrong'});
     }
 
@@ -22,6 +21,7 @@ const signinController = {
       return res.status(400).json({error: 'The provided informations is wrong'});
     }
 
+    req.session.userId = userExist.id; 
     delete userExist.password;
 
     res.status(200).json({data: [userExist]});
