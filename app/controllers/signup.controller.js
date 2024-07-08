@@ -11,16 +11,26 @@ import userDatamapper from "../models/user.datamapper.js";
 const signupController = {
 
   sendOTP(req, res) {
-    const { email, password, pseudo } = req.body;
-    const OTP = otpGenerator.generate(6, {
+    const { email, password, passwordConfirm, pseudo } = req.body;
 
-    });
+    const userExist = userDatamapper.show(email);
+    if(!userExist) {
+      return res.status(400).json({error: 'The user don`t exist'})
+    }
+
+    if(password !== passwordConfirm) {
+      return res.status(400).json({error: 'passwords don\'t match'});
+    }
+
+    const OTP = otpGenerator.generate(6);
 
     console.log(OTP);
 
+    // implémenter mongo pour stocker le password pour vérifier l'inscription
     req.session.signupDatas = {
       email,
       password,
+      passwordConfirm,
       pseudo,
       OTP,
     }
@@ -58,7 +68,7 @@ const signupController = {
 
       } catch (err) {
         console.log('Send message error:', err);
-        res.status(500).json({error: err})
+        return res.status(500).json({error: err})
       }
     }
 
@@ -69,14 +79,14 @@ const signupController = {
 
   async checkUserByOTP(req, res) {
     if(!req.session?.signupDatas) {
-      res.status(404).json({error: 'Bad Request'})
+      return res.status(404).json({error: 'Bad Request'})
     }
 
     const { email, password, pseudo, OTP } = req.session.signupDatas;
     const sendedOTP = req.body.OTP;
 
     if(OTP !== sendedOTP) {
-      res.status(400).json({error: 'The OTP does not match'});
+      return res.status(400).json({error: 'The OTP does not match'});
     }
 
     const SALT_ROUNDS = 10;
