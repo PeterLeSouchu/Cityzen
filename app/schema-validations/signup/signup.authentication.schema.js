@@ -10,26 +10,58 @@ const signupAuthenticationSchema = Joi.alternatives()
       .required(),
 
     password: Joi.string()
-    .pattern(PASSWORD_REGEX)
-    .required(),
-
-    OTP: Joi.string()
-    .length(6)
-    .required()
+      .pattern(PASSWORD_REGEX)
+      .required()
     })
-    .length(3),
+    .length(2),
 
     Joi.object({
-    email: Joi.string()
-      .email()
-      .required(),
-
-    password: Joi.string()
-    .pattern(PASSWORD_REGEX)
-    .required(), 
+      OTP: Joi.string()
+        .length(6)
+        .required()
     })
-    .length(2)
+    .length(1)
   ) 
+
+
+
+  export default signupAuthenticationSchema;
+
+
+
+
+
+
+
+  
+// const signupAuthenticationSchema = Joi.alternatives()
+//   .try(
+//     Joi.object({
+//     email: Joi.string()
+//       .email()
+//       .required(),
+
+//     password: Joi.string()
+//       .pattern(PASSWORD_REGEX)
+//       .required(),
+
+//     OTP: Joi.string()
+//       .length(6)
+//       .required()
+//       })
+//       .length(3),
+
+//     Joi.object({
+//     email: Joi.string()
+//       .email()
+//       .required(),
+
+//     password: Joi.string()
+//       .pattern(PASSWORD_REGEX)
+//       .required(), 
+//       })
+//       .length(2)
+//   ) 
 
   // const signupAuthenticationSchema = Joi.object({
 //   email: Joi.string()
@@ -51,4 +83,3 @@ const signupAuthenticationSchema = Joi.alternatives()
 // ;
 
 
-export default signupAuthenticationSchema;

@@ -79,7 +79,7 @@ const signupController = {
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hash = await bcrypt.hash(password, salt);
 
-    const createdUser = await userDatamapper.store(email, hash);
+    const createdUser = await userDatamapper.save(email, hash);
     // const createdUser = [{id: 2, email, hash}];
 
     res.status(200).json({data: createdUser});
