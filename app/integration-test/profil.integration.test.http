@@ -2,12 +2,14 @@
 # @url = http://localhost:3000
 @mainEndpoint = profil
 
-### POST /profil
-POST {{url}}/{{mainEndpoint}}
+### POST /profil/favorite
+POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
+  "id": 1,
   "title": "attraction 2000",
+  "slug": "attraction-2000-lyon-3",
   "description": "Une bonne attraction",
   "image": "blabla",
   "address": "rue du PHP ",
