@@ -1,0 +1,46 @@
+// 1- Insert all countries into DB
+await insertCountries(client,countries)
+console.log('countries inserted');
+
+// 2- Insert all departments into DB
+const allDepartmentsFromAPI = await fetchDepartments(API_DEP_URL);
+await insertDepartments(client, allDepartmentsFromAPI);
+console.log('departments inserted');
+
+
+
+// 3- Insert all cities from one department into DB
+const country = await getCountryFromDB(client, 'France');
+const allDepartments = await getDepartmentsFromDB(client);
+
+for (const department of allDepartments) {
+  const citiesFromDepartment = await fetchCitiesFromDepartement(department.code);
+
+  await insertCities(client, country, department, citiesFromDepartment);
+}
+
+
+
+// DEPARTMENTS TESTS
+// for(let i = 10; i <= 95; i++) {
+//   try {
+//     const citiesFromDepartment = await fetchCitiesFromDepartement(i);
+//   } catch (error) {
+//     console.log(error);
+//     console.log(i);
+//   }
+// }
+
+// 4- Insert user
+
+insertUser(client, "fictiveuser@example.com", "securepassword123", "FictiveUser");
+
+// 5 - Insert activities
+
+const userId = getUser(client);
+
+const activityFromApi = fetchActivitiesFromCity('montesson');
+
+const activitiesToBd = formatingActivity(client,activityFromApi,userId );
+
+insertActivitiesFromCity(client, activitiesToBd);

@@ -50,7 +50,7 @@ CREATE TABLE "city" (
 
 CREATE TABLE "zip_code" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "zip_code" TEXT NOT NULL UNIQUE,
+  "zip_code" TEXT NOT NULL,
   "id_city" INT NOT NULL REFERENCES "city" ("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
@@ -65,7 +65,7 @@ CREATE TABLE "activity" (
   "url_image" TEXT NOT NULL,
   "address" TEXT NOT NULL,
   "phone" TEXT,
-  "avg_note" INT,
+  "avg_rating" NUMERIC,
   "latitude" NUMERIC NOT NULL,
   "longitude" NUMERIC NOT NULL,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
@@ -75,7 +75,7 @@ CREATE TABLE "activity" (
 );
 CREATE TABLE "raiting" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "note" INT NOT NULL,
+  "raiting" INT NOT NULL,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
@@ -93,7 +93,7 @@ CREATE TABLE "favorite_activity" (
 CREATE TABLE "user_raiting" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_user" INT NOT NULL REFERENCES "user" ("id"),
-  "id_note" INT NOT NULL REFERENCES "note" ("id"),
+  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );
@@ -101,7 +101,7 @@ CREATE TABLE "user_raiting" (
 CREATE TABLE "raiting_activity" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "id_activity" INT NOT NULL REFERENCES "activity" ("id"),
-  "id_note" INT NOT NULL REFERENCES "note" ("id"),
+  "id_raiting" INT NOT NULL REFERENCES "raiting" ("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ
 );

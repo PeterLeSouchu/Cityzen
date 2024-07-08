@@ -8,9 +8,7 @@ async function insertCountries(client, countries) {
   try {
     for (const country of countries) {
       const query = {
-        text: `BEGIN;
-        INSERT INTO "country"('name') VALUES($1);
-        COMMIT;`,
+        text: `INSERT INTO "country"("name") VALUES($1);`,
         values: [country.name],
       };
       
@@ -28,9 +26,9 @@ async function insertCountries(client, countries) {
  * @param {*} country 
  * @returns 
  */
-async function getCountryFromDB(country) {
+async function getCountryFromDB(client, countryDB) {
   // Get ID from country
-  const data = await client.query(`SELECT * FROM "country" WHERE "name" = ${country}`);
+  const data = await client.query(`SELECT * FROM "country" WHERE "name" = '${countryDB}'`);
   const country = data.rows[0];
 
   if (!country?.id) {
