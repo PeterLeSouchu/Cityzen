@@ -1,3 +1,4 @@
+import activityDatamapper from "../models/activity.datamapper.js";
 import makeSlug from "../utils/make-slug.js";
 
 
@@ -10,8 +11,22 @@ const profilController = {
   },
 
    async store(req, res) {
+     
+     if(req.url === '/favorite') {
 
-    console.log(req.query);
+      const userId = req.session.userId;
+      const activityId = Number.parseInt(req.body.id, 10);
+
+      //Check if activity exist
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        return res.status(400).json({error: 'The activity don\'t exist'});
+      }
+
+      const activityForUser = await profilDatamapper.saveFavorite(activityId, userId);
+
+      res.status(201).json({data: existActivity});
+    }
 
     // const { title, description, image, address, phone, longitude, latitude, city } = req.body;
 
