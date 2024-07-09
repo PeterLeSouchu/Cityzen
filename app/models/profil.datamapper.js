@@ -1,13 +1,40 @@
+import client from "../config/pg.client.js";
+
 const profilDatamapper = {
 
-  async saveFavorite(activityId, userId) {
+  favorites : {
+    async getOne(userId, activityId) {
+
+      const userActivity = await client.query(`
+      SELECT * FROM "favorite_activity"
+        WHERE "id_user" = $1
+        AND "id_activity" = $2
+      ;`, [userId, activityId]);
+
+      return userActivity.rows;
+    },
+
+    async getAll(userId) {
+      const userActivities = await client.query(`
+        SELECT * FROM "favorite_activity"
+          WHERE "id_user" = $1
+        ;`, [userId]);
+  
+      return userActivities.rows;
+    },
+
+    async saveFavorite(userId, activityId) {
+
+      const savedActivity = await client.query(`
+        INSERT INTO "favorite_activity" ("id_user", "id_activity")
+          VALUES ($1, $2)
+        RETURNING *;
+      ;`, [userId, activityId]);
+
+      return savedActivity.rows;
+    },
 
 
-    const savedActivity = await client.query(`
-      INSERT INTO "favorite_activity"
-        VALUES ($1, $2)
-      RETURNING *;
-    ;`, [activityId, userId]);
   }
 
 };
