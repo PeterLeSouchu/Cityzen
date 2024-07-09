@@ -12,6 +12,7 @@ const profilController = {
   },
 
    async store(req, res) {
+
      
      if(req.url === '/favorite') {
 
@@ -20,7 +21,8 @@ const profilController = {
 
       //Check if activity exist
       const existActivity = await activityDatamapper.getOne(activityId);
-      if(!existActivity) {
+      console.log(existActivity);
+      if(!existActivity[0]) {
         return res.status(400).json({error: 'The activity don\'t exist'});
       }
 
