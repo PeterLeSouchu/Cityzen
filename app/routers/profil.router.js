@@ -3,6 +3,7 @@ import { Router } from "express";
 
 // EXTERNAL MODULES
 import profilController from "../controllers/profil.controller.js";
+import catchHandlerController from "../errors/api.error.js";
 
 
 
@@ -18,11 +19,11 @@ profilRouter.route('/authentication')
 
   // To handle favorites of the user
 profilRouter.route('/favorite')
-  .get(profilController.favorites.index) // OK !
-  .post(profilController.favorites.store) // OK !
+  .get(catchHandlerController(profilController.favorites.index)) // OK !
+  .post(catchHandlerController(profilController.favorites.store)) // OK !
 
 profilRouter.route('/favorite/:id(\\d+)')
-  .delete(profilController.favorites.destroy); // juste l'id
+  .delete(catchHandlerController(profilController.favorites.destroy)); // OK !
 
   // To handle created activities of the user
 profilRouter.route('/activity')

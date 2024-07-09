@@ -31,10 +31,12 @@ const app = express();
 // });
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: ['http://127.0.0.1:8000', 'http://localhost:8000', 'http://localhost:5173'],
+  // origin: 'http://localhost:5173',
+  credentials: true, // Autoriser l'envoi de cookies
+  // allowedHeaders: ['Content-Type', 'Authorization'] // En-têtes autorisés
 }));
 
-app.use(cookieParser());
 
 app.use(session({
   secret: process.env.SESSION_PASSWORD,
@@ -48,9 +50,15 @@ app.use(session({
 }));
 
 // Parser
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+// app.post('/test', (req, res) => {
+//   console.log('ok');
+//   console.log(req.cookies);
+//   res.json({ok: 'ok'})
+// })
 
 // Router: router variable not exist now. Is only for information. To do
 app.use(router);

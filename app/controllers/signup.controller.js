@@ -29,7 +29,14 @@ const signupController = {
 
     const hash = await hashPassword(password);
 
-    res.cookie.signupDatas = {
+    // res.cookie('signup', JSON.stringify({
+    //     email,
+    //     hash,
+    //     pseudo,
+    //     OTP,
+    // }), { maxAge: 900000, httpOnly: false })
+
+    req.session.signup = {
       email,
       hash,
       pseudo,
@@ -73,18 +80,24 @@ const signupController = {
       }
     }
 
-    sendMail(transporter, htmlCode);
 
+    // res.status(200).cookie('test', 'unTEST').json({info: 'OTP sented'});
     res.status(200).json({info: 'OTP sented'});
   },
 
   async checkUserByOTP(req, res) {
-    console.log(req.cookies.signupDatas);
-    if(!req.session?.signupDatas) {
+
+    // console.log(JSON.parse(req.cookies.signup));
+
+    if(!req.session?.signup) {
       return res.status(404).json({error: 'Bad Request'})
     }
+    // if(!req.cookies?.signup) {
+    //   return res.status(404).json({error: 'Bad Request'})
+    // }
 
-    const { email, hash, pseudo, OTP } = req.session.signupDatas;
+    const { email, hash, pseudo, OTP } = JSON.parse(req.cookies.signup);
+    console.log(OTP);
     const sendedOTP = req.body.OTP;
 
     if(OTP !== sendedOTP) {
@@ -96,6 +109,8 @@ const signupController = {
 
     delete req.session.signupDatas;
     req.session.userId = createdUser.id;
+    // delete req.cookies.signup;
+    // res.cookie.userId = createdUser.id;
 
     res.status(200).json({data: [createdUser]});
   }
