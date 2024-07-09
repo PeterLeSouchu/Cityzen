@@ -7,8 +7,12 @@ POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 148
+  "id": 43
 }
+
+### GET /profil/favorites
+GET {{url}}/{{mainEndpoint}}/favorite
+Content-Type: application/json
 
 # {
 #   "id": 1,

@@ -18,11 +18,11 @@ profilRouter.route('/authentication')
 
   // To handle favorites of the user
 profilRouter.route('/favorite')
-  // .get(profilController.index) // toutes les activités entières
-  .post(profilController.store) // l'activité entière
+  .get(profilController.favorites.index) // toutes les activités entières
+  .post(profilController.favorites.store) // l'activité entière
   // .delete(profilController.destroy); // juste l'id
 
-  // To handle favorites of the user
+  // To handle created activities of the user
 profilRouter.route('/activity')
   // .get(profilController.index)
   // .post(profilController.store)
