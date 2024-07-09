@@ -1,4 +1,5 @@
 import activityDatamapper from "../models/activity.datamapper.js";
+import profilDatamapper from "../models/profil.datamapper.js";
 import makeSlug from "../utils/make-slug.js";
 
 
