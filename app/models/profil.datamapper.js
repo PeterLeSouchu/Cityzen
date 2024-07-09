@@ -34,6 +34,18 @@ const profilDatamapper = {
       return savedActivity.rows;
     },
 
+    async removedFavorite(userId, activityId) {
+
+      const removedActivity = await client.query(`
+        DELETE FROM "favorite_activity"
+          WHERE "id_user" = $1
+          AND "id_activity" = $2
+        RETURNING *;
+      ;`, [userId, activityId]);
+
+      return removedActivity.rows;
+    }
+
 
   }
 

@@ -4,6 +4,27 @@ import makeSlug from "../utils/make-slug.js";
 
 
 const profilController = {
+  RADIX_NUMBER: 10,
+
+  async checkExistingActivity(activityId) {
+    const existActivity = await activityDatamapper.getOne(activityId);
+    if(!existActivity[0]) {
+      const requestError = new Error('The activity don\'t exist');
+      requestError.name = "BadRequest";
+      throw requestError;
+    }
+    return true;
+  },
+
+  async checkUserHasActivity(userId, activityId) {
+    const userHasActivity = await profilDatamapper.favorites.getOne(userId, activityId);
+    if(userHasActivity) {
+      const requestError = new Error('The activity already exist');
+      requestError.name = "BadRequest";
+      throw requestError;
+    }
+    return true;
+  },
 
   favorites: {
     async index(req, res) {
@@ -18,19 +39,13 @@ const profilController = {
     async store(req, res) {
   
       const userId = req.session.userId;
-      const activityId = Number.parseInt(req.body.id, 10);
+      const activityId = Number.parseInt(req.body.id, profilController.RADIX_NUMBER);
 
-      // Check if activity exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if(!existActivity[0]) {
-        return res.status(400).json({error: 'The activity don\'t exist'});
-      }
+      // Check if activity is already exist
+      await profilController.checkExistingActivity(activityId);
 
       // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilDatamapper.favorites.getOne(userId, activityId)
-      if(userHasActivity) {
-        return res.status(400).json({error: 'The activity already exist'});
-      }
+      await profilController.checkUserHasActivity(userId), activityId;
 
       // Save favorite in DB for this user
       const activityForUser = await profilDatamapper.favorites.saveFavorite( userId, activityId);
@@ -63,6 +78,21 @@ const profilController = {
       // res.status(201).json({})
   
     },
+
+    async destroy(req, res) {
+      const userId = req.session.userId;
+      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      
+      // Check if activity is already exist
+      await profilController.checkExistingActivity(activityId);
+
+      // Check if activity is already saved ti the user's favorites
+      await profilController.checkUserHasActivity(userId, activityId);
+
+      const removedFavorite = await profilDatamapper.favorites.removedFavorite(userId, activityId);
+
+      res.status(200).json({data: removedFavorite});
+    }
   }
 
 

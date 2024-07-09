@@ -18,16 +18,29 @@ profilRouter.route('/authentication')
 
   // To handle favorites of the user
 profilRouter.route('/favorite')
-  .get(profilController.favorites.index) // toutes les activités entières
-  .post(profilController.favorites.store) // l'activité entière
-  // .delete(profilController.destroy); // juste l'id
+  .get(profilController.favorites.index) // OK !
+  .post(profilController.favorites.store) // OK !
+
+profilRouter.route('/favorite/:id(\\d+)')
+  .delete(profilController.favorites.destroy); // juste l'id
 
   // To handle created activities of the user
 profilRouter.route('/activity')
-  // .get(profilController.index)
-  // .post(profilController.store)
-  // .patch(profilController.update)
-  // .delete(profilController.destroy);
+  // .get(profilController.index) // retourner toutes les activités crées par le user
+  // .post(profilController.store) // crée une activité par le user
+ 
+  profilRouter.route('/activity/:id(\\d+)')
+  // .patch(profilController.update)  // modifier une activité crée par le user
+  // .delete(profilController.destroy); // supprimer une activité créée par le user
+
+profilRouter.route('/raiting')
+  // .get(profilController.rating.index)  // retourne toutes les activités notées (inclure une note moyenne totale)
+  // .post(profilController.rating.store)  // ajouter une note à une activité
+
+// profilRouter.route('/raiting/:id(\\d+)')
+  // .get
+
+
 
 
 export default profilRouter;
