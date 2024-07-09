@@ -29,7 +29,7 @@ const signupController = {
 
     const hash = await hashPassword(password);
 
-    req.session.signupDatas = {
+    res.cookie.signupDatas = {
       email,
       hash,
       pseudo,
@@ -79,6 +79,7 @@ const signupController = {
   },
 
   async checkUserByOTP(req, res) {
+    console.log(req.cookies.signupDatas);
     if(!req.session?.signupDatas) {
       return res.status(404).json({error: 'Bad Request'})
     }

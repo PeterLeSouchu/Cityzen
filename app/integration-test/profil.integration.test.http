@@ -13,9 +13,8 @@ Content-Type: application/json
 ### GET /profil/favorite
 GET {{url}}/{{mainEndpoint}}/favorite
 
-
 ### DELETE /profil/favorite
-DELETE {{url}}/{{mainEndpoint}}/favorite
+DELETE {{url}}/{{mainEndpoint}}/favorite/44
 
 # {
 #   "id": 1,
