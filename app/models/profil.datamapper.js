@@ -1,84 +1,121 @@
-import client from "../config/pg.client.js";
+import client from '../config/pg.client.js';
 
 const profilDatamapper = {
-
   favorites: {
     async getOne(userId, activityId) {
-
-      const userActivity = await client.query(`
+      const userActivity = await client.query(
+        `
       SELECT * FROM "favorite_activity"
         WHERE "id_user" = $1
         AND "id_activity" = $2
-      ;`, [userId, activityId]);
+      ;`,
+        [userId, activityId]
+      );
 
       return userActivity.rows[0];
     },
 
     async getAll(userId) {
-      const userActivities = await client.query(`
-        SELECT * FROM "favorite_activity"
-          WHERE "id_user" = $1
-        ;`, [userId]);
-  
+      const userActivities = await client.query(
+        `
+        SELECT * FROM "favorite_activity" JOIN "activity" ON "favorite_activity".id_activity = "activity".id WHERE "favorite_activity"."id_user" = $1;`,
+        [userId]
+      );
+
       return userActivities.rows;
     },
 
     async saveFavorite(userId, activityId) {
-
-      const savedActivity = await client.query(`
+      const savedActivity = await client.query(
+        `
         INSERT INTO "favorite_activity" ("id_user", "id_activity")
           VALUES ($1, $2)
         RETURNING *;
-      ;`, [userId, activityId]);
+      ;`,
+        [userId, activityId]
+      );
 
       return savedActivity.rows[0];
     },
 
     async removedFavorite(userId, activityId) {
-
-      const removedActivity = await client.query(`
+      const removedActivity = await client.query(
+        `
         DELETE FROM "favorite_activity"
           WHERE "id_user" = $1
           AND "id_activity" = $2
         RETURNING *;
-      ;`, [userId, activityId]);
+      ;`,
+        [userId, activityId]
+      );
 
       return removedActivity.rows[0];
-    }
-
-
+    },
   },
 
   activities: {
     async getAll(userId) {
-      const userActivity = await client.query(`
+      const userActivity = await client.query(
+        `
       SELECT * FROM "activity"
         WHERE "id_user" = $1
-      ;`, [userId]);
+      ;`,
+        [userId]
+      );
 
       return userActivity.rows;
     },
 
     async getOne(userId, activityId) {
-      const userActivity = await client.query(`
+      const userActivity = await client.query(
+        `
         SELECT * FROM "activity"
           WHERE "id_user" = $1
           AND "id" = $2
-        ;`, [userId, activityId]);
-  
-        return userActivity.rows[0];
+        ;`,
+        [userId, activityId]
+      );
+
+      return userActivity.rows[0];
     },
 
     async create(activity) {
-      const { slug, url, title, description, image, address, phone, longitude, latitude, userId, cityId } = activity;
+      const {
+        slug,
+        url,
+        title,
+        description,
+        image,
+        address,
+        phone,
+        longitude,
+        latitude,
+        userId,
+        cityId,
+      } = activity;
 
-      const createdActivity = await client.query(`
+      const createdActivity = await client.query(
+        `
       INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_user", "id_city")
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
-      ;`, [slug, url, title, description, image, address, phone, longitude, latitude, userId, cityId]);
-  
-        return createdActivity.rows[0];
+      ;`,
+        [
+          slug,
+          url,
+          title,
+          description,
+          image,
+          address,
+          phone,
+          longitude,
+          latitude,
+          userId,
+          cityId,
+        ]
+      );
+
+      return createdActivity.rows[0];
     },
 
     async update(activity) {
@@ -92,7 +129,7 @@ const profilDatamapper = {
       // let valuesScriptSQL = '';
 
       // for(const column in activity) {
-      //   console.log(column);          
+      //   console.log(column);
       //   console.log(activity[column]);
 
       // }
@@ -100,22 +137,18 @@ const profilDatamapper = {
       const entries = Object.entries(activity);
       console.log(entries);
 
-      const scriptSQL = entries.map(data => {
-        if(Number(data[1])){
+      const scriptSQL = entries.map((data) => {
+        if (Number(data[1])) {
           return `${data[0]} = ${data[1]}`;
         }
         return `${data[0]} = '${data[1]}'`;
-      })
+      });
 
       console.log('SET ' + scriptSQL);
 
-
-
       // const updatedActivity = await client.query(`
       // UPDATE "activity"
-          
-        
-        
+
       //   ("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_city")
       //   VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       //   RETURNING *
@@ -123,10 +156,8 @@ const profilDatamapper = {
 
       // return updatedActivity.rows[0];
       return activity;
-    }
-
-  }
-
+    },
+  },
 };
 
 export default profilDatamapper;
