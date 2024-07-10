@@ -69,6 +69,8 @@ Content-Type: application/json
 #   "city": "Lyon"
 # }
 
+### DELETE /profil/activity/:id
+DELETE {{url}}/{{mainEndpoint}}/activity/101
 
 
 

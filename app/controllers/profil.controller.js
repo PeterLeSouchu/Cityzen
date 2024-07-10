@@ -94,8 +94,6 @@ const profilController = {
         throw requestError;
       }
 
-
-      console.log(userId, activityId);
       const removedFavorite = await profilDatamapper.favorites.removedFavorite(userId, activityId);
 
       res.status(200).json({data: removedFavorite});
@@ -225,6 +223,25 @@ const profilController = {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
 
+      // Check if activity is already exist
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity already exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      // Check if activity is already saved ti the user's favorites
+      const userHasActivity = await profilDatamapper.activities.getOne(userId, activityId);
+      if(!userHasActivity) {
+        const requestError = new ApiError('This activity not saved by the user', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      const removedActivity = await profilDatamapper.activities.removeActivity(userId, activityId);
+
+      res.status(200).json({data: removedActivity});
     },
   }
 

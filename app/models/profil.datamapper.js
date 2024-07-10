@@ -102,34 +102,6 @@ const profilDatamapper = {
         return `"${column}" = $${index + 1}`
       })
 
-      // console.log(columnsScriptSQL);
-      // let valuesScriptSQL = '';
-
-      // for(const column in activity) {
-      //   console.log(column);          
-      //   console.log(activity[column]);
-
-      // }
-
-      // const entries = Object.entries(activity);
-      // console.log(entries);
-
-      // const scriptSQL = entries.map(data => {
-      //   if(data[0] === 'cityId') {
-      //     return `"id_city" = ${data[1]}`;
-      //   }
-
-      //   if(Number(data[1])){
-      //     return `"${data[0]}" = ${data[1]}`;
-      //   }
-
-      //   return `"${data[0]}" = '${data[1]}'`;
-      // })
-
-      // console.log('SET ' + scriptSQL);
-
-
-
       const updatedActivity = await client.query(`
       UPDATE "activity"
         SET ${columnsScriptSQL}
@@ -138,6 +110,18 @@ const profilDatamapper = {
       ;`, [...values, activityId]);
 
       return updatedActivity.rows[0];
+    },
+
+    async removeActivity(userId, activityId) {
+      
+      const removedActivity = await client.query(`
+        DELETE FROM "activity"
+          WHERE "id_user" = $1
+          AND "id" = $2
+        RETURNING *;
+      ;`, [userId, activityId]);
+
+      return removedActivity.rows[0];
     }
 
   }
