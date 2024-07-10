@@ -73,6 +73,13 @@ Content-Type: application/json
 DELETE {{url}}/{{mainEndpoint}}/activity/101
 
 
+# RATINGS
+
+### GET /profil/activity
+GET {{url}}/{{mainEndpoint}}/rating
+
+
+
 
 
 

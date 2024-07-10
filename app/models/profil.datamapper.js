@@ -124,6 +124,30 @@ const profilDatamapper = {
       return removedActivity.rows[0];
     }
 
+  },
+
+  ratings: {
+    async getAllActivities(userId) {
+      const userActivitiesRating = await client.query(`
+        SELECT * FROM "user_activity_rating"
+          JOIN "activity"
+            ON "user_activity_rating"."id_activity" = "activity"."id"
+          WHERE "user_activity_rating"."id_user" = $1
+        ;`, [userId]);
+  
+        return userActivitiesRating.rows;
+    },
+
+    async getAvg(userId) {
+      const userAvgRating = await client.query(`
+        SELECT AVG("user_activity_rating"."id_rating") FROM "user_activity_rating"
+          JOIN "activity"
+            ON "user_activity_rating"."id_activity" = "activity"."id"
+          WHERE "user_activity_rating"."id_user" = $1
+        ;`, [userId]);
+  
+        return userAvgRating.rows[0];
+    }
   }
 
 };

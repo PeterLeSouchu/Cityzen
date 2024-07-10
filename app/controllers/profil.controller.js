@@ -243,8 +243,29 @@ const profilController = {
 
       res.status(200).json({data: removedActivity});
     },
-  }
 
+  },
+
+  ratings: {
+    async index(req, res) {
+      const userId = req.session.userId;
+
+      const userActivitiesRating = await profilDatamapper.ratings.getAllActivities(userId);
+
+      const avgRating = await profilDatamapper.ratings.getAvg(userId);
+
+      // const ratingsUser = userActivitiesRating.map(activity => id_rating);
+
+      // const avgRating = ratingsUser.reduce((accumulator, currentValue) => {
+      //   return accumulator + currentValue;
+      // }, 0)
+
+      res.status(200).json({
+        data: userActivitiesRating,
+        avgRating: avgRating.avg 
+      });
+    },
+  }
 
 
 };
