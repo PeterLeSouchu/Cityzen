@@ -1,10 +1,9 @@
-const catchHandlerController = (controller) => async (req, res, next) => {
-  try {
-    await controller(req, res, next);
-  } catch (err) {
-    console.log('catch une erreur');
-    next(err);
+class ApiError extends Error {
+  constructor(message, causeObj) {
+    super(message, causeObj);
+    this.status = causeObj.status;
+    this.message = message;
   }
 }
 
-export default catchHandlerController;
+export default ApiError;

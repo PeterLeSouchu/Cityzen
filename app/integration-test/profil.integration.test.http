@@ -7,14 +7,14 @@ POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 44
+  "id": 12
 }
 
 ### GET /profil/favorite
 GET {{url}}/{{mainEndpoint}}/favorite
 
 ### DELETE /profil/favorite
-DELETE {{url}}/{{mainEndpoint}}/favorite/44
+DELETE {{url}}/{{mainEndpoint}}/favorite/1
 
 # {
 #   "id": 1,

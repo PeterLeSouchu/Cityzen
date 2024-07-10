@@ -11,7 +11,7 @@ const profilDatamapper = {
         AND "id_activity" = $2
       ;`, [userId, activityId]);
 
-      return userActivity.rows;
+      return userActivity.rows[0];
     },
 
     async getAll(userId) {
@@ -31,7 +31,7 @@ const profilDatamapper = {
         RETURNING *;
       ;`, [userId, activityId]);
 
-      return savedActivity.rows;
+      return savedActivity.rows[0];
     },
 
     async removedFavorite(userId, activityId) {
@@ -43,7 +43,7 @@ const profilDatamapper = {
         RETURNING *;
       ;`, [userId, activityId]);
 
-      return removedActivity.rows;
+      return removedActivity.rows[0];
     }
 
 

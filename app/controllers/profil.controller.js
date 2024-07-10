@@ -1,3 +1,4 @@
+import ApiError from "../errors/api.error.js";
 import activityDatamapper from "../models/activity.datamapper.js";
 import profilDatamapper from "../models/profil.datamapper.js";
 import makeSlug from "../utils/make-slug.js";
@@ -5,28 +6,6 @@ import makeSlug from "../utils/make-slug.js";
 
 const profilController = {
   RADIX_NUMBER: 10,
-
-  async checkExistingActivity(activityId) {
-    const existActivity = await activityDatamapper.getOne(activityId);
-    if(existActivity[0]) {
-      return true;
-    }
-    return false;
-  },
-
-  async checkUserHasActivity(userId, activityId) {
-    const userHasActivity = await profilDatamapper.favorites.getOne(userId, activityId);
-    if(userHasActivity) {
-      return true;
-    }
-    return false;
-  },
-
-  throwBadRequestError(message) {
-    const requestError = new Error(message);
-    requestError.name = "BadRequest";
-    throw requestError;
-  },
 
   favorites: {
     async index(req, res) {
@@ -46,16 +25,20 @@ const profilController = {
       const activityId = Number.parseInt(req.body.id, profilController.RADIX_NUMBER);
 
       // Check if activity is already exist
-      const activityExist = await profilController.checkExistingActivity(activityId);
-
-      if(!activityExist) {
-        profilController.throwBadRequestError('The activity don\'t exist');
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity already exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
       }
 
       // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilController.checkUserHasActivity(userId, activityId);
+      console.log(userId, activityId);
+      const userHasActivity = await profilDatamapper.favorites.getOne(userId, activityId);
       if(userHasActivity) {
-        profilController.throwBadRequestError('This activity already saved');
+        const requestError = new ApiError('This activity already saved', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
       }
 
       // Save favorite in DB for this user
@@ -96,16 +79,21 @@ const profilController = {
       const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
       
       // Check if activity is already exist
-      const activityExist = await profilController.checkExistingActivity(activityId);
-      if(!activityExist) {
-        profilController.throwBadRequestError('The activity don\'t exist');
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity already exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
       }
 
       // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilController.checkUserHasActivity(userId, activityId);
+      const userHasActivity = await profilDatamapper.favorites.getOne(userId, activityId);
       if(!userHasActivity) {
-        profilController.throwBadRequestError('This activity dont exist for this user');
+        const requestError = new ApiError('This activity not saved by the user', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
       }
+
 
       console.log(userId, activityId);
       const removedFavorite = await profilDatamapper.favorites.removedFavorite(userId, activityId);

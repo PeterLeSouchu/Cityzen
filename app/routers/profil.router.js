@@ -3,7 +3,7 @@ import { Router } from "express";
 
 // EXTERNAL MODULES
 import profilController from "../controllers/profil.controller.js";
-import catchHandlerController from "../errors/api.error.js";
+import catchHandlerController from "../middlewares/error-handler.middleware.js";
 
 
 

@@ -45,12 +45,12 @@ app.use(session({
   cookie: {
     httpOnly: true,
     maxAge: 1000*60*15,
-    // sameSite: 'lax',
+    sameSite: 'lax',
   }
 }));
 
 // Parser
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
