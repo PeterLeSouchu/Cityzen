@@ -10,6 +10,15 @@ const cityDatamapper = {
     return city.rows[0];
   },
 
+  async getOneById(id) {
+    const city = await client.query(`
+     SELECT * FROM "city" 
+      WHERE "id" = $1
+    ;`, [id]);
+
+    return city.rows[0];
+  },
+
 };
 
 export default cityDatamapper;

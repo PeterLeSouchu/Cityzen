@@ -81,14 +81,28 @@ const profilDatamapper = {
         return createdActivity.rows[0];
     },
 
-    async update(activity) {
+    async update(activity, activityId) {
       // const { slug, url, title, description, image, address, phone, longitude, latitude, cityId } = activity;
-      console.log(activity);
+      // console.log(activity);
 
       const columns = Object.keys(activity);
       // console.log(columns);
       const values = Object.values(activity);
+      // console.log(values);
 
+      const columnsScriptSQL = columns.map((column, index) => {
+        if(column === "cityId") {
+          return `"id_city" = $${index + 1}`
+        }
+
+        if(column === "image") {
+          return `"url_image" = $${index + 1}`
+        }
+
+        return `"${column}" = $${index + 1}`
+      })
+
+      // console.log(columnsScriptSQL);
       // let valuesScriptSQL = '';
 
       // for(const column in activity) {
@@ -97,32 +111,33 @@ const profilDatamapper = {
 
       // }
 
-      const entries = Object.entries(activity);
-      console.log(entries);
+      // const entries = Object.entries(activity);
+      // console.log(entries);
 
-      const scriptSQL = entries.map(data => {
-        if(Number(data[1])){
-          return `${data[0]} = ${data[1]}`;
-        }
-        return `${data[0]} = '${data[1]}'`;
-      })
+      // const scriptSQL = entries.map(data => {
+      //   if(data[0] === 'cityId') {
+      //     return `"id_city" = ${data[1]}`;
+      //   }
 
-      console.log('SET ' + scriptSQL);
+      //   if(Number(data[1])){
+      //     return `"${data[0]}" = ${data[1]}`;
+      //   }
+
+      //   return `"${data[0]}" = '${data[1]}'`;
+      // })
+
+      // console.log('SET ' + scriptSQL);
 
 
 
-      // const updatedActivity = await client.query(`
-      // UPDATE "activity"
-          
-        
-        
-      //   ("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_city")
-      //   VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      //   RETURNING *
-      // ;`, [slug, url, title, description, image, address, phone, longitude, latitude, cityId]);
+      const updatedActivity = await client.query(`
+      UPDATE "activity"
+        SET ${columnsScriptSQL}
+        WHERE "id" = $${columnsScriptSQL.length + 1}
+      RETURNING *
+      ;`, [...values, activityId]);
 
-      // return updatedActivity.rows[0];
-      return activity;
+      return updatedActivity.rows[0];
     }
 
   }

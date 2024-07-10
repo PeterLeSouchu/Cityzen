@@ -45,16 +45,29 @@ PATCH {{url}}/{{mainEndpoint}}/activity/101
 Content-Type: application/json
 
 {
-  "title": "L'attraction 9999 & top",
-  "description": "Une bonne attraction",
   "url": "blablooo",
   "image": "blabla",
-  "address": "rue du PHP ",
-  "phone": "0654748965",
-  "longitude": 45.326359,
-  "latitude": 12.25489,
-  "city": "Lyon"
+  "address": "rue du Ruby ",
+  "phone": "0657847596",
+  "city": "Marseille"
 }
+
+# {
+#   "title": "Le bleu top",
+#   "description": "Une bonne bleu"
+# }
+
+# {
+#   "title": "L'attraction 9999 & top",
+#   "description": "Une bonne attraction",
+#   "url": "blablooo",
+#   "image": "blabla",
+#   "address": "rue du PHP ",
+#   "phone": "0654748965",
+#   "longitude": 45.326359,
+#   "latitude": 12.25489,
+#   "city": "Lyon"
+# }
 
 
 

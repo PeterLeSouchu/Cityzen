@@ -164,6 +164,7 @@ const profilController = {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
 
+
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if(!existActivity) {
@@ -171,6 +172,8 @@ const profilController = {
         requestError.name = "BadRequest";
         throw requestError;
       }
+
+      const cityActivity = await cityDatamapper.getOneById(existActivity.id_city);
 
       // Check if activity is created by this user
       const createdActivityByUser = await profilDatamapper.activities.getOne(userId, activityId);
@@ -180,17 +183,19 @@ const profilController = {
         throw requestError;
       }
 
-      // const { title, description, url, image, address, phone, latitude, longitude, city } = req.body;
       const { title, city } = req.body;
 
       let slug = '';
 
+      
       if(title || city) {
-        // Faire le slug
-        slug = encodeURIComponent(title.toLowerCase());
+        let titleForSlug = title ? title : existActivity.title;
+        let cityForSlug = city ? city : cityActivity.name; 
+
+        slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
         if(sameActivityExist) {
-          slug += `%20${city.toLowerCase()}`;
+          slug += `%20${cityForSlug.toLowerCase()}`;
         }
         
         const sameActivityExistWithCity = await activityDatamapper.getAllBySlug(slug);
@@ -201,35 +206,19 @@ const profilController = {
         }
       }
 
-      console.log(slug);
-
-      const cityFromDB = await cityDatamapper.getOneByName(city);
-
-      // const activityToUpdate = {
-      //   slug,
-      //   url,
-      //   title,
-      //   description,
-      //   image,
-      //   address,
-      //   phone,
-      //   longitude,
-      //   latitude,
-      //   cityId: cityFromDB.id,
-      // };
+      const cityFromDB = city ? await cityDatamapper.getOneByName(city) : cityActivity;
 
       const activityToUpdate = {
         ...req.body,
         slug,
-        title,
+        title: existActivity.title,
         cityId: cityFromDB.id
       };
       delete activityToUpdate.city;
 
-      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate);
+      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate, activityId);
 
-      res.status(200).json({data: 'ok'});
-      // res.status(200).json({data: [updatedActivity]});
+      res.status(200).json({data: [updatedActivity]});
     },
 
     async destroy(req, res) {
