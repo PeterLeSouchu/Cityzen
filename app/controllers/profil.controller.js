@@ -26,7 +26,7 @@ const profilController = {
 
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
-      if(!existActivity) {
+      if(existActivity) {
         const requestError = new ApiError('This activity already exist', {status: 400});
         requestError.name = "BadRequest";
         throw requestError;
@@ -254,17 +254,16 @@ const profilController = {
 
       const avgRating = await profilDatamapper.ratings.getAvg(userId);
 
-      // const ratingsUser = userActivitiesRating.map(activity => id_rating);
-
-      // const avgRating = ratingsUser.reduce((accumulator, currentValue) => {
-      //   return accumulator + currentValue;
-      // }, 0)
-
       res.status(200).json({
         data: userActivitiesRating,
         avgRating: avgRating.avg 
       });
     },
+
+    async store(req, res) {
+      const userId = req.session.userId;
+
+    }
   }
 
 

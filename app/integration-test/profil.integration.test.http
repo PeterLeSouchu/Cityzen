@@ -82,7 +82,6 @@ GET {{url}}/{{mainEndpoint}}/rating
 
 
 
-
 # {
 #   "id": 1,
 #   "title": "attraction 2000",
