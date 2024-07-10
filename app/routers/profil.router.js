@@ -27,8 +27,8 @@ profilRouter.route('/favorite/:id(\\d+)')
 
   // To handle created activities of the user
 profilRouter.route('/activity')
-  // .get(profilController.index) // retourner toutes les activités crées par le user
-  // .post(profilController.store) // crée une activité par le user
+  .get(profilController.activities.index) // OK
+  .post(profilController.activities.store) // OK
  
   profilRouter.route('/activity/:id(\\d+)')
   // .patch(profilController.update)  // modifier une activité crée par le user

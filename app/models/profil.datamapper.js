@@ -2,7 +2,7 @@ import client from "../config/pg.client.js";
 
 const profilDatamapper = {
 
-  favorites : {
+  favorites: {
     async getOne(userId, activityId) {
 
       const userActivity = await client.query(`
@@ -46,6 +46,30 @@ const profilDatamapper = {
       return removedActivity.rows[0];
     }
 
+
+  },
+
+  activities: {
+    async getAll(userId) {
+      const userActivity = await client.query(`
+      SELECT * FROM "activity"
+        WHERE "id_user" = $1
+      ;`, [userId]);
+
+      return userActivity.rows;
+    },
+
+    async create(activity) {
+      const { slug, url, title, description, image, address, phone, longitude, latitude, userId, cityId } = activity;
+
+      const createdActivity = await client.query(`
+        INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_user", "id_city")
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        RETURNING *
+        ;`, [slug, url, title, description, image, address, phone, longitude, latitude, userId, cityId]);
+  
+        return createdActivity.rows[0];
+    }
 
   }
 
