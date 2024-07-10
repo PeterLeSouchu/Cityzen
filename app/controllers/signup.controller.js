@@ -28,7 +28,6 @@ const signupController = {
 
     const hash = await hashPassword(password);
 
-
     req.session.signupDatas = {
       email,
       hash,
@@ -72,7 +71,7 @@ const signupController = {
       }
     }
 
-
+    sendMail(transporter, htmlCode);
 
     res
       .status(200)
@@ -83,14 +82,9 @@ const signupController = {
     console.log(req.session.signupDatas);
     if (!req.session?.signupDatas) {
       return res.status(404).json({ error: 'Bad Request' });
-
     }
-    // if(!req.cookies?.signup) {
-    //   return res.status(404).json({error: 'Bad Request'})
-    // }
 
-    const { email, hash, pseudo, OTP } = JSON.parse(req.cookies.signup);
-    console.log(OTP);
+    const { email, hash, pseudo, OTP } = req.session.signupDatas;
     const sendedOTP = req.body.OTP;
 
     if (OTP !== sendedOTP || sendedOTP.length < 6) {
@@ -102,8 +96,6 @@ const signupController = {
 
     delete req.session.signupDatas;
     req.session.userId = createdUser.id;
-    // delete req.cookies.signup;
-    // res.cookie.userId = createdUser.id;
 
     res.status(200).json({ data: [createdUser] });
   },
