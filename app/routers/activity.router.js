@@ -1,26 +1,27 @@
-// TIERCE MODULES
 import { Router } from "express";
+import activityController from "../controllers/activities.controller.js";
 
-// EXTERNAL MODULES
-import Controller from "../controllers/index.controller.js";
-
-// TODO : The core datamapper
-const activityController = new Controller({datamapper: 'to do'})
+// import validationMiddleware from '../../middlewares/validation.middleware.js';
 
 const activityRouter = Router();
 
+// for connected user
 activityRouter.route('/')
-  // .post(activityController.store);
+  .post(activityController.store);
 
+// Route pour obtenir les activités récentes
+activityRouter.route('/recent')
+  .get(activityController.showRecent);
+
+activityRouter.route('/rating')
+  .get(activityController.showRating);
+
+// Route pour obtenir les activités d'une ville et d'un pays spécifiques
 activityRouter.route('/:country/:city')
   .get(activityController.index);
 
-activityRouter.route('/rating')
-  .get(activityController.index);
-
-
-activityRouter.route('/recent')
-  .get(activityController.index);
-
+// Route pour obtenir une activité par son ID
+activityRouter.route('/:id')
+  .get(activityController.show);
 
 export default activityRouter;
