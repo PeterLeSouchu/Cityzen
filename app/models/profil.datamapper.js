@@ -81,50 +81,73 @@ const profilDatamapper = {
         return createdActivity.rows[0];
     },
 
-    async update(activity) {
+    async update(activity, activityId) {
       // const { slug, url, title, description, image, address, phone, longitude, latitude, cityId } = activity;
-      console.log(activity);
+      // console.log(activity);
 
       const columns = Object.keys(activity);
       // console.log(columns);
       const values = Object.values(activity);
+      // console.log(values);
 
-      // let valuesScriptSQL = '';
-
-      // for(const column in activity) {
-      //   console.log(column);          
-      //   console.log(activity[column]);
-
-      // }
-
-      const entries = Object.entries(activity);
-      console.log(entries);
-
-      const scriptSQL = entries.map(data => {
-        if(Number(data[1])){
-          return `${data[0]} = ${data[1]}`;
+      const columnsScriptSQL = columns.map((column, index) => {
+        if(column === "cityId") {
+          return `"id_city" = $${index + 1}`
         }
-        return `${data[0]} = '${data[1]}'`;
+
+        if(column === "image") {
+          return `"url_image" = $${index + 1}`
+        }
+
+        return `"${column}" = $${index + 1}`
       })
 
-      console.log('SET ' + scriptSQL);
+      const updatedActivity = await client.query(`
+      UPDATE "activity"
+        SET ${columnsScriptSQL}
+        WHERE "id" = $${columnsScriptSQL.length + 1}
+      RETURNING *
+      ;`, [...values, activityId]);
 
+      return updatedActivity.rows[0];
+    },
 
+    async removeActivity(userId, activityId) {
+      
+      const removedActivity = await client.query(`
+        DELETE FROM "activity"
+          WHERE "id_user" = $1
+          AND "id" = $2
+        RETURNING *;
+      ;`, [userId, activityId]);
 
-      // const updatedActivity = await client.query(`
-      // UPDATE "activity"
-          
-        
-        
-      //   ("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_city")
-      //   VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      //   RETURNING *
-      // ;`, [slug, url, title, description, image, address, phone, longitude, latitude, cityId]);
-
-      // return updatedActivity.rows[0];
-      return activity;
+      return removedActivity.rows[0];
     }
 
+  },
+
+  ratings: {
+    async getAllActivities(userId) {
+      const userActivitiesRating = await client.query(`
+        SELECT * FROM "user_activity_rating"
+          JOIN "activity"
+            ON "user_activity_rating"."id_activity" = "activity"."id"
+          WHERE "user_activity_rating"."id_user" = $1
+        ;`, [userId]);
+  
+        return userActivitiesRating.rows;
+    },
+
+    async getAvg(userId) {
+      const userAvgRating = await client.query(`
+        SELECT AVG("user_activity_rating"."id_rating") FROM "user_activity_rating"
+          JOIN "activity"
+            ON "user_activity_rating"."id_activity" = "activity"."id"
+          WHERE "user_activity_rating"."id_user" = $1
+        ;`, [userId]);
+  
+        return userAvgRating.rows[0];
+    }
   }
 
 };
