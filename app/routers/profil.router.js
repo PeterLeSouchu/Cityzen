@@ -31,8 +31,8 @@ profilRouter.route('/activity')
   .post(profilController.activities.store) // OK
  
   profilRouter.route('/activity/:id(\\d+)')
-  // .patch(profilController.update)  // modifier une activité crée par le user
-  // .delete(profilController.destroy); // supprimer une activité créée par le user
+  .patch(profilController.activities.update)  // modifier une activité crée par le user
+  // .delete(profilController.activities.destroy); // supprimer une activité créée par le user
 
 profilRouter.route('/raiting')
   // .get(profilController.rating.index)  // retourne toutes les activités notées (inclure une note moyenne totale)
