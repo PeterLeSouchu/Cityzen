@@ -25,6 +25,8 @@ const signinController = {
 
     req.session.userId = userExist.id;
     delete userExist.password;
+    // res.cookie.userId = userExist.id; 
+    // delete userExist.password;
 
     res.status(200).json({ data: [userExist] });
   },

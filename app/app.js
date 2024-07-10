@@ -31,6 +31,7 @@ const app = express();
 //   }
 // });
 
+
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -38,7 +39,8 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+
+
 
 app.use(
   session({
@@ -53,9 +55,14 @@ app.use(
   })
 );
 
+
+
 // Parser
+// app.use(cookieParser());
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
+
 
 // Router: router variable not exist now. Is only for information. To do
 app.use(router);

@@ -2,19 +2,64 @@
 # @url = http://localhost:3000
 @mainEndpoint = profil
 
+# FAVORITES
+
 ### POST /profil/favorite
 POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 44
+  "id": 12
 }
 
 ### GET /profil/favorite
 GET {{url}}/{{mainEndpoint}}/favorite
 
-### DELETE /profil/favorite
-DELETE {{url}}/{{mainEndpoint}}/favorite/44
+### DELETE /profil/favorite/:id
+DELETE {{url}}/{{mainEndpoint}}/favorite/12
+
+
+# ACTIVITIES
+
+### GET /profil/activity
+GET {{url}}/{{mainEndpoint}}/activity
+
+### POST profil/activity
+POST {{url}}/{{mainEndpoint}}/activity
+Content-Type: application/json
+
+{
+  "title": "L'attraction 2000 & top",
+  "description": "Une bonne attraction",
+  "url": "blablooo",
+  "image": "blabla",
+  "address": "rue du PHP ",
+  "phone": "0654748965",
+  "longitude": 45.326359,
+  "latitude": 12.25489,
+  "city": "Lyon"
+}
+
+### PATCH profil/activity
+PATCH {{url}}/{{mainEndpoint}}/activity/101
+Content-Type: application/json
+
+{
+  "title": "L'attraction 9999 & top",
+  "description": "Une bonne attraction",
+  "url": "blablooo",
+  "image": "blabla",
+  "address": "rue du PHP ",
+  "phone": "0654748965",
+  "longitude": 45.326359,
+  "latitude": 12.25489,
+  "city": "Lyon"
+}
+
+
+
+
+
 
 # {
 #   "id": 1,

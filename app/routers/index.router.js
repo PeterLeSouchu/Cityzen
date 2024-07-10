@@ -9,7 +9,7 @@ import unsubscribeRouter from "./unsubscribe.router.js";
 import profilRouter from "./profil.router.js";
 import forgotPasswordRouter from "./forgot-password.router.js";
 import signupRouter from "./signup.router.js";
-import authenticationCheck from "../middlewares/authenticationCheck.js";
+import authenticationCheck from "../middlewares/authentication-check.middleware.js";
 
 
 

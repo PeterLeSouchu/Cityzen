@@ -3,6 +3,7 @@ import { Router } from "express";
 
 // EXTERNAL MODULES
 import profilController from "../controllers/profil.controller.js";
+import catchHandlerController from "../middlewares/error-handler.middleware.js";
 
 
 
@@ -18,20 +19,20 @@ profilRouter.route('/authentication')
 
   // To handle favorites of the user
 profilRouter.route('/favorite')
-  .get(profilController.favorites.index) // OK !
-  .post(profilController.favorites.store) // OK !
+  .get(catchHandlerController(profilController.favorites.index)) // OK !
+  .post(catchHandlerController(profilController.favorites.store)) // OK !
 
 profilRouter.route('/favorite/:id(\\d+)')
-  .delete(profilController.favorites.destroy); // juste l'id
+  .delete(catchHandlerController(profilController.favorites.destroy)); // OK !
 
   // To handle created activities of the user
 profilRouter.route('/activity')
-  // .get(profilController.index) // retourner toutes les activités crées par le user
-  // .post(profilController.store) // crée une activité par le user
+  .get(profilController.activities.index) // OK
+  .post(profilController.activities.store) // OK
  
   profilRouter.route('/activity/:id(\\d+)')
-  // .patch(profilController.update)  // modifier une activité crée par le user
-  // .delete(profilController.destroy); // supprimer une activité créée par le user
+  .patch(profilController.activities.update)  // modifier une activité crée par le user
+  // .delete(profilController.activities.destroy); // supprimer une activité créée par le user
 
 profilRouter.route('/raiting')
   // .get(profilController.rating.index)  // retourne toutes les activités notées (inclure une note moyenne totale)
