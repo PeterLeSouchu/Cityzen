@@ -4,12 +4,28 @@ import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+//import path from 'path';
+//import { fileURLToPath } from 'url';
+
+//import multer
+// npm i path
+// Get the current directory name
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
+
+
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
 
+
+
+
 const app = express();
 
+//app.use(express.static(path.join(import.meta.dirname, 'uploads')));
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
 // app.use(express.static(path.join(import.meta.dirname, '/')))
 
