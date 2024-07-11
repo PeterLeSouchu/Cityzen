@@ -1,11 +1,12 @@
-import dataMapper from '../dataMapper/ActivityDataMapper.js';
+import activityDatamapper from "../models/activity.datamapper.js";
 
-const activityController = {
+
+const activitiesController = {
   async index(req, res) {
     try {
       const { country, city } = req.params;
 
-      const activitiesOfCity = await dataMapper.findActivityOfCity(
+      const activitiesOfCity = await activityDatamapper.findActivityOfCity(
         country,
         city
       );
@@ -26,7 +27,7 @@ const activityController = {
   async show(req, res) {
     const id = parseInt(req.params.id);
     console.log(id);
-    const activity = await dataMapper.findByPk(id);
+    const activity = await activityDatamapper.getOne(id);
 
     if (!activity) {
       return res
@@ -39,7 +40,7 @@ const activityController = {
 
   async showRecent(req, res) {
     try {
-      const recentActivities = await dataMapper.findRecent();
+      const recentActivities = await activityDatamapper.findRecent();
 
       if (!recentActivities || recentActivities.length === 0) {
         return res.status(404).json({ message: `No recent activities found` });
@@ -57,7 +58,7 @@ const activityController = {
 
   async showRating(req, res) {
     try {
-      const recentActivities = await dataMapper.findActivitiesRating();
+      const recentActivities = await activityDatamapper.findActivitiesRating();
 
       if (!recentActivities || recentActivities.length === 0) {
         return res.status(404).json({ message: `No recent activities found` });
@@ -92,7 +93,7 @@ const activityController = {
     } = req.body;
 
     // Vérifier si la ville existe en utilisant le dataMapper
-    const city = await dataMapper.findCity(id_city); // Utilisation de l'id de la ville pour la recherche
+    const city = await activityDatamapper.findCity(id_city); // Utilisation de l'id de la ville pour la recherche
 
     if (!city) {
       // Si la ville n'existe pas, retourner une erreur 400
@@ -127,6 +128,7 @@ const activityController = {
     // Répondre avec l'activité créée en JSON
     res.status(200).json(createdActivity);
   },
+
 };
 
-export default activityController;
+export default activitiesController;
