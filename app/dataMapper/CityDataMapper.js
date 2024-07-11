@@ -3,8 +3,8 @@ import client from '../config/pg.client.js'
 const dataMapper = {
     async findCity(city) {
         const query = {
-          text: `SELECT * FROM city WHERE LOWER(name) LIKE $1`,
-          values: [`%${city.toLowerCase()}%`]
+          text: `SELECT * FROM city WHERE LOWER(name) LIKE $1 LIMIT 5`,
+          values: [`${city.toLowerCase()}%`]
         }
         const result = await client.query(query);
         const {rows} = result;
