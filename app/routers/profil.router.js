@@ -27,18 +27,18 @@ profilRouter.route('/favorite/:id(\\d+)')
 
   // To handle created activities of the user
 profilRouter.route('/activity')
-  .get(profilController.activities.index) // OK
-  .post(profilController.activities.store) // OK
+  .get(catchHandlerController(profilController.activities.index)) // OK
+  .post(catchHandlerController(profilController.activities.store)) // OK
  
   profilRouter.route('/activity/:id(\\d+)')
-  .patch(profilController.activities.update)  // OK
-  .delete(profilController.activities.destroy); // OK
+  .patch(catchHandlerController(profilController.activities.update))  // OK
+  .delete(catchHandlerController(profilController.activities.destroy)); // OK
 
 profilRouter.route('/rating')
-  .get(profilController.ratings.index)  // OK
+  .get(catchHandlerController(profilController.ratings.index))  // OK
 
 profilRouter.route('/rating/:id(\\d+)')
-  .post(profilController.ratings.store)  // OK (Retourne le résultat des 3 relations)
+  .post(catchHandlerController(profilController.ratings.store))  // OK (Retourne le résultat des 3 relations)
 
   // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité
 
