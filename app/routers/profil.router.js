@@ -39,6 +39,8 @@ profilRouter.route('/rating')
 profilRouter.route('/rating')
   .post(profilController.ratings.store)  // ajouter une note à une activité
 
+  // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité
+
 // profilRouter.route('/raiting/:id(\\d+)')
   // .get
 

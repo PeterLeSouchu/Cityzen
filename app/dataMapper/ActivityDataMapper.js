@@ -66,18 +66,7 @@ const dataMapper = {
     return rows;
   },
 
-  async findCity(id_city) {
-    const query = {
-      text: `SELECT *
-                   FROM "city"
-                   WHERE id = $1
-                   `,
-      values: [id_city],
-    };
-    const result = await client.query(query);
-    const { rows } = result;
-    return rows;
-  },
+
 };
 
 export default dataMapper;

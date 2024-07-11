@@ -18,7 +18,6 @@ const cityDatamapper = {
 
     return city.rows[0];
   },
-
 };
 
 export default cityDatamapper;
