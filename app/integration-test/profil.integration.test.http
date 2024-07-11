@@ -75,11 +75,16 @@ DELETE {{url}}/{{mainEndpoint}}/activity/109
 
 # RATINGS
 
-### GET /profil/activity
+### GET /profil/rating
 GET {{url}}/{{mainEndpoint}}/rating
 
+### POST profil/rating
+POST {{url}}/{{mainEndpoint}}/rating/58
+Content-Type: application/json
 
-
+{
+  "rating": 4
+}
 
 
 # {

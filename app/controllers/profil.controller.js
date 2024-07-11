@@ -1,8 +1,10 @@
+// EXTERNAL MODULES
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
-import makeSlug from '../utils/make-slug.js';
+import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
+
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -304,8 +306,28 @@ const profilController = {
 
     async store(req, res) {
       const userId = req.session.userId;
+      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      const userRating = Number.parseInt(req.body.rating, profilController.RADIX_NUMBER);
 
-    }
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity don\'t exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      // Check if user has already rate this activity
+      const userHasRateActivity = await userActivityRatingDatamapper  .getOne(userId, activityId);
+      if(userHasRateActivity) {
+        const requestError = new ApiError('The user has already rate this activity', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      const userActivityWithRating = await profilDatamapper.ratings.saveRating(userId, activityId, userRating)
+
+      res.status(201).json({ data: [userActivityWithRating]});
+    },
   }
 };
 
