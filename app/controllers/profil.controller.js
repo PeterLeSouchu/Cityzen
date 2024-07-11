@@ -31,7 +31,7 @@ const profilController = {
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError("This activity doesn't exist", {
+        const requestError = new ApiError("This activity don't exist", {
           status: 400,
         });
         requestError.name = 'BadRequest';
@@ -62,28 +62,6 @@ const profilController = {
       console.log(existActivity);
 
       res.status(201).json({ data: existActivity });
-
-      // const { title, description, image, address, phone, longitude, latitude, city } = req.body;
-
-      // // This real slug but now we use the id at the place of the title
-      // const slug = makeSlug(title);
-      // // const slug =
-      // const userId = req.cookies.userId;
-
-      // const createdActivity = await profilDatamapper.create({
-      //   title,
-      //   description,
-      //   image,
-      //   address,
-      //   phone,
-      //   longitude,
-      //   latitude,
-      //   city,
-      //   slug,
-      //   userId
-      // })
-
-      // res.status(201).json({})
     },
 
     async destroy(req, res) {
@@ -97,7 +75,7 @@ const profilController = {
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError("This activity doesn't exist", {
+        const requestError = new ApiError("This activity don't exist", {
           status: 400,
         });
         requestError.name = 'BadRequest';
@@ -141,7 +119,6 @@ const profilController = {
       const {
         title,
         description,
-        url,
         image,
         address,
         phone,
@@ -170,7 +147,6 @@ const profilController = {
 
       const activityToCreate = {
         slug,
-        url,
         title,
         description,
         image,
@@ -196,11 +172,10 @@ const profilController = {
         profilController.RADIX_NUMBER
       );
 
-
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError('This activity already exist', {
+        const requestError = new ApiError('This activity don\'t exist', {
           status: 400,
         });
         requestError.name = 'BadRequest';
@@ -227,7 +202,6 @@ const profilController = {
 
       let slug = '';
 
-      
       if(title || city) {
         let titleForSlug = title ? title : existActivity.title;
         let cityForSlug = city ? city : cityActivity.name; 
@@ -270,7 +244,7 @@ const profilController = {
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if(!existActivity) {
-        const requestError = new ApiError('This activity already exist', {status: 400});
+        const requestError = new ApiError('The activity is not in the registered activities', {status: 400});
         requestError.name = "BadRequest";
         throw requestError;
       }

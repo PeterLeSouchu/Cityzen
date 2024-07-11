@@ -82,7 +82,6 @@ const profilDatamapper = {
     async create(activity) {
       const {
         slug,
-        url,
         title,
         description,
         image,
@@ -96,13 +95,12 @@ const profilDatamapper = {
 
       const result = await client.query(
         `
-      INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_user", "id_city")
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      INSERT INTO "activity"("slug", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_user", "id_city")
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *
       ;`,
         [
           slug,
-          url,
           title,
           description,
           image,

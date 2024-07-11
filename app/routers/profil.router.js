@@ -7,6 +7,12 @@ import catchHandlerController from "../middlewares/error-handler.middleware.js";
 import validationSchema from "../schema-validations/validation.schema.js";
 import profilFavoritePostSchema from "../schema-validations/profil/profil-favorite-post.schema.js";
 import profilFavoriteDeleteSchema from "../schema-validations/profil/profil-favorite-delete.schema.js";
+import profilActivityPostSchema from "../schema-validations/profil/profil-activity-post.schema.js";
+import profilActivityDeleteSchema from "../schema-validations/profil/profil-activity-delete.schema.js";
+import profilRatingPostSchema from "../schema-validations/profil/profil-rating-post.schema.js";
+import profilActivityPatchSchema from "../schema-validations/profil/profil-activity-patch.schema.js";
+import paramsSchema from "../schema-validations/params.schema.js";
+import updateSchema from "../schema-validations/update.schema.js";
 
 
 
@@ -26,22 +32,22 @@ profilRouter.route('/favorite')
   .post(validationSchema(profilFavoritePostSchema, 'body'), catchHandlerController(profilController.favorites.store))
 
 profilRouter.route('/favorite/:id(\\d+)')
-  .delete(validationSchema(profilFavoriteDeleteSchema, 'params'), catchHandlerController(profilController.favorites.destroy));
+  .delete(validationSchema(profilFavoriteDeleteSchema, 'params', true), catchHandlerController(profilController.favorites.destroy));
 
   // To handle created activities of the user
 profilRouter.route('/activity')
   .get(catchHandlerController(profilController.activities.index)) // OK
-  .post(catchHandlerController(profilController.activities.store)) // OK
+  .post(validationSchema(profilActivityPostSchema, 'body'), catchHandlerController(profilController.activities.store))
  
   profilRouter.route('/activity/:id(\\d+)')
-  .patch(catchHandlerController(profilController.activities.update))  // OK
-  .delete(catchHandlerController(profilController.activities.destroy)); // OK
+  .patch(validationSchema(updateSchema(paramsSchema, profilActivityPatchSchema), undefined, 'update', true), catchHandlerController(profilController.activities.update))  // Validation à faire
+  .delete(validationSchema(profilActivityDeleteSchema, 'params', true), catchHandlerController(profilController.activities.destroy));
 
 profilRouter.route('/rating')
-  .get(catchHandlerController(profilController.ratings.index))  // OK
+  .get(catchHandlerController(profilController.ratings.index))
 
 profilRouter.route('/rating/:id(\\d+)')
-  .post(catchHandlerController(profilController.ratings.store))  // OK (Retourne le résultat des 3 relations)
+  .post(validationSchema(profilRatingPostSchema, 'body'), catchHandlerController(profilController.ratings.store))
 
   // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité
 

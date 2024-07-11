@@ -29,19 +29,18 @@ POST {{url}}/{{mainEndpoint}}/activity
 Content-Type: application/json
 
 {
-  "title": "L'attraction 400 & top",
-  "description": "Une bonne 400",
-  "url": "blablooo",
+  "title": "La pizza du coin",
+  "description": "Une bonne pizza au fromage",
   "image": "blabla",
-  "address": "rue du PHP ",
+  "address": "rue du camembert ",
   "phone": "0654748965",
   "longitude": 45.326359,
   "latitude": 12.25489,
-  "city": "Paris"
+  "city": "Rennes"
 }
 
 ### PATCH profil/activity
-PATCH {{url}}/{{mainEndpoint}}/activity/109
+PATCH {{url}}/{{mainEndpoint}}/activity/113
 Content-Type: application/json
 
 # {
@@ -70,7 +69,7 @@ Content-Type: application/json
 # }
 
 ### DELETE /profil/activity/:id
-DELETE {{url}}/{{mainEndpoint}}/activity/109
+DELETE {{url}}/{{mainEndpoint}}/activity/116
 
 
 # RATINGS
@@ -79,7 +78,7 @@ DELETE {{url}}/{{mainEndpoint}}/activity/109
 GET {{url}}/{{mainEndpoint}}/rating
 
 ### POST profil/rating
-POST {{url}}/{{mainEndpoint}}/rating/58
+POST {{url}}/{{mainEndpoint}}/rating/9
 Content-Type: application/json
 
 {
