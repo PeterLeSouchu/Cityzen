@@ -44,7 +44,6 @@ PATCH {{url}}/{{mainEndpoint}}/activity/113
 Content-Type: application/json
 
 # {
-#   "url": "blablooo",
 #   "image": "blabla",
 #   "address": "rue du Ruby ",
 #   "phone": "0657847596",
@@ -59,7 +58,6 @@ Content-Type: application/json
 # {
 #   "title": "L'attraction 9999 & top",
 #   "description": "Une bonne attraction",
-#   "url": "blablooo",
 #   "image": "blabla",
 #   "address": "rue du PHP ",
 #   "phone": "0654748965",

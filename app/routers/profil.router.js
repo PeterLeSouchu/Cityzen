@@ -46,7 +46,9 @@ profilRouter.route('/activity')
 profilRouter.route('/rating')
   .get(catchHandlerController(profilController.ratings.index))
 
-profilRouter.route('/rating/:id(\\d+)')
+profilRouter.route('/rating/:id(\\d+)') // id fait référence à une activité
+  .get(catchHandlerController(profilController.ratings.getOne))
+  .patch(catchHandlerController(profilController.ratings.update))
   .post(validationSchema(profilRatingPostSchema, 'body'), catchHandlerController(profilController.ratings.store))
 
   // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité

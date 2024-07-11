@@ -3,7 +3,7 @@ const validationSchema = (schema, reqProperty = undefined, method = undefined, a
   try {
     if(method === 'update') {
       await schema.validateAsync(req, {convert: acceptConvert});
-      next();
+      return next();
     }
 
     await schema.validateAsync(req[reqProperty], {convert: acceptConvert});
