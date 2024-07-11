@@ -4,6 +4,9 @@ import { Router } from "express";
 // EXTERNAL MODULES
 import profilController from "../controllers/profil.controller.js";
 import catchHandlerController from "../middlewares/error-handler.middleware.js";
+import validationSchema from "../schema-validations/validation.schema.js";
+import profilFavoritePostSchema from "../schema-validations/profil/profil-favorite-post.schema.js";
+import profilFavoriteDeleteSchema from "../schema-validations/profil/profil-favorite-delete.schema.js";
 
 
 
@@ -19,11 +22,11 @@ profilRouter.route('/authentication')
 
   // To handle favorites of the user
 profilRouter.route('/favorite')
-  .get(catchHandlerController(profilController.favorites.index)) // OK !
-  .post(catchHandlerController(profilController.favorites.store)) // OK !
+  .get(catchHandlerController(profilController.favorites.index))
+  .post(validationSchema(profilFavoritePostSchema, 'body'), catchHandlerController(profilController.favorites.store))
 
 profilRouter.route('/favorite/:id(\\d+)')
-  .delete(catchHandlerController(profilController.favorites.destroy)); // OK !
+  .delete(validationSchema(profilFavoriteDeleteSchema, 'params'), catchHandlerController(profilController.favorites.destroy));
 
   // To handle created activities of the user
 profilRouter.route('/activity')

@@ -1,10 +1,10 @@
-const validationSchema = (schema) => async (req, _, next
+const validationSchema = (schema, reqProperty) => async (req, _, next
 ) => {
   try {
-    await schema.validateAsync(req.body);
+    await schema.validateAsync(req[reqProperty]);
     next();
   } catch (err) {
-    console.log('dans le validator', err.name, err.message);
+    console.log('Provenant du validateur :', err.name, err.message);
     next(err);
   }
 }
