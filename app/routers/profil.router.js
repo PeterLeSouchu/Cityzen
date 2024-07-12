@@ -14,17 +14,16 @@ import profilActivityPatchSchema from "../schema-validations/profil/profil-activ
 import paramsSchema from "../schema-validations/params.schema.js";
 import updateSchema from "../schema-validations/update.schema.js";
 import profilRatingPatchSchema from "../schema-validations/profil/profil-rating-patch.schema.js";
+import upload from "../middlewares/multer.upload.middlewares.js";
 
 
 
 const profilRouter = Router();
 
 profilRouter.route('/pseudo')
-// Check with the JWT and the id from session and change pseudo in DB (use middleware to check user)
   // .patch(profilController.update);
 
 profilRouter.route('/authentication')
-// Check with the JWT, the id from session and check password from DB. If correct change new password in DB (use middleware to check user)
   // .patch(profilController.update);
 
   // To handle favorites of the user
@@ -37,25 +36,21 @@ profilRouter.route('/favorite/:id(\\d+)')
 
   // To handle created activities of the user
 profilRouter.route('/activity')
-  .get(catchHandlerController(profilController.activities.index)) // OK
-  .post(validationSchema(profilActivityPostSchema, 'body'), catchHandlerController(profilController.activities.store))
+  .get(catchHandlerController(profilController.activities.index))
+  .post(validationSchema(profilActivityPostSchema, 'body'), upload.single('image') ,catchHandlerController(profilController.activities.store))
  
   profilRouter.route('/activity/:id(\\d+)')
-  .patch(validationSchema(updateSchema(paramsSchema, profilActivityPatchSchema), undefined, 'update', true), catchHandlerController(profilController.activities.update))  // Validation à faire
+  .patch(validationSchema(updateSchema(paramsSchema, profilActivityPatchSchema), undefined, 'update', true), catchHandlerController(profilController.activities.update))
   .delete(validationSchema(profilActivityDeleteSchema, 'params', undefined, true), catchHandlerController(profilController.activities.destroy));
 
+  // To handle rating activities of the user
 profilRouter.route('/rating')
   .get(catchHandlerController(profilController.ratings.index))
 
-profilRouter.route('/rating/:id(\\d+)') // id fait référence à une activité
-  .get(catchHandlerController(profilController.ratings.show)) // ok
-  .patch(validationSchema(updateSchema(paramsSchema, profilRatingPatchSchema), undefined, 'update', true), catchHandlerController(profilController.ratings.update)) // ok
+profilRouter.route('/rating/:id(\\d+)') // id refers to an activity
+  .get(catchHandlerController(profilController.ratings.show))
+  .patch(validationSchema(updateSchema(paramsSchema, profilRatingPatchSchema), undefined, 'update', true), catchHandlerController(profilController.ratings.update))
   .post(validationSchema(profilRatingPostSchema, 'body'), catchHandlerController(profilController.ratings.store))
-
-  // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité
-
-
-
 
 
 export default profilRouter;
