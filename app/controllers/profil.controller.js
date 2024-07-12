@@ -303,6 +303,27 @@ const profilController = {
       });
     },
 
+    async show(req, res) {
+      const userId = req.session.userId;
+      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity don\'t exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      const userHasRateActivity = await userActivityRatingDatamapper.getOne(userId, activityId);
+      if(!userHasRateActivity) {
+        const requestError = new ApiError('The user don\'t rate this activity', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      res.status(200).json({ data: [userHasRateActivity]});
+    },
+
     async store(req, res) {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
@@ -316,16 +337,43 @@ const profilController = {
       }
 
       // Check if user has already rate this activity
-      const userHasRateActivity = await userActivityRatingDatamapper  .getOne(userId, activityId);
+      const userHasRateActivity = await userActivityRatingDatamapper.getOne(userId, activityId);
       if(userHasRateActivity) {
         const requestError = new ApiError('The user has already rate this activity', {status: 400});
         requestError.name = "BadRequest";
         throw requestError;
       }
 
-      const userActivityWithRating = await profilDatamapper.ratings.saveRating(userId, activityId, userRating)
+      const userActivityWithRating = await profilDatamapper.ratings.saveRating(userId, activityId, userRating);
 
       res.status(201).json({ data: [userActivityWithRating]});
+    },
+
+    async update(req, res) {
+      const userId = req.session.userId;
+      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      const userRating = Number.parseInt(req.body.rating, profilController.RADIX_NUMBER);
+
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity don\'t exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      // Check if user has already rate this activity
+      const userHasRateActivity = await userActivityRatingDatamapper.getOne(userId, activityId);
+      if(!userHasRateActivity) {
+        const requestError = new ApiError('The user don\'t rate this activity', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      const oldUserRating = userHasRateActivity.id_rating;
+
+      const userActivityWithRating = await profilDatamapper.ratings.updateRating(userId, activityId, userRating, oldUserRating);
+
+      res.status(200).json({ data: userActivityWithRating });
     },
   }
 };

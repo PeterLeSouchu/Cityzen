@@ -16,7 +16,7 @@ Content-Type: application/json
 GET {{url}}/{{mainEndpoint}}/favorite
 
 ### DELETE /profil/favorite/:id
-DELETE {{url}}/{{mainEndpoint}}/favorite/71
+DELETE {{url}}/{{mainEndpoint}}/favorite/23
 
 
 # ACTIVITIES

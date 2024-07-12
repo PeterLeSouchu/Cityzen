@@ -207,6 +207,44 @@ const profilDatamapper = {
 
       return result.rows[0];
     },
+
+    async updateRating(userId, activityId, userRating, oldUserRating) {
+      const result = await client.query(`
+      UPDATE "user_activity_rating"
+        SET "id_rating" = $1
+          WHERE "id_user" = $2
+          AND "id_activity" = $3
+      RETURNING *
+      ;`, [ userRating, userId, activityId]);
+
+      await client.query(`
+      UPDATE "user_rating"
+        SET "id_rating" = $1
+          WHERE "id" IN (
+            SELECT "id" FROM "user_rating" 
+              WHERE "id_user" = $2 
+              AND "id_rating" = $3
+            LIMIT 1
+          )
+      RETURNING *
+      ;`, [userRating, userId, oldUserRating]);
+
+      await client.query(`
+      UPDATE "rating_activity"
+       SET "id_rating" = $1
+          WHERE "id" IN (
+            SELECT "id" FROM "rating_activity" 
+              WHERE "id_activity" = $2 
+              AND "id_rating" = $3
+            LIMIT 1
+          )
+      RETURNING *
+      ;`, [userRating, activityId, oldUserRating]);
+
+      // Mettre à jour la note moyenne SEULEMENT pour les activités créées par les utilisateurs cityZen
+
+      return result.rows[0];
+    },
   }
 };
 

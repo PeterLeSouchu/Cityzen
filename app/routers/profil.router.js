@@ -13,6 +13,7 @@ import profilRatingPostSchema from "../schema-validations/profil/profil-rating-p
 import profilActivityPatchSchema from "../schema-validations/profil/profil-activity-patch.schema.js";
 import paramsSchema from "../schema-validations/params.schema.js";
 import updateSchema from "../schema-validations/update.schema.js";
+import profilRatingPatchSchema from "../schema-validations/profil/profil-rating-patch.schema.js";
 
 
 
@@ -47,8 +48,8 @@ profilRouter.route('/rating')
   .get(catchHandlerController(profilController.ratings.index))
 
 profilRouter.route('/rating/:id(\\d+)') // id fait référence à une activité
-  .get(catchHandlerController(profilController.ratings.getOne))
-  .patch(catchHandlerController(profilController.ratings.update))
+  .get(catchHandlerController(profilController.ratings.show)) // ok
+  .patch(validationSchema(updateSchema(paramsSchema, profilRatingPatchSchema), undefined, 'update', true), catchHandlerController(profilController.ratings.update)) // ok
   .post(validationSchema(profilRatingPostSchema, 'body'), catchHandlerController(profilController.ratings.store))
 
   // Retrouver la note selon l'utilisateur et l'activité pour l'afficher lors du clique sur l'activité
