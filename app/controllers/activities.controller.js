@@ -1,5 +1,3 @@
-import activityDatamapper from "../models/activity.datamapper.js";
-
 
 const activitiesController = {
   async index(req, res) {

@@ -9,14 +9,14 @@ POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 12
+  "id": 71
 }
 
 ### GET /profil/favorite
 GET {{url}}/{{mainEndpoint}}/favorite
 
 ### DELETE /profil/favorite/:id
-DELETE {{url}}/{{mainEndpoint}}/favorite/12
+DELETE {{url}}/{{mainEndpoint}}/favorite/71
 
 
 # ACTIVITIES
@@ -29,38 +29,35 @@ POST {{url}}/{{mainEndpoint}}/activity
 Content-Type: application/json
 
 {
-  "title": "L'attraction 2000 & top",
-  "description": "Une bonne attraction",
-  "url": "blablooo",
+  "title": "La pizza du coin",
+  "description": "Une bonne pizza au fromage",
   "image": "blabla",
-  "address": "rue du PHP ",
+  "address": "rue du camembert ",
   "phone": "0654748965",
   "longitude": 45.326359,
   "latitude": 12.25489,
-  "city": "Lyon"
+  "city": "Rennes"
 }
 
 ### PATCH profil/activity
-PATCH {{url}}/{{mainEndpoint}}/activity/101
+PATCH {{url}}/{{mainEndpoint}}/activity/113
 Content-Type: application/json
 
-{
-  "url": "blablooo",
-  "image": "blabla",
-  "address": "rue du Ruby ",
-  "phone": "0657847596",
-  "city": "Marseille"
-}
-
 # {
-#   "title": "Le bleu top",
-#   "description": "Une bonne bleu"
+#   "image": "blabla",
+#   "address": "rue du Ruby ",
+#   "phone": "0657847596",
+#   "city": "Marseille"
 # }
+
+{
+  "title": "Le bleu top",
+  "description": "Une bonne bleu"
+}
 
 # {
 #   "title": "L'attraction 9999 & top",
 #   "description": "Une bonne attraction",
-#   "url": "blablooo",
 #   "image": "blabla",
 #   "address": "rue du PHP ",
 #   "phone": "0654748965",
@@ -70,16 +67,21 @@ Content-Type: application/json
 # }
 
 ### DELETE /profil/activity/:id
-DELETE {{url}}/{{mainEndpoint}}/activity/101
+DELETE {{url}}/{{mainEndpoint}}/activity/116
 
 
 # RATINGS
 
-### GET /profil/activity
+### GET /profil/rating
 GET {{url}}/{{mainEndpoint}}/rating
 
+### POST profil/rating
+POST {{url}}/{{mainEndpoint}}/rating/9
+Content-Type: application/json
 
-
+{
+  "rating": 4
+}
 
 
 # {
