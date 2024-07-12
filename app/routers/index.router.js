@@ -10,6 +10,8 @@ import profilRouter from "./profil.router.js";
 import forgotPasswordRouter from "./forgot-password.router.js";
 import signupRouter from "./signup.router.js";
 import authenticationCheck from "../middlewares/authentication-check.middleware.js";
+import countryRouter from "./country.router.js";
+import cityRouter from "./city.router.js";
 
 
 
@@ -22,6 +24,8 @@ router.use('/signout', signoutRouter);
 router.use('/unsubscribe', unsubscribeRouter);
 router.use( '/profil',authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
+router.use('/country', countryRouter);
+router.use('/city', cityRouter);
 
 
 
