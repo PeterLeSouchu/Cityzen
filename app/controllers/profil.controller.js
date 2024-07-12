@@ -1,8 +1,10 @@
+// EXTERNAL MODULES
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
-import makeSlug from '../utils/make-slug.js';
+import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
+
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -29,7 +31,7 @@ const profilController = {
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError("This activity doesn't exist", {
+        const requestError = new ApiError("This activity don't exist", {
           status: 400,
         });
         requestError.name = 'BadRequest';
@@ -60,28 +62,6 @@ const profilController = {
       console.log(existActivity);
 
       res.status(201).json({ data: existActivity });
-
-      // const { title, description, image, address, phone, longitude, latitude, city } = req.body;
-
-      // // This real slug but now we use the id at the place of the title
-      // const slug = makeSlug(title);
-      // // const slug =
-      // const userId = req.cookies.userId;
-
-      // const createdActivity = await profilDatamapper.create({
-      //   title,
-      //   description,
-      //   image,
-      //   address,
-      //   phone,
-      //   longitude,
-      //   latitude,
-      //   city,
-      //   slug,
-      //   userId
-      // })
-
-      // res.status(201).json({})
     },
 
     async destroy(req, res) {
@@ -95,7 +75,7 @@ const profilController = {
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError("This activity doesn't exist", {
+        const requestError = new ApiError("This activity don't exist", {
           status: 400,
         });
         requestError.name = 'BadRequest';
@@ -118,8 +98,10 @@ const profilController = {
 
       console.log(userId, activityId);
 
-      const removedFavorite = await profilDatamapper.favorites.removedFavorite(userId, activityId);
-
+      const removedFavorite = await profilDatamapper.favorites.removedFavorite(
+        userId,
+        activityId
+      );
 
       res.status(200).json({ data: existActivity });
     },
@@ -136,15 +118,15 @@ const profilController = {
 
     async store(req, res) {
       const userId = req.session.userId;
+
+      const longitude = 4.76527;
+      const latitude = 4.76527;
       const {
         title,
         description,
-        url,
         image,
         address,
         phone,
-        longitude,
-        latitude,
         city,
       } = req.body;
 
@@ -168,7 +150,6 @@ const profilController = {
 
       const activityToCreate = {
         slug,
-        url,
         title,
         description,
         image,
@@ -194,18 +175,19 @@ const profilController = {
         profilController.RADIX_NUMBER
       );
 
-
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
-        const requestError = new ApiError('This activity already exist', {
+        const requestError = new ApiError('This activity don\'t exist', {
           status: 400,
         });
         requestError.name = 'BadRequest';
         throw requestError;
       }
 
-      const cityActivity = await cityDatamapper.getOneById(existActivity.id_city);
+      const cityActivity = await cityDatamapper.getOneById(
+        existActivity.id_city
+      );
 
       // Check if activity is created by this user
       const createdActivityByUser = await profilDatamapper.activities.getOne(
@@ -225,14 +207,15 @@ const profilController = {
 
       let slug = '';
 
-      
+
       if(title || city) {
+
         let titleForSlug = title ? title : existActivity.title;
-        let cityForSlug = city ? city : cityActivity.name; 
+        let cityForSlug = city ? city : cityActivity.name;
 
         slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-        if(sameActivityExist) {
+        if (sameActivityExist) {
           slug += `%20${cityForSlug.toLowerCase()}`;
         }
 
@@ -246,66 +229,104 @@ const profilController = {
         }
       }
 
-      const cityFromDB = city ? await cityDatamapper.getOneByName(city) : cityActivity;
+      const cityFromDB = city
+        ? await cityDatamapper.getOneByName(city)
+        : cityActivity;
 
       const activityToUpdate = {
         ...req.body,
         slug,
         title: existActivity.title,
-        cityId: cityFromDB.id
+        cityId: cityFromDB.id,
       };
       delete activityToUpdate.city;
 
-      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate, activityId);
+      const updatedActivity = await profilDatamapper.activities.update(
+        activityToUpdate,
+        activityId
+      );
 
-      res.status(200).json({data: [updatedActivity]});
+      res.status(200).json({ data: [updatedActivity] });
     },
 
     async destroy(req, res) {
       const userId = req.session.userId;
-      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      const activityId = Number.parseInt(
+        req.params.id,
+        profilController.RADIX_NUMBER
+      );
 
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
+
       if(!existActivity) {
-        const requestError = new ApiError('This activity already exist', {status: 400});
+        const requestError = new ApiError('The activity is not in the registered activities', {status: 400});
         requestError.name = "BadRequest";
         throw requestError;
       }
 
       // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilDatamapper.activities.getOne(userId, activityId);
-      if(!userHasActivity) {
-        const requestError = new ApiError('This activity not saved by the user', {status: 400});
-        requestError.name = "BadRequest";
+      const userHasActivity = await profilDatamapper.activities.getOne(
+        userId,
+        activityId
+      );
+      if (!userHasActivity) {
+        const requestError = new ApiError(
+          'This activity not saved by the user',
+          { status: 400 }
+        );
+        requestError.name = 'BadRequest';
         throw requestError;
       }
 
-      const removedActivity = await profilDatamapper.activities.removeActivity(userId, activityId);
+      const removedActivity = await profilDatamapper.activities.removeActivity(
+        userId,
+        activityId
+      );
 
-      res.status(200).json({data: removedActivity});
+      res.status(200).json({ data: removedActivity });
     },
-
   },
 
   ratings: {
     async index(req, res) {
       const userId = req.session.userId;
 
-      const userActivitiesRating = await profilDatamapper.ratings.getAllActivities(userId);
+      const userActivitiesRating =
+        await profilDatamapper.ratings.getAllActivities(userId);
 
       const avgRating = await profilDatamapper.ratings.getAvg(userId);
 
       res.status(200).json({
         data: userActivitiesRating,
-        avgRating: avgRating.avg 
+        avgRating: avgRating.avg,
       });
     },
 
     async store(req, res) {
       const userId = req.session.userId;
+      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      const userRating = Number.parseInt(req.body.rating, profilController.RADIX_NUMBER);
 
-    }
+      const existActivity = await activityDatamapper.getOne(activityId);
+      if(!existActivity) {
+        const requestError = new ApiError('This activity don\'t exist', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      // Check if user has already rate this activity
+      const userHasRateActivity = await userActivityRatingDatamapper  .getOne(userId, activityId);
+      if(userHasRateActivity) {
+        const requestError = new ApiError('The user has already rate this activity', {status: 400});
+        requestError.name = "BadRequest";
+        throw requestError;
+      }
+
+      const userActivityWithRating = await profilDatamapper.ratings.saveRating(userId, activityId, userRating)
+
+      res.status(201).json({ data: [userActivityWithRating]});
+    },
   }
 };
 

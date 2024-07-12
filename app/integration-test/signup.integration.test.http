@@ -7,10 +7,10 @@ POST {{url}}/{{mainEndpoint}}
 Content-Type: application/json
 
 {
-  "email": "pesszstr22510@gmail.com",
+  "email": "ryad@gmail.com",
   "password": "Cityzen1.",
   "passwordConfirm": "Cityzen1.",
-  "pseudo": "tom"
+  "pseudo": "tom1"
 }
 
 # {
@@ -25,5 +25,5 @@ POST {{url}}/{{mainEndpoint}}/confirmation
 Content-Type: application/json
 
 {
-  "OTP": "DJqcR@"
+  "OTP": "JDuamn"
 }

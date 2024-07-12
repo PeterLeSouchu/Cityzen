@@ -1,7 +1,6 @@
 import activityDatamapper from "../models/activity.datamapper.js";
 
-
-const activitiesController = {
+const activityController = {
   async index(req, res) {
     try {
       const { country, city } = req.params;
@@ -131,4 +130,4 @@ const activitiesController = {
 
 };
 
-export default activitiesController;
+export default activityController;

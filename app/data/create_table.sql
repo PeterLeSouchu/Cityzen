@@ -60,7 +60,7 @@ CREATE TABLE "zip_code" (
 CREATE TABLE "activity" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "slug" TEXT NOT NULL,
-  "url" TEXT NOT NULL,
+  "url" TEXT,
   "title" TEXT NOT NULL,
   "description" TEXT NOT NULL,
   "url_image" TEXT NOT NULL,
