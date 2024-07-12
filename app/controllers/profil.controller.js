@@ -127,8 +127,6 @@ const profilController = {
         image,
         address,
         phone,
-        longitude,
-        latitude,
         city,
       } = req.body;
 

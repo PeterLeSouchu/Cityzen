@@ -9,7 +9,6 @@ import router from './routers/index.router.js';
 
 const app = express();
 
-app.use(cookieParser(process.env.COOKIE));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
 // app.use(express.static(path.join(import.meta.dirname, '/')))

@@ -71,7 +71,7 @@ const signupController = {
       }
     }
 
-    sendMail(transporter, htmlCode);
+    // sendMail(transporter, htmlCode);
 
     res
       .status(200)

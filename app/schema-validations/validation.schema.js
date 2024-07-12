@@ -7,7 +7,7 @@ const validationSchema = (schema, reqProperty = undefined, method = undefined, a
     }
 
     await schema.validateAsync(req[reqProperty], {convert: acceptConvert});
-    next();
+    return next();
   } catch (err) {
     console.log('Provenant du validateur :', err.name, err.message);
     next(err);
