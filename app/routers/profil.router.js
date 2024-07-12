@@ -32,7 +32,7 @@ profilRouter.route('/favorite')
   .post(validationSchema(profilFavoritePostSchema, 'body'), catchHandlerController(profilController.favorites.store))
 
 profilRouter.route('/favorite/:id(\\d+)')
-  .delete(validationSchema(profilFavoriteDeleteSchema, 'params', true), catchHandlerController(profilController.favorites.destroy));
+  .delete(validationSchema(profilFavoriteDeleteSchema, 'params', undefined, true), catchHandlerController(profilController.favorites.destroy));
 
   // To handle created activities of the user
 profilRouter.route('/activity')
@@ -41,7 +41,7 @@ profilRouter.route('/activity')
  
   profilRouter.route('/activity/:id(\\d+)')
   .patch(validationSchema(updateSchema(paramsSchema, profilActivityPatchSchema), undefined, 'update', true), catchHandlerController(profilController.activities.update))  // Validation à faire
-  .delete(validationSchema(profilActivityDeleteSchema, 'params', true), catchHandlerController(profilController.activities.destroy));
+  .delete(validationSchema(profilActivityDeleteSchema, 'params', undefined, true), catchHandlerController(profilController.activities.destroy));
 
 profilRouter.route('/rating')
   .get(catchHandlerController(profilController.ratings.index))
