@@ -98,8 +98,10 @@ const profilController = {
 
       console.log(userId, activityId);
 
-      const removedFavorite = await profilDatamapper.favorites.removedFavorite(userId, activityId);
-
+      const removedFavorite = await profilDatamapper.favorites.removedFavorite(
+        userId,
+        activityId
+      );
 
       res.status(200).json({ data: existActivity });
     },
@@ -116,6 +118,9 @@ const profilController = {
 
     async store(req, res) {
       const userId = req.session.userId;
+
+      const longitude = 4.76527;
+      const latitude = 4.76527;
       const {
         title,
         description,
@@ -182,7 +187,9 @@ const profilController = {
         throw requestError;
       }
 
-      const cityActivity = await cityDatamapper.getOneById(existActivity.id_city);
+      const cityActivity = await cityDatamapper.getOneById(
+        existActivity.id_city
+      );
 
       // Check if activity is created by this user
       const createdActivityByUser = await profilDatamapper.activities.getOne(
@@ -202,13 +209,15 @@ const profilController = {
 
       let slug = '';
 
+
       if(title || city) {
+
         let titleForSlug = title ? title : existActivity.title;
-        let cityForSlug = city ? city : cityActivity.name; 
+        let cityForSlug = city ? city : cityActivity.name;
 
         slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-        if(sameActivityExist) {
+        if (sameActivityExist) {
           slug += `%20${cityForSlug.toLowerCase()}`;
         }
 
@@ -222,27 +231,36 @@ const profilController = {
         }
       }
 
-      const cityFromDB = city ? await cityDatamapper.getOneByName(city) : cityActivity;
+      const cityFromDB = city
+        ? await cityDatamapper.getOneByName(city)
+        : cityActivity;
 
       const activityToUpdate = {
         ...req.body,
         slug,
         title: existActivity.title,
-        cityId: cityFromDB.id
+        cityId: cityFromDB.id,
       };
       delete activityToUpdate.city;
 
-      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate, activityId);
+      const updatedActivity = await profilDatamapper.activities.update(
+        activityToUpdate,
+        activityId
+      );
 
-      res.status(200).json({data: [updatedActivity]});
+      res.status(200).json({ data: [updatedActivity] });
     },
 
     async destroy(req, res) {
       const userId = req.session.userId;
-      const activityId = Number.parseInt(req.params.id, profilController.RADIX_NUMBER);
+      const activityId = Number.parseInt(
+        req.params.id,
+        profilController.RADIX_NUMBER
+      );
 
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
+
       if(!existActivity) {
         const requestError = new ApiError('The activity is not in the registered activities', {status: 400});
         requestError.name = "BadRequest";
@@ -250,31 +268,40 @@ const profilController = {
       }
 
       // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilDatamapper.activities.getOne(userId, activityId);
-      if(!userHasActivity) {
-        const requestError = new ApiError('This activity not saved by the user', {status: 400});
-        requestError.name = "BadRequest";
+      const userHasActivity = await profilDatamapper.activities.getOne(
+        userId,
+        activityId
+      );
+      if (!userHasActivity) {
+        const requestError = new ApiError(
+          'This activity not saved by the user',
+          { status: 400 }
+        );
+        requestError.name = 'BadRequest';
         throw requestError;
       }
 
-      const removedActivity = await profilDatamapper.activities.removeActivity(userId, activityId);
+      const removedActivity = await profilDatamapper.activities.removeActivity(
+        userId,
+        activityId
+      );
 
-      res.status(200).json({data: removedActivity});
+      res.status(200).json({ data: removedActivity });
     },
-
   },
 
   ratings: {
     async index(req, res) {
       const userId = req.session.userId;
 
-      const userActivitiesRating = await profilDatamapper.ratings.getAllActivities(userId);
+      const userActivitiesRating =
+        await profilDatamapper.ratings.getAllActivities(userId);
 
       const avgRating = await profilDatamapper.ratings.getAvg(userId);
 
       res.status(200).json({
         data: userActivitiesRating,
-        avgRating: avgRating.avg 
+        avgRating: avgRating.avg,
       });
     },
 
