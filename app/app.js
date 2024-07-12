@@ -7,8 +7,11 @@ import cors from 'cors';
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
 
+
+
 const app = express();
 
+//app.use(express.static(path.join(import.meta.dirname, 'uploads')));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
 // app.use(express.static(path.join(import.meta.dirname, '/')))
