@@ -1,9 +1,19 @@
 // EXTERNAL MODULES
+//import { func } from 'joi';
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
+import 'dotenv/config';
+
+
+const API_GEO_ADDRESS = process.env.API_GEO_ADDRESS;
+const API_GEO_ADDRESS_KEY = process.env.API_GEO_ADDRESS_KEY;
+
+
+
+
 
 
 const profilController = {
@@ -117,10 +127,11 @@ const profilController = {
     },
 
     async store(req, res) {
-      const userId = req.session.userId;
 
-      const longitude = 4.76527;
-      const latitude = 4.76527;
+      // id user
+      const userId = req.session.userId
+    
+      //slug, adress, id_user, found city
       const {
         title,
         description,
@@ -130,24 +141,46 @@ const profilController = {
         city,
       } = req.body;
 
-      // Faire le slug
+
+      // Générer le slug initial
       let slug = encodeURIComponent(title.toLowerCase());
-      const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-      if (sameActivityExist) {
-        slug += `%20${city.toLowerCase()}`;
+
+      // Vérifier si une activité avec le même slug existe déjà
+      const activitesExistantes = await activityDatamapper.getAllBySlug(slug);
+      if (activitesExistantes.length > 0) {
+        // Ajouter la ville au slug si une activité avec le même slug existe
+        slug += `%20${encodeURIComponent(city.toLowerCase())}`;
       }
 
-      const sameActivityExistWithCity = await activityDatamapper.getAllBySlug(
-        slug
-      );
-      console.log(sameActivityExistWithCity);
-      if (sameActivityExistWithCity.length > 0) {
-        const numberOfActivities = sameActivityExistWithCity.length;
-        slug += `%20${numberOfActivities + 1}`;
+      // Vérifier à nouveau si une activité avec le slug (incluant la ville) existe
+      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(slug);
+      //console.log(activitesAvecSlugVille);
+      if (activitesAvecSlugVille.length > 0) {
+        // Ajouter un numéro au slug pour garantir son unicité
+        const nombreActivites = activitesAvecSlugVille.length;
+        slug += `%20${nombreActivites + 1}`;
       }
 
+      // found the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
+      //console.log(cityFromDB);
 
+      // the address geocode
+      async function  coordonates(address){
+        const reponse = await fetch(`${API_GEO_ADDRESS}${address}${API_GEO_ADDRESS_KEY}`)
+        const coodonee = await reponse.json()
+        return coodonee;
+       
+      }
+      const test = await coordonates(address);
+      let latitude;
+      let longitude;
+      test.forEach( coordonate => {
+        latitude = coordonate.lat
+        longitude = coordonate.lon
+      });
+
+      // new activity object
       const activityToCreate = {
         slug,
         title,
@@ -160,6 +193,8 @@ const profilController = {
         userId,
         cityId: cityFromDB.id,
       };
+
+      console.log(activityToCreate);
 
       const createdActivity = await profilDatamapper.activities.create(
         activityToCreate
