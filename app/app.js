@@ -3,19 +3,18 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import path from 'path';
 
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
 
-
-
 const app = express();
 
-//app.use(express.static(path.join(import.meta.dirname, 'uploads')));
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, 'app/image')));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
 // app.use(express.static(path.join(import.meta.dirname, '/')))
-
 
 // CORS handler
 app.use(
@@ -24,7 +23,6 @@ app.use(
     credentials: true,
   })
 );
-
 
 // Create session
 app.use(
@@ -40,11 +38,9 @@ app.use(
   })
 );
 
-
 // Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // Router
 app.use(router);
