@@ -14,8 +14,6 @@ const API_GEO_ADDRESS_KEY = process.env.API_GEO_ADDRESS_KEY;
 
 
 
-
-
 const profilController = {
   RADIX_NUMBER: 10,
 
