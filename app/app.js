@@ -7,6 +7,7 @@ import path from 'path';
 
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
+import { generateToken, getTokenFromRequest } from './config/csrf.config.js';
 
 const app = express();
 
@@ -41,6 +42,24 @@ app.use(
 // Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Route to generate a csrf token
+app.get('/csrf-token', (req, res) => {
+  console.log('CSRF-TOKEN');
+  try {
+    if (!getTokenFromRequest()) {
+      // On passe req et res à generateToken pour qu'il puisse gérer le cookie et les headers
+      const csrfToken = generateToken(req, res, false, true);
+
+      // res.setHeader('x-csrf-token', token);
+      return res.json(csrfToken);
+    }
+    return res.json({});
+  } catch (error) {
+    console.log(error);
+    console.log(error.message);
+  }
+});
 
 // Router
 app.use(router);
