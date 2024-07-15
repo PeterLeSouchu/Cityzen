@@ -23,7 +23,7 @@ router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use('/unsubscribe', authenticationCheck, doubleCsrfProtection, unsubscribeRouter);
-router.use( '/profil',authenticationCheck, doubleCsrfProtection, profilRouter);
+router.use( '/profil', authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 router.use('/country', countryRouter);
 router.use('/city', cityRouter);

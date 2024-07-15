@@ -33,7 +33,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 24, // 24h de validité
       sameSite: 'lax',
     },
   })
@@ -47,12 +47,12 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/csrf-token', (req, res) => {
   console.log('CSRF-TOKEN');
   try {
-    if (!getTokenFromRequest()) {
+    if (!req.headers['x-csrf-token']) {
       // On passe req et res à generateToken pour qu'il puisse gérer le cookie et les headers
       const csrfToken = generateToken(req, res, false, true);
 
       // res.setHeader('x-csrf-token', token);
-      return res.json(csrfToken);
+      return res.json({ csrfToken });
     }
     return res.json({});
   } catch (error) {

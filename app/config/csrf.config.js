@@ -12,6 +12,7 @@ const {
   cookieOptions: {
       sameSite: 'lax', // Recommend you make this strict if posible
       path: '/',
+      maxAge: 1000 * 60 * 60 * 24, // 24h de validité
       secure: false, // * false car on n'a pas https
       httpOnly: true, // par défaut, ce package transmet des cookies par le protocole http : on ne pourra pas modifier ce cookie depuis le navigateur
   },

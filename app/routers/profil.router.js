@@ -15,6 +15,8 @@ import paramsSchema from '../schema-validations/params.schema.js';
 import updateSchema from '../schema-validations/update.schema.js';
 import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-patch.schema.js';
 import upload from '../middlewares/multer.upload.middlewares.js';
+import { doubleCsrfProtection } from "../config/csrf.config.js";
+
 
 const profilRouter = Router();
 
@@ -28,14 +30,14 @@ profilRouter.route('/authentication');
 profilRouter
   .route('/favorite')
   .get(catchHandlerController(profilController.favorites.index))
-  .post(
+  .post(doubleCsrfProtection,
     validationSchema(profilFavoritePostSchema, 'body'),
     catchHandlerController(profilController.favorites.store)
   );
 
 profilRouter
   .route('/favorite/:id(\\d+)')
-  .delete(
+  .delete(doubleCsrfProtection, 
     validationSchema(profilFavoriteDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.favorites.destroy)
   );
@@ -44,7 +46,7 @@ profilRouter
 profilRouter
   .route('/activity')
   .get(catchHandlerController(profilController.activities.index))
-  .post(
+  .post(doubleCsrfProtection, 
     (req, res, next) => {
       console.log(req.body);
       next();
@@ -56,7 +58,7 @@ profilRouter
 
 profilRouter
   .route('/activity/:id(\\d+)')
-  .patch(
+  .patch(doubleCsrfProtection, 
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
       undefined,
@@ -65,7 +67,7 @@ profilRouter
     ),
     catchHandlerController(profilController.activities.update)
   )
-  .delete(
+  .delete(doubleCsrfProtection, 
     validationSchema(profilActivityDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.activities.destroy)
   );
@@ -78,7 +80,7 @@ profilRouter
 profilRouter
   .route('/rating/:id(\\d+)') // id refers to an activity
   .get(catchHandlerController(profilController.ratings.show))
-  .patch(
+  .patch(doubleCsrfProtection, 
     validationSchema(
       updateSchema(paramsSchema, profilRatingPatchSchema),
       undefined,
@@ -87,7 +89,7 @@ profilRouter
     ),
     catchHandlerController(profilController.ratings.update)
   )
-  .post(
+  .post(doubleCsrfProtection, 
     validationSchema(profilRatingPostSchema, 'body'),
     catchHandlerController(profilController.ratings.store)
   );
