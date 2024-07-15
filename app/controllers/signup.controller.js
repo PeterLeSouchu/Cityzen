@@ -79,7 +79,6 @@ const signupController = {
   },
 
   async checkUserByOTP(req, res) {
-    console.log(req.session.signupDatas);
     if (!req.session?.signupDatas) {
       return res.status(404).json({ error: 'Bad Request' });
     }
