@@ -29,14 +29,14 @@ POST {{url}}/{{mainEndpoint}}/activity
 Content-Type: application/json
 
 {
-  "title": "La pizza du coin",
+  "title": "La pizzdu2",
   "description": "Une bonne pizza au fromage",
   "image": "blabla",
-  "address": "rue du camembert ",
+  "address": "5 place paul demange ",
+  "longitude": 0,
+  "latitude": 0,
   "phone": "0654748965",
-  "longitude": 45.326359,
-  "latitude": 12.25489,
-  "city": "Rennes"
+  "city": "Montesson"
 }
 
 ### PATCH profil/activity
