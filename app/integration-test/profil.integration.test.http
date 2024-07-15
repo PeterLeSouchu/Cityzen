@@ -16,7 +16,7 @@ Content-Type: application/json
 GET {{url}}/{{mainEndpoint}}/favorite
 
 ### DELETE /profil/favorite/:id
-DELETE {{url}}/{{mainEndpoint}}/favorite/71
+DELETE {{url}}/{{mainEndpoint}}/favorite/23
 
 
 # ACTIVITIES
@@ -83,6 +83,16 @@ Content-Type: application/json
   "rating": 4
 }
 
+### GET /profil/rating/:id
+GET {{url}}/{{mainEndpoint}}/rating/54
+
+### PATCH /profil/rating/:id
+PATCH {{url}}/{{mainEndpoint}}/rating/4
+Content-Type: application/json
+
+{
+  "rating": 2
+}
 
 # {
 #   "id": 1,
