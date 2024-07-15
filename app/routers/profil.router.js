@@ -49,7 +49,7 @@ profilRouter
       console.log(req.body);
       next();
     },
-    validationSchema(profilActivityPostSchema, 'body'),
+    //validationSchema(profilActivityPostSchema, 'body'),
     upload.single('image'),
     catchHandlerController(profilController.activities.store)
   );
