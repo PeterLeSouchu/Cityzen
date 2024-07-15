@@ -14,8 +14,9 @@ import profilActivityPatchSchema from '../schema-validations/profil/profil-activ
 import paramsSchema from '../schema-validations/params.schema.js';
 import updateSchema from '../schema-validations/update.schema.js';
 import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-patch.schema.js';
-import upload from '../middlewares/multer.upload.middlewares.js';
+import upload from '../config/multer.upload.middlewares.js';
 import { doubleCsrfProtection } from "../config/csrf.config.js";
+import uploadImage from '../middlewares/upload-files.middleware.js';
 
 
 const profilRouter = Router();
@@ -46,13 +47,11 @@ profilRouter
 profilRouter
   .route('/activity')
   .get(catchHandlerController(profilController.activities.index))
-  .post(doubleCsrfProtection, 
-    (req, res, next) => {
-      console.log(req.body);
-      next();
-    },
+  .post(
+    // doubleCsrfProtection,
+    (req, res, next) => {console.log('req.body', req.body); next()},
     validationSchema(profilActivityPostSchema, 'body'),
-    upload.single('image'),
+    uploadImage,
     catchHandlerController(profilController.activities.store)
   );
 

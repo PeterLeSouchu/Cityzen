@@ -111,6 +111,7 @@ const profilController = {
 
   activities: {
     async index(req, res) {
+      console.log(req.body);
       const userId = req.session.userId;
       const activities = await profilDatamapper.activities.getAll(userId);
 
@@ -168,9 +169,9 @@ const profilController = {
 
       console.log(activityToCreate);
 
-      const createdActivity = await profilDatamapper.activities.create(
-        activityToCreate
-      );
+      // const createdActivity = await profilDatamapper.activities.create(
+      //   activityToCreate
+      // );
 
       res.status(201).json({ data: [createdActivity] });
     },
