@@ -217,9 +217,12 @@ const profilController = {
 
       let slug = '';
 
+      let titleForSlug = '';
+      let cityForSlug = '';
+
       if (title || city) {
-        let titleForSlug = title ? title : existActivity.title;
-        let cityForSlug = city ? city : cityActivity.name;
+        titleForSlug = title ? title : existActivity.title;
+        cityForSlug = city ? city : cityActivity.name;
 
         slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
