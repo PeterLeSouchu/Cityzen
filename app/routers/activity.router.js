@@ -24,7 +24,7 @@ activityRouter.route('/:country/:city')
   );
 
 // Route pour obtenir une activité par son ID
-activityRouter.route('/:id')
+activityRouter.route('/:id(\\d+)')
   .get(
     catchHandlerController(activityController.show)
   );
