@@ -62,7 +62,7 @@ async function fetchActivitiesFromCity(cityName) {
 
     const formatedActivity = {
       slug: activityFromFetch.alias,
-      url: activityFromFetch.url,
+      // url: activityFromFetch.url,
       title: activityFromFetch.name,
       description: activityFromFetch.name,
       url_image: activityFromFetch.image_url,
@@ -83,12 +83,12 @@ async function fetchActivitiesFromCity(cityName) {
 
 
   async function insertActivityFromCity(client, activity) {
-    const { slug, url, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city } = activity;
+    const { slug, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city } = activity;
     try {
       const query = {
-        text: `INSERT INTO "activity"("slug", "url", "title", "description", "url_image", "address", "phone", "avg_rating", "latitude", "longitude", "id_user", "id_city") 
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
-        values: [slug, url, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city], 
+        text: `INSERT INTO "activity"("slug", "title", "description", "url_image", "address", "phone", "avg_rating", "latitude", "longitude", "id_user", "id_city") 
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
+        values: [slug, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city], 
       };
   
       const returningQuery = await client.query(query);
