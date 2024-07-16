@@ -11,70 +11,94 @@ const activityController = {
       );
 
       if (!activitiesOfCity || activitiesOfCity.length === 0) {
-        return res
-          .status(404)
-          .json({ message: `No activities found for ${city} and ${country}` });
+        const requestError = new ApiError("This activity don't exist", {
+          status: 400,
+        });
+        requestError.name = 'BadRequest';
+
+        throw requestError;
       }
 
-      res.status(200).json(activitiesOfCity);
+      res.status(200).json({ data: activitiesOfCity });
+
     } catch (error) {
-      console.error('Error in activityController: index method', error.message);
-      res.status(500).json({ error: 'An error occurred' });
+      const requestError = new ApiError("Internal Server Error, please contact your administrator", {
+        status: 500,
+      });
+      requestError.name = 'InternalServerError';
+      throw requestError;
     }
   },
 
   async show(req, res) {
-    const id = parseInt(req.params.id);
-    console.log(id);
-    const activity = await activityDatamapper.getOne(id);
+    try {
+      const id = parseInt(req.params.id);
+      const activity = await activityDatamapper.getOne(id);
+  
+      if (!activity) {
+        const requestError = new ApiError("This activity don't exist", {
+          status: 400,
+        });
+        requestError.name = 'BadRequest';
+        throw requestError;
+      }
+  
+      res.status(200).json({ data: [activity] });
 
-    if (!activity) {
-      return res
-        .status(404)
-        .json({ message: `No activity found for id ${id}` });
+    } catch (error) {
+      const requestError = new ApiError("Internal Server Error, please contact your administrator", {
+        status: 500,
+      });
+      requestError.name = 'InternalServerError';
+      throw requestError;
     }
-
-    res.status(200).json(activity);
   },
 
   async showRecent(req, res) {
     try {
-      const recentActivities = await activityDatamapper.findRecent();
+      const recentActivities = await activityDatamapper.getRecent();
 
       if (!recentActivities || recentActivities.length === 0) {
-        return res.status(404).json({ message: `No recent activities found` });
+        const requestError = new ApiError("Recent activities not founds", {
+          status: 400,
+        });
+        requestError.name = 'BadRequest';
+        throw requestError;
       }
 
-      res.status(200).json(recentActivities);
+      res.status(200).json({ data: recentActivities });
+
     } catch (error) {
-      console.error(
-        'Error in activityController: showRecent method',
-        error.message
-      );
-      res.status(500).json({ error: 'An error occurred' });
+      const requestError = new ApiError("Internal Server Error, please contact your administrator", {
+        status: 500,
+      });
+      requestError.name = 'InternalServerError';
+      throw requestError;
     }
   },
 
   async showRating(req, res) {
     try {
-      const recentActivities = await activityDatamapper.findActivitiesRating();
+      const ratingActivities = await activityDatamapper.findActivitiesRating();
 
-      if (!recentActivities || recentActivities.length === 0) {
-        return res.status(404).json({ message: `No recent activities found` });
+      if (!ratingActivities || ratingActivities.length === 0) {
+        const requestError = new ApiError("Rating activities not founds", {
+          status: 400,
+        });
+        requestError.name = 'BadRequest';
+        throw requestError;
       }
 
-      res.status(200).json(recentActivities);
+      res.status(200).json({ data: ratingActivities });
+
     } catch (error) {
-      console.error(
-        'Error in activityController: showRecent method',
-        error.message
-      );
-      res.status(500).json({ error: 'An error occurred' });
+      const requestError = new ApiError("Internal Server Error, please contact your administrator", {
+        status: 500,
+      });
+      requestError.name = 'InternalServerError';
+      throw requestError;
     }
   },
-
- 
-
 };
 
 export default activityController;

@@ -31,7 +31,8 @@ profilRouter.route('/authentication');
 profilRouter
   .route('/favorite')
   .get(catchHandlerController(profilController.favorites.index))
-  .post(doubleCsrfProtection,
+  .post(
+    // doubleCsrfProtection,
     validationSchema(profilFavoritePostSchema, 'body'),
     catchHandlerController(profilController.favorites.store)
   );
