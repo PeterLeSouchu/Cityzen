@@ -60,7 +60,8 @@ profilRouter
 
 profilRouter
   .route('/activity/:id(\\d+)')
-  .patch(doubleCsrfProtection, 
+  .patch(
+    // doubleCsrfProtection, 
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
       undefined,
@@ -69,7 +70,8 @@ profilRouter
     ),
     catchHandlerController(profilController.activities.update)
   )
-  .delete(doubleCsrfProtection, 
+  .delete(
+    // doubleCsrfProtection, 
     validationSchema(profilActivityDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.activities.destroy)
   );
@@ -82,7 +84,8 @@ profilRouter
 profilRouter
   .route('/rating/:id(\\d+)') // id refers to an activity
   .get(catchHandlerController(profilController.ratings.show))
-  .patch(doubleCsrfProtection, 
+  .patch(
+    // doubleCsrfProtection, 
     validationSchema(
       updateSchema(paramsSchema, profilRatingPatchSchema),
       undefined,
@@ -91,7 +94,8 @@ profilRouter
     ),
     catchHandlerController(profilController.ratings.update)
   )
-  .post(doubleCsrfProtection, 
+  .post(
+    // doubleCsrfProtection, 
     validationSchema(profilRatingPostSchema, 'body'),
     catchHandlerController(profilController.ratings.store)
   );

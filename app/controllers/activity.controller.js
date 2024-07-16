@@ -1,3 +1,5 @@
+// EXTERNAL MODULES
+import ApiError from "../errors/api.error.js";
 import activityDatamapper from "../models/activity.datamapper.js";
 
 const activityController = {
