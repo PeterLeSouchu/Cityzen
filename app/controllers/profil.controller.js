@@ -147,7 +147,7 @@ const profilController = {
 
       // Found the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
-
+      console.log("hellllllllooooooo",cityFromDB.id);
       // Get latitude and longitude from address user by an external API
       const coordinates = await getCoordinates(address);
       const latitude = coordinates.lat;
@@ -167,7 +167,7 @@ const profilController = {
         cityId: cityFromDB.id,
       };
 
-      console.log(activityToCreate);
+      //console.log(activityToCreate);
 
       const createdActivity = await profilDatamapper.activities.create(
         activityToCreate

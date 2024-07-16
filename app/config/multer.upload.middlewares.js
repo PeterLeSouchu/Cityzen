@@ -11,6 +11,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../../public/images'));
   },
+  
   filename: (req, file, cb) => {
     const filename = Date.now() + '_' + file.originalname;
     req.session.imageName = filename;
