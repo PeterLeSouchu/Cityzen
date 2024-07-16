@@ -119,6 +119,7 @@ const profilController = {
     },
 
     async store(req, res) {
+      console.log('req.session', req.session)
       const userId = req.session.userId
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file

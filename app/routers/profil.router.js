@@ -16,7 +16,7 @@ import updateSchema from '../schema-validations/update.schema.js';
 import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-patch.schema.js';
 import upload from '../config/multer.upload.middlewares.js';
 import { doubleCsrfProtection } from "../config/csrf.config.js";
-import uploadImage from '../middlewares/upload-files.middleware.js';
+import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 
 
 const profilRouter = Router();
@@ -38,7 +38,8 @@ profilRouter
 
 profilRouter
   .route('/favorite/:id(\\d+)')
-  .delete(doubleCsrfProtection, 
+  .delete(
+    // doubleCsrfProtection, 
     validationSchema(profilFavoriteDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.favorites.destroy)
   );
@@ -49,9 +50,10 @@ profilRouter
   .get(catchHandlerController(profilController.activities.index))
   .post(
     // doubleCsrfProtection,
-    (req, res, next) => {console.log('req.body', req.body); next()},
+    upload.single('image'),
+    uploadErrorHandler,
+    (req, res, next) => {console.log('req.body', req.body, req.file); next()},
     validationSchema(profilActivityPostSchema, 'body'),
-    uploadImage,
     catchHandlerController(profilController.activities.store)
   );
 

@@ -13,29 +13,30 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const filename = Date.now() + '_' + file.originalname;
-    req.body.image = filename;
+    req.session.imageName = filename;
+    // req.body.imageName = filename;
     cb(null, filename);
   },
 });
 
 // Configuring accepted files
-const allowedFileTypes = ['image/jpeg', 'image/png'];
-function fileFilter(req, file, cb) {
-  if (allowedFileTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+// const allowedFileTypes = ['image/jpeg', 'image/png'];
+// function fileFilter(req, file, cb) {
+//   if (allowedFileTypes.includes(file.mimetype)) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
 
 
 const upload = multer({
   storage: storage,
-  limits: {
-    files: 1,
-    fileSize: 2 * 1024 * 1024, // 2MB
-  },
-  fileFilter,
+  // limits: {
+  //   files: 1,
+  //   fileSize: 2 * 1024 * 1024, // 2MB
+  // },
+  // fileFilter,
 });
 
 export default upload;

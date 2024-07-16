@@ -5,15 +5,14 @@ const profilActivityPostSchema = Joi.object({
 
   description: Joi.string().min(2).required(),
 
-  image: Joi.string().min(2).required(),
-
   address: Joi.string().min(2).required(),
 
   phone: Joi.string().pattern(/^0[1-9]{1}[0-9]{8}$/),
 
   city: Joi.string().min(2).required(),
 })
-  .min(7)
-  .max(9);
+  .min(4)
+  .max(5);
+
 
 export default profilActivityPostSchema;
