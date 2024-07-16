@@ -6,8 +6,8 @@ import activityController from "../controllers/activity.controller.js";
 const activityRouter = Router();
 
 // for connected user
-activityRouter.route('/')
-  .post(activityController.store);
+//activityRouter.route('/')
+//  .post(activityController.store);
 
 // Route pour obtenir les activités récentes
 activityRouter.route('/recent')

@@ -1,9 +1,11 @@
 // EXTERNAL MODULES
+
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
+import getCoordinates from "../utils/get-coordinate.js";
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -107,53 +109,65 @@ const profilController = {
   activities: {
     async index(req, res) {
       const userId = req.session.userId;
-
+      console.log(userId);
       const activities = await profilDatamapper.activities.getAll(userId);
 
       res.status(200).json({ data: activities });
     },
 
     async store(req, res) {
-      const userId = req.session.userId;
 
-      const longitude = 4.76527;
-      const latitude = 4.76527;
+      const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
-        ? `http://localhost:3000/uploads/${req.file.filename}`
-        : null;
+        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+        : null
+      ;
 
-      // Faire le slug
+      // Generate the initial slug
       let slug = encodeURIComponent(title.toLowerCase());
-      const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-      if (sameActivityExist) {
-        slug += `%20${city.toLowerCase()}`;
+
+      // Check if an activity with the same slug already exists
+      const activitesExistantes = await activityDatamapper.getAllBySlug(slug);
+      if (activitesExistantes.length > 0) {
+        // Add city to slug if an activity with the same slug exists
+        slug += `%20${encodeURIComponent(city.toLowerCase())}`;
       }
 
-      const sameActivityExistWithCity = await activityDatamapper.getAllBySlug(
-        slug
-      );
-      console.log(sameActivityExistWithCity);
-      if (sameActivityExistWithCity.length > 0) {
-        const numberOfActivities = sameActivityExistWithCity.length;
-        slug += `%20${numberOfActivities + 1}`;
+      // Check again if an activity with the slug (including city) exists
+      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(slug);
+      //console.log(activitesAvecSlugVille);
+      if (activitesAvecSlugVille.length > 0) {
+        // Add a number to the slug to ensure its uniqueness
+        const nombreActivites = activitesAvecSlugVille.length;
+        slug += `%20${nombreActivites + 1}`;
       }
 
+      // Found the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
 
+      // Get latitude and longitude from address user by an external API
+      const coordinates = await getCoordinates(address);
+      const latitude = coordinates.lat;
+      const longitude = coordinates.lon;
+      console.log(coordinates);
+     
+
+      // new activity object
       const activityToCreate = {
         slug,
-        url: 'effeef',
         title,
         description,
         image: imageUrl,
         address,
         phone,
-        longitude,
         latitude,
+        longitude,
         userId,
         cityId: cityFromDB.id,
       };
+
+      console.log(activityToCreate);
 
       const createdActivity = await profilDatamapper.activities.create(
         activityToCreate
