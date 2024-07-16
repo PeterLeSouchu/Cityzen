@@ -52,7 +52,7 @@ profilRouter
     // doubleCsrfProtection,
     upload.single('image'),
     uploadErrorHandler,
-    (req, res, next) => {console.log('req.body', req.body, req.file); next()},
+    (req, res, next) => {console.log('req.body', req.body, req.file, req.session); next()},
     validationSchema(profilActivityPostSchema, 'body'),
     catchHandlerController(profilController.activities.store)
   );

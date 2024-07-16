@@ -2,13 +2,13 @@
 import 'dotenv/config';
 
 // EXTERNAL MODULES
+
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
-import getCoordinates from '../utils/get-coordinate.js';
-
+import getCoordinates from "../utils/get-coordinate.js";
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -119,8 +119,7 @@ const profilController = {
     },
 
     async store(req, res) {
-      console.log('req.session', req.session)
-      const userId = req.session.userId
+      const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
         ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
@@ -170,9 +169,9 @@ const profilController = {
 
       console.log(activityToCreate);
 
-      // const createdActivity = await profilDatamapper.activities.create(
-      //   activityToCreate
-      // );
+      const createdActivity = await profilDatamapper.activities.create(
+        activityToCreate
+      );
 
       res.status(201).json({ data: [createdActivity] });
     },

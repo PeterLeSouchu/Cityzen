@@ -67,7 +67,7 @@ Content-Type: application/json
 # }
 
 ### DELETE /profil/activity/:id
-DELETE {{url}}/{{mainEndpoint}}/activity/116
+DELETE {{url}}/{{mainEndpoint}}/activity/12
 
 
 # RATINGS
