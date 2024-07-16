@@ -140,7 +140,7 @@ const profilDatamapper = {
       const result = await client.query(
         `
       UPDATE "activity"
-        SET ${columnsScriptSQL}
+        SET ${columnsScriptSQL}, updated_at = CURRENT_TIMESTAMP
         WHERE "id" = $${columnsScriptSQL.length + 1}
       RETURNING *
       ;`,
