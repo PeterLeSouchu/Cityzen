@@ -7,6 +7,8 @@ const profilActivityPatchSchema = Joi.object({
   description: Joi.string()
     .min(2),
 
+  image: Joi.object(),
+
   address: Joi.string()
     .min(2),
 
@@ -17,7 +19,7 @@ const profilActivityPatchSchema = Joi.object({
     .min(2)
 })
 .min(1)
-.max(5)
-.or(  'title', 'description', 'address', 'phone', 'city');
+.max(6)
+.or(  'title', 'description', 'image', 'address', 'phone', 'city');
 
 export default profilActivityPatchSchema;

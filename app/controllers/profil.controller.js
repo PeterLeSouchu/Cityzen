@@ -183,6 +183,8 @@ const profilController = {
         profilController.RADIX_NUMBER
       );
 
+      console.log(req.body);
+
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
@@ -242,7 +244,7 @@ const profilController = {
       const activityToUpdate = {
         ...req.body,
         slug,
-        title: existActivity.title,
+        title: titleForSlug,
         cityId: cityFromDB.id,
       };
       delete activityToUpdate.city;
