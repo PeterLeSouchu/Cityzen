@@ -55,7 +55,11 @@ router.use((error, req, res, next) => {
       delete req.session.imageName;
 
     break;
-      
+
+    case "InternalServerError":
+      status = 500;
+    break;
+
     case "BadRequest":
       status = 404;
     break;

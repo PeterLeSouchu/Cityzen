@@ -7,7 +7,6 @@ function uploadErrorHandler (req, res, next) {
       status: 400,
     });
     requestError.name = 'BadRequest';
-    requestError.code = '1203';
     return next(requestError);
   }
 
