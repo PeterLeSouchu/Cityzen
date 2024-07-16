@@ -12,7 +12,7 @@ import { generateToken, getTokenFromRequest } from './config/csrf.config.js';
 const app = express();
 
 const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, 'app/image')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
 // app.use(express.static(path.join(import.meta.dirname, '/')))
