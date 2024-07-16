@@ -1,3 +1,6 @@
+// TIERCE MODULES
+import 'dotenv/config';
+
 // EXTERNAL MODULES
 
 import ApiError from '../errors/api.error.js';
@@ -108,15 +111,14 @@ const profilController = {
 
   activities: {
     async index(req, res) {
+      console.log(req.body);
       const userId = req.session.userId;
-      console.log(userId);
       const activities = await profilDatamapper.activities.getAll(userId);
 
       res.status(200).json({ data: activities });
     },
 
     async store(req, res) {
-
       const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
@@ -150,8 +152,6 @@ const profilController = {
       const coordinates = await getCoordinates(address);
       const latitude = coordinates.lat;
       const longitude = coordinates.lon;
-      console.log(coordinates);
-     
 
       // new activity object
       const activityToCreate = {

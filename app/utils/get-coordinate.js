@@ -39,7 +39,17 @@ async function getCoordinates(address){
         console.error('Error fetching coordinates:', error.message);
         throw error; // Relancer l'erreur pour la gérer dans la fonction appelante
     }
+  
+//     const response = await fetch(`${process.env.API_GEO_ADDRESS}${address}${process.env.API_GEO_ADDRESS_KEY}`);
+//   const coordinates = await response.json();
+
+//   return coordinates;
 }
+
+
+
+
+
 
 
 export default getCoordinates;
