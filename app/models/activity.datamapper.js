@@ -29,7 +29,7 @@ const activityDatamapper = {
     return result.rows;
   },
 
-  async getRecent() {
+  async getRecents() {
     const result = await client.query(`
     SELECT * FROM "activity"
       ORDER BY "created_at" DESC

@@ -56,7 +56,7 @@ const activityController = {
 
   async showRecent(req, res) {
     try {
-      const recentActivities = await activityDatamapper.getRecent();
+      const recentActivities = await activityDatamapper.getRecents();
 
       if (!recentActivities || recentActivities.length === 0) {
         const requestError = new ApiError("Recent activities not founds", {
