@@ -61,7 +61,8 @@ profilRouter
 profilRouter
   .route('/activity/:id(\\d+)')
   .patch(
-    // doubleCsrfProtection, 
+    // doubleCsrfProtection,
+    upload.single('image'),
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
       undefined,
