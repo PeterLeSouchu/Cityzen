@@ -183,6 +183,8 @@ const profilController = {
         profilController.RADIX_NUMBER
       );
 
+      console.log(req.body);
+
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
@@ -212,12 +214,18 @@ const profilController = {
       }
 
       const { title, city } = req.body;
+      const imageUrl = req.file
+      ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+      : existActivity.url_image
+    ;
 
-      let slug = '';
+      let slug = existActivity.slug;
+      let titleForSlug = existActivity.title;
+      let cityForSlug = cityActivity.name;
 
       if (title || city) {
-        let titleForSlug = title ? title : existActivity.title;
-        let cityForSlug = city ? city : cityActivity.name;
+        titleForSlug = title ? title : titleForSlug;
+        cityForSlug = city ? city : cityForSlug;
 
         slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
@@ -242,7 +250,8 @@ const profilController = {
       const activityToUpdate = {
         ...req.body,
         slug,
-        title: existActivity.title,
+        image: imageUrl,
+        title: titleForSlug,
         cityId: cityFromDB.id,
       };
       delete activityToUpdate.city;
