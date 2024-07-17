@@ -9,14 +9,14 @@ POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 71
+  "id": 17
 }
 
 ### GET /profil/favorite
 GET {{url}}/{{mainEndpoint}}/favorite
 
 ### DELETE /profil/favorite/:id
-DELETE {{url}}/{{mainEndpoint}}/favorite/23
+DELETE {{url}}/{{mainEndpoint}}/favorite/17
 
 
 # ACTIVITIES
@@ -29,18 +29,16 @@ POST {{url}}/{{mainEndpoint}}/activity
 Content-Type: application/json
 
 {
-  "title": "La pizzdu2",
+  "title": "La pizza du coin",
   "description": "Une bonne pizza au fromage",
-  "image": "blabla",
+  "image": "http://cityzen.fr/upload/fnikrefvnipndxpmpi", 
   "address": "5 place paul demange ",
-  "longitude": 0,
-  "latitude": 0,
   "phone": "0654748965",
   "city": "Montesson"
 }
 
 ### PATCH profil/activity
-PATCH {{url}}/{{mainEndpoint}}/activity/113
+PATCH {{url}}/{{mainEndpoint}}/activity/38
 Content-Type: application/json
 
 # {
@@ -84,10 +82,10 @@ Content-Type: application/json
 }
 
 ### GET /profil/rating/:id
-GET {{url}}/{{mainEndpoint}}/rating/54
+GET {{url}}/{{mainEndpoint}}/rating/20
 
 ### PATCH /profil/rating/:id
-PATCH {{url}}/{{mainEndpoint}}/rating/4
+PATCH {{url}}/{{mainEndpoint}}/rating/20
 Content-Type: application/json
 
 {
