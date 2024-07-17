@@ -17,6 +17,7 @@ import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-
 import upload from '../config/multer.upload.middlewares.js';
 import { doubleCsrfProtection } from "../config/csrf.config.js";
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
+import setImageInBody from '../utils/set-image.js';
 
 
 const profilRouter = Router();
@@ -63,6 +64,7 @@ profilRouter
   .patch(
     // doubleCsrfProtection,
     upload.single('image'),
+    setImageInBody,
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
       undefined,

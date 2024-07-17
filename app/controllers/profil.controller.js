@@ -214,15 +214,18 @@ const profilController = {
       }
 
       const { title, city } = req.body;
+      const imageUrl = req.file
+      ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+      : existActivity.url_image
+    ;
 
-      let slug = '';
-
-      let titleForSlug = '';
-      let cityForSlug = '';
+      let slug = existActivity.slug;
+      let titleForSlug = existActivity.title;
+      let cityForSlug = cityActivity.name;
 
       if (title || city) {
-        titleForSlug = title ? title : existActivity.title;
-        cityForSlug = city ? city : cityActivity.name;
+        titleForSlug = title ? title : titleForSlug;
+        cityForSlug = city ? city : cityForSlug;
 
         slug = encodeURIComponent(titleForSlug.toLowerCase());
         const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
@@ -247,6 +250,7 @@ const profilController = {
       const activityToUpdate = {
         ...req.body,
         slug,
+        image: imageUrl,
         title: titleForSlug,
         cityId: cityFromDB.id,
       };

@@ -1,13 +1,14 @@
 import Joi from "joi";
 
-const profilActivityPatchSchema = Joi.object({
+const 
+profilActivityPatchSchema = Joi.object({
   title: Joi.string()
   .min(2),
 
   description: Joi.string()
     .min(2),
 
-  image: Joi.object(),
+  image: Joi.string(),
 
   address: Joi.string()
     .min(2),
