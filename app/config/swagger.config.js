@@ -40,8 +40,6 @@ const options = {
   // multiple: true,
 
 };
-console.log(import.meta.dirname);
+// console.log(import.meta.dirname);
 
 export default (app) => expressJSDocSwagger(app)(options);
-
-// export default apiDocumentation;
