@@ -35,7 +35,7 @@ profilRouter
     * GET /profil/favorite
     * @summary Get all favorite from a profil user
     * @tags Favorite
-    * @return {array<GetOrder>} 200 - Success response - application/json
+    * @return {array<GetFavorite>} 200 - Success response - application/json
     * @example response - 200 - example success response
     *{
     *    "data": [
