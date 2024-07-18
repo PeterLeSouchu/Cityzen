@@ -5,8 +5,10 @@ const activityDatamapper = {
 
   async getOne(id) {
     const result = await client.query(`
-    SELECT * FROM "activity"
-      WHERE id = $1
+    SELECT "activity".*, "city"."name" AS "city_name" FROM "activity"
+      JOIN "city"
+        ON "activity"."id_city" = "city"."id"
+      WHERE "activity"."id" = $1
     ;`, [id]);
     return result.rows[0];
   },
