@@ -144,7 +144,7 @@ const profilController = {
       // Found the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
       // Get latitude and longitude from address user by an external API
-      const coordinates = await getCoordinates(address);
+      const coordinates = await getCoordinates(address, cityFromDB.name);
       const latitude = coordinates.lat;
       const longitude = coordinates.lon;
 
@@ -179,8 +179,6 @@ const profilController = {
         profilController.RADIX_NUMBER
       );
 
-      console.log(req.body);
-
       // Check if activity is already exist
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
@@ -209,11 +207,11 @@ const profilController = {
         throw requestError;
       }
 
-      const { title, city } = req.body;
+      const { title, address, city } = req.body;
       const imageUrl = req.file
       ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
       : existActivity.url_image
-    ;
+      ;
 
       let slug = existActivity.slug;
       let titleForSlug = existActivity.title;
@@ -241,11 +239,22 @@ const profilController = {
 
       const cityFromDB = city
         ? await cityDatamapper.getOneByName(city)
-        : cityActivity;
+        : cityActivity
+      ;
 
+      let latitude = '';
+      let longitude = '';
+      if(city) {
+        const coordinates = await getCoordinates(address, cityFromDB.name);
+        latitude = coordinates.lat;
+        longitude = coordinates.lon;
+      }
+// tester avec la modif d'une ville et adresse
       const activityToUpdate = {
         ...req.body,
         slug,
+        latitude,
+        longitude,
         image: imageUrl,
         title: titleForSlug,
         cityId: cityFromDB.id,

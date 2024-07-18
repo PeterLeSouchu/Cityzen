@@ -9,11 +9,11 @@ const API_GEO_ADDRESS_KEY= process.env.API_GEO_ADDRESS_KEY
 //const address = "45 place paul demange";
 
 
-async function getCoordinates(address){
+async function getCoordinates(address, city){
 
     
     try {
-        const response = await fetch(`${API_GEO_ADDRESS}${address}&api_key=${API_GEO_ADDRESS_KEY}`);
+        const response = await fetch(`${API_GEO_ADDRESS}${address}, ${city}&api_key=${API_GEO_ADDRESS_KEY}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
