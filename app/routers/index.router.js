@@ -37,9 +37,8 @@ router.use('/city', cityRouter);
 // TODO : Handler error middleware here 👇
 router.use((error, req, res, next) => {
   let { message, status, name, code } = error;
-  console.log('middleware de gestion d\'erreur');
   console.log(status, name, message);
-  console.log(error);
+  // console.log(error);
 
   switch (name) {
     case "ValidationError":
@@ -72,7 +71,7 @@ router.use((error, req, res, next) => {
 
     case "Forbidden":
       status = 403;
-      message = 'Forbidden. You don\'t have access'
+      message = 'Forbidden. You need to be connected to access this route'
     break;
         
     default:
@@ -85,7 +84,7 @@ router.use((error, req, res, next) => {
     switch (code) {
       case '23503':
         status = 403;
-        message = 'Request forbidden. This element is attached to an other element'
+        message = 'Forbidden. This element is attached to an other element'
       break;
     
       default:
