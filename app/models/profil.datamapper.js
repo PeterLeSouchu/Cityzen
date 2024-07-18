@@ -18,7 +18,29 @@ const profilDatamapper = {
     async getAll(userId) {
       const result = await client.query(
         `
-        SELECT * FROM "favorite_activity" JOIN "activity" ON "favorite_activity".id_activity = "activity".id WHERE "favorite_activity"."id_user" = $1;`,
+        SELECT 
+          "favorite_activity"."id" AS "id_favorite",
+          "favorite_activity"."id_user",
+          "favorite_activity"."id_activity",
+          "favorite_activity"."created_at" AS "created_at_favorite",
+          "favorite_activity"."updated_at" AS "updated_at_favorite",
+          "activity"."slug",
+          "activity"."title",
+          "activity"."description",
+          "activity"."url_image",
+          "activity"."address",
+          "activity"."phone",
+          "activity"."avg_rating",
+          "activity"."latitude",
+          "activity"."longitude",
+          "activity"."id_user" AS "id_created_user",
+          "activity"."id_city",
+          "activity"."created_at" AS "created_at_activity",
+          "activity"."updated_at" AS "updated_at_activity"
+        FROM "favorite_activity" 
+          JOIN "activity" 
+            ON "favorite_activity"."id_activity" = "activity"."id"
+          WHERE "favorite_activity"."id_user" = $1;`,
         [userId]
       );
 
@@ -97,7 +119,7 @@ const profilDatamapper = {
         `
       INSERT INTO "activity"("slug", "title", "description", "url_image", "address", "phone", "longitude", "latitude", "id_user", "id_city")
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        RETURNING *
+      RETURNING *
       ;`,
         [
           slug,
@@ -117,13 +139,8 @@ const profilDatamapper = {
     },
 
     async update(activity, activityId) {
-      // const { slug, url, title, description, image, address, phone, longitude, latitude, cityId } = activity;
-      // console.log(activity);
-
       const columns = Object.keys(activity);
-      // console.log(columns);
       const values = Object.values(activity);
-      // console.log(values);
 
       const columnsScriptSQL = columns.map((column, index) => {
         if (column === 'cityId') {
@@ -169,7 +186,28 @@ const profilDatamapper = {
     async getAllActivities(userId) {
       const result = await client.query(
         `
-        SELECT * FROM "user_activity_rating"
+        SELECT 
+          "user_activity_rating"."id" AS "id_user_rating",
+          "user_activity_rating"."id_user",
+          "user_activity_rating"."id_activity",
+          "user_activity_rating"."id_rating",
+          "user_activity_rating"."created_at" AS "created_at_rating",
+          "user_activity_rating"."updated_at" AS "updated_at_rating",
+          "user_activity_rating"."updated_at" AS "updated_at_rating",
+          "activity"."slug",
+          "activity"."title",
+          "activity"."description",
+          "activity"."url_image",
+          "activity"."address",
+          "activity"."phone",
+          "activity"."avg_rating",
+          "activity"."latitude",
+          "activity"."longitude",
+          "activity"."id_user" AS "id_created_user",
+          "activity"."id_city",
+          "activity"."created_at" AS "created_at_activity",
+          "activity"."updated_at" AS "updated_at_activity"
+        FROM "user_activity_rating"
           JOIN "activity"
             ON "user_activity_rating"."id_activity" = "activity"."id"
           WHERE "user_activity_rating"."id_user" = $1

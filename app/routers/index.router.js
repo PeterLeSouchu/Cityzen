@@ -37,13 +37,12 @@ router.use('/city', cityRouter);
 // TODO : Handler error middleware here 👇
 router.use((error, req, res, next) => {
   let { message, status, name, code } = error;
-  console.log('middleware de gestion d\'erreur');
   console.log(status, name, message);
-  console.log(error);
+  // console.log(error);
 
   switch (name) {
     case "ValidationError":
-      status = 404;
+      status = 400;
       message = 'Bad request. Invalid value.';
 
       // If the error comes from adding an activity, we delete the image 
@@ -61,24 +60,38 @@ router.use((error, req, res, next) => {
     break;
 
     case "BadRequest":
+      status = 400;
+      message = 'Bad request. Invalid value.'
+    break;
+
+    case "NotFound":
       status = 404;
+      message = 'Bad request. Not found.'
+    break;
+
+    case "Forbidden":
+      status = 403;
+      message = 'Forbidden. You need to be connected to access this route'
     break;
         
     default:
-      status = 404;
+      status = 400;
       message = 'Bad request. Invalid value.'
     break;
   }
 
-  switch (code) {
-    case '23503':
-      status = 403;
-      message = 'Request forbidden. This element is attached to an other element'
-    break;
-  
-    default:
-      message = 'Internal Server Error. Please contact your administrator.'
+  if(code) {
+    switch (code) {
+      case '23503':
+        status = 403;
+        message = 'Forbidden. This element is attached to an other element'
       break;
+    
+      default:
+        message = 'Internal Server Error. Please contact your administrator.'
+        break;
+    }
+
   }
 
 

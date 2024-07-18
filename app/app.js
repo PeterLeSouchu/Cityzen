@@ -8,6 +8,8 @@ import path from 'path';
 // EXTERNAL MODULES
 import router from './routers/index.router.js';
 import { generateToken, getTokenFromRequest } from './config/csrf.config.js';
+import apiDocumentation from './config/swagger.config.js';
+
 
 const app = express();
 
@@ -60,6 +62,9 @@ app.get('/csrf-token', (req, res) => {
     console.log(error.message);
   }
 });
+
+// Swagger doc
+apiDocumentation(app);
 
 // Router
 app.use(router);

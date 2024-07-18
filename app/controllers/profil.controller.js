@@ -34,9 +34,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
 
         throw requestError;
       }
@@ -61,9 +61,7 @@ const profilController = {
         activityId
       );
 
-      console.log(existActivity);
-
-      res.status(201).json({ data: existActivity });
+      res.status(201).json({ data: [existActivity] });
     },
 
     async destroy(req, res) {
@@ -78,9 +76,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -98,14 +96,12 @@ const profilController = {
         throw requestError;
       }
 
-      console.log(userId, activityId);
-
       const removedFavorite = await profilDatamapper.favorites.removedFavorite(
         userId,
         activityId
       );
 
-      res.status(200).json({ data: existActivity });
+      res.status(200).json({ data: [existActivity] });
     },
   },
 
@@ -147,7 +143,6 @@ const profilController = {
 
       // Found the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
-      console.log("hellllllllooooooo",cityFromDB.id);
       // Get latitude and longitude from address user by an external API
       const coordinates = await getCoordinates(address);
       const latitude = coordinates.lat;
@@ -173,6 +168,7 @@ const profilController = {
         activityToCreate
       );
 
+      console.log({ data: [createdActivity] });
       res.status(201).json({ data: [createdActivity] });
     },
 
@@ -189,9 +185,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -277,9 +273,9 @@ const profilController = {
       if (!existActivity) {
         const requestError = new ApiError(
           'The activity is not in the registered activities',
-          { status: 400 }
+          { status: 404 }
         );
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -290,10 +286,10 @@ const profilController = {
       );
       if (!userHasActivity) {
         const requestError = new ApiError(
-          'This activity not saved by the user',
-          { status: 400 }
+          'This activity not created by this user',
+          { status: 403 }
         );
-        requestError.name = 'BadRequest';
+        requestError.name = 'Forbidden';
         throw requestError;
       }
 
@@ -331,9 +327,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -343,9 +339,9 @@ const profilController = {
       );
       if (!userHasRateActivity) {
         const requestError = new ApiError("The user don't rate this activity", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -366,9 +362,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -409,9 +405,9 @@ const profilController = {
       const existActivity = await activityDatamapper.getOne(activityId);
       if (!existActivity) {
         const requestError = new ApiError("This activity don't exist", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
@@ -422,9 +418,9 @@ const profilController = {
       );
       if (!userHasRateActivity) {
         const requestError = new ApiError("The user don't rate this activity", {
-          status: 400,
+          status: 404,
         });
-        requestError.name = 'BadRequest';
+        requestError.name = 'NotFound';
         throw requestError;
       }
 
