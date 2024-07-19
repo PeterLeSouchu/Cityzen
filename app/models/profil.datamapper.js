@@ -142,6 +142,7 @@ const profilDatamapper = {
     async update(activity, activityId) {
       const columns = Object.keys(activity);
       const values = Object.values(activity);
+      console.log(activity);
 
       const columnsScriptSQL = columns.map((column, index) => {
         if (column === 'cityId') {

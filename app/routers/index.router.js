@@ -38,7 +38,7 @@ router.use('/city', cityRouter);
 router.use((error, req, res, next) => {
   let { message, status, name, code } = error;
   console.log(status, name, message);
-  // console.log(error);
+  console.log(error);
 
   switch (name) {
     case "ValidationError":

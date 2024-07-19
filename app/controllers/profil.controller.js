@@ -242,8 +242,8 @@ const profilController = {
         : cityActivity
       ;
 
-      let latitude = '';
-      let longitude = '';
+      let latitude = existActivity.latitude;
+      let longitude = existActivity.longitude;
       if(city) {
         const coordinates = await getCoordinates(address, cityFromDB.name);
         latitude = coordinates.lat;
