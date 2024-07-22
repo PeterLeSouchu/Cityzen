@@ -4,9 +4,9 @@ const countryDatamapper = {
   async findCountry(country) {
     const countriesFounded = await client.query(`
       SELECT * FROM "country" 
-       WHERE "name" LIKE $1
+       WHERE LOWER(name) LIKE $1
       LIMIT 5
-     ;`, [country]);
+     ;`, [country + '%']);
  
      return countriesFounded.rows;
   }

@@ -15,6 +15,8 @@ const cityController = {
           .json({ message: `${city} not found` });
       }
 
+      console.log(cities);
+
       res.status(200).json({ data: cities});
 
     } catch (error) {

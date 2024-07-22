@@ -4,10 +4,13 @@ const countryController = {
   async index(req, res) {
     try {
       const { country } = req.params;
-
+      console.log(country);
+      
       const countries = await countryDatamapper.findCountry(
         country.toLowerCase(),
       );
+      console.log(countries);
+
 
       if (!countries || countries.length === 0) {
         return res

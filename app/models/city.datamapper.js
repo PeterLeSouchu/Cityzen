@@ -22,9 +22,9 @@ const cityDatamapper = {
   async findCity(city) {
     const citiesFounded = await client.query(`
       SELECT * FROM "city" 
-       WHERE "name" LIKE $1
+       WHERE LOWER(name) LIKE $1
       LIMIT 5
-     ;`, [city]);
+     ;`, [city + '%']);
  
      return citiesFounded.rows;
   }
