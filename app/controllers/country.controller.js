@@ -6,7 +6,7 @@ const countryController = {
       const { country } = req.params;
 
       const countries = await countryDatamapper.findCountry(
-        country,
+        country.toLowerCase(),
       );
 
       if (!countries || countries.length === 0) {
