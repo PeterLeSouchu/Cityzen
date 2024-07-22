@@ -28,6 +28,7 @@ const activityController = {
         status: 500,
       });
       requestError.name = 'InternalServerError';
+      requestError.originalErr = error;
       throw requestError;
     }
   },

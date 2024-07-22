@@ -1,24 +1,30 @@
-import dataMapper from "../dataMapper/CityDataMapper.js";
+import cityDatamapper from "../models/city.datamapper.js";
 
 const cityController = {
   async index(req, res) {
     try {
       const { city } = req.params;
 
-      const countries = await dataMapper.findCity(
-        city,
+      const cities = await cityDatamapper.findCity(
+        city.toLowerCase(),
       );
 
-      if (!countries || countries.length === 0) {
+      if (!cities || cities.length === 0) {
         return res
           .status(404)
-          .json({ message: `No ${city} found` });
+          .json({ message: `${city} not found` });
       }
 
-      res.status(200).json(countries);
+      res.status(200).json({ data: cities});
+
     } catch (error) {
       console.error('Error in cityController: index method', error.message);
-      res.status(500).json({ error: 'An error occurred' });
+
+      const requestError = new ApiError("City not found", error);
+      requestError.name = 'BadRequest';
+      requestError.status = 400;
+
+      throw requestError;
     }
   },
 };

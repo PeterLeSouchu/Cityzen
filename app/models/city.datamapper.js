@@ -18,6 +18,16 @@ const cityDatamapper = {
 
     return city.rows[0];
   },
+
+  async findCity(city) {
+    const citiesFounded = await client.query(`
+      SELECT * FROM "city" 
+       WHERE "name" LIKE $1
+      LIMIT 5
+     ;`, [city]);
+ 
+     return citiesFounded.rows;
+  }
 };
 
 export default cityDatamapper;
