@@ -21,9 +21,11 @@ const cityDatamapper = {
 
   async findCity(city) {
     const citiesFounded = await client.query(`
-      SELECT * FROM "city" 
-       WHERE LOWER(name) LIKE $1
-      LIMIT 5
+      SELECT * FROM "city"
+      	JOIN "zip_code"
+		      ON "city"."id" = "zip_code"."id_city"
+	      WHERE LOWER("city"."name") LIKE $1
+      LIMIT 13;
      ;`, [city + '%']);
  
      return citiesFounded.rows;
