@@ -1,20 +1,16 @@
 class ApiError extends Error {
-  _type = "ApiError";
-  status;
-  errorCode;
+  _origin = 'ApiError';
 
-  constructor(message, causeObj, status, errorCode) {
-    super(message, causeObj);
-    this.status = status;
+  constructor(errorType, message, causeObj) {
+    super();
+    this.errortype = errorType;
     this.message = message;
-    this.errorCode = errorCode;
+    this.causeObj = causeObj;
   }
 
-  get type() {
-    return this._type;
+  get origin() {
+    return this._origin;
   }
-
-
 }
 
 export default ApiError;
