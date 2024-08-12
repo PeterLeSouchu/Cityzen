@@ -1,21 +1,18 @@
-
-
-
 async function fetchActivitiesFromCity(cityName) {
   const API_ACTIVITY_URL = `https://api.yelp.com/v3/businesses/search?location=${cityName}&limit=10`;
   const activities = await fetch(API_ACTIVITY_URL, {
     headers: {
-      'Authorization': 'Bearer Rd5PQvdtAG_mnsYICR0QGlvZaATQFSvXMNOkcTxGy0dfeyk7kvmVrx-07yFNF4zYaxR-spgAN12kwl51BRVntfWxQ-q1XioPdhBdzto-lS_VoKYNabEuUZGeb690ZnYx',
-      'Content-Type': 'application/json'
-    }
+      Authorization:
+        'Bearer 51kfSDpxvKMra_GlVWtEMDscBY2qHIwcqNig3ngxjreRomPBjdcz9JtGPvfNi-x0hR-oyEFQS-olKG1NPdig9d030OXcGUanlagMTC8rQWAVkqM6CxHMKA3vr7a5ZnYx',
+      'Content-Type': 'application/json',
+    },
   })
-  .then(response => response.json())
-  .then(data => data.businesses)
-  .catch(err => console.log(err));
+    .then((response) => response.json())
+    .then((data) => data.businesses)
+    .catch((err) => console.log(err));
 
   return activities;
 }
-  
 
 /*
  {
@@ -54,54 +51,69 @@ async function fetchActivitiesFromCity(cityName) {
 
 */
 
+// La fonction pour formater l'activité
+async function formatingActivity(client, activityFromFetch, cityId, userId) {
+  const formatedActivity = {
+    slug: activityFromFetch.alias,
+    // url: activityFromFetch.url,
+    title: activityFromFetch.name,
+    description: activityFromFetch.name,
+    url_image: activityFromFetch.image_url,
+    address: activityFromFetch.location.address1,
+    phone: activityFromFetch.phone,
+    avg_rating: activityFromFetch.rating,
+    latitude: activityFromFetch.coordinates.latitude,
+    longitude: activityFromFetch.coordinates.longitude,
+    id_user: userId,
+    id_city: cityId,
+  };
 
+  // Afficher l'activité formatée pour vérification
+  console.log('Activité formatée:', formatedActivity);
 
-  
-  // La fonction pour formater l'activité
-  async function formatingActivity(client, activityFromFetch, cityId, userId) {
+  return formatedActivity;
+}
 
-    const formatedActivity = {
-      slug: activityFromFetch.alias,
-      // url: activityFromFetch.url,
-      title: activityFromFetch.name,
-      description: activityFromFetch.name,
-      url_image: activityFromFetch.image_url,
-      address: activityFromFetch.location.address1,
-      phone: activityFromFetch.phone,
-      avg_rating: activityFromFetch.rating,
-      latitude: activityFromFetch.coordinates.latitude,
-      longitude: activityFromFetch.coordinates.longitude,
-      id_user: userId,
-      id_city: cityId,
-    };
-  
-    // Afficher l'activité formatée pour vérification
-    console.log('Activité formatée:', formatedActivity);
-  
-    return formatedActivity;
-  }
-
-
-  async function insertActivityFromCity(client, activity) {
-    const { slug, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city } = activity;
-    try {
-      const query = {
-        text: `INSERT INTO "activity"("slug", "title", "description", "url_image", "address", "phone", "avg_rating", "latitude", "longitude", "id_user", "id_city") 
+async function insertActivityFromCity(client, activity) {
+  const {
+    slug,
+    title,
+    description,
+    url_image,
+    address,
+    phone,
+    avg_rating,
+    latitude,
+    longitude,
+    id_user,
+    id_city,
+  } = activity;
+  try {
+    const query = {
+      text: `INSERT INTO "activity"("slug", "title", "description", "url_image", "address", "phone", "avg_rating", "latitude", "longitude", "id_user", "id_city") 
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
-        values: [slug, title, description, url_image, address, phone, avg_rating, latitude, longitude, id_user, id_city], 
-      };
-  
-      const returningQuery = await client.query(query);
-        const insertedActivities = returningQuery.rows[0]
-        console.log('insertedActivities effectué');
-    } catch (err) {
-      console.error('Erreur lors de l\'insertion de l\'activité :', err);
-    }
+      values: [
+        slug,
+        title,
+        description,
+        url_image,
+        address,
+        phone,
+        avg_rating,
+        latitude,
+        longitude,
+        id_user,
+        id_city,
+      ],
+    };
+
+    const returningQuery = await client.query(query);
+    const insertedActivities = returningQuery.rows[0];
+    console.log('insertedActivities effectué');
+  } catch (err) {
+    console.error("Erreur lors de l'insertion de l'activité :", err);
   }
-  
-  
-
-
+}
 
 /*
 
@@ -118,33 +130,23 @@ const activity = data.businesses.map(business => ({
 
 */
 
-
 async function getCityActivitiesFromDB(client, cityName) {
-    try {
-      const query = `SELECT * FROM "activity" 
+  try {
+    const query = `SELECT * FROM "activity" 
       JOIN "city" ON "activity"."id_city" = "city"."id"
         WHERE "city"."name" = $1
       ;`;
-      const data = await client.query(query, [cityName]);
-      console.table(data);
-      return data.rows;
-
-    } catch (err) {
-      console.error('Error getting cities from DB:', err);
-    }
+    const data = await client.query(query, [cityName]);
+    console.table(data);
+    return data.rows;
+  } catch (err) {
+    console.error('Error getting cities from DB:', err);
   }
-
+}
 
 //fetchActivitiesFromCity('Paris');
 
-export {
-    fetchActivitiesFromCity,
-    formatingActivity,
-    insertActivityFromCity,
-}
-  
-
-
+export { fetchActivitiesFromCity, formatingActivity, insertActivityFromCity };
 
 /* Exemple de fetch activities pour Paris 
 

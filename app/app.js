@@ -10,10 +10,10 @@ import router from './routers/index.router.js';
 import { generateToken, getTokenFromRequest } from './config/csrf.config.js';
 import apiDocumentation from './config/swagger.config.js';
 
-
 const app = express();
 
 const __dirname = path.resolve();
+// app.use(express.static(path.join(__dirname, 'public/dist')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
@@ -22,7 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 // CORS handler
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
     credentials: true,
   })
 );
@@ -68,5 +68,9 @@ apiDocumentation(app);
 
 // Router
 app.use(router);
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
+// });
 
 export default app;

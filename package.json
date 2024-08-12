@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "db:create": "psql -p 5431 -U cityzen -d cityzen -f ./app/data/create_table.sql"
+    "db:create": "psql -p 5432 -U cityzen -d cityzen -f ./app/data/create_table.sql",
+    "db:seeding": "node ./app/data/seedding/index.seeding.js"
+
   },
   "author": "",
   "license": "ISC",
