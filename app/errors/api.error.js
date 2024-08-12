@@ -1,4 +1,5 @@
 class ApiError extends Error {
+  #type = "ApiError";
   status;
   errorCode;
 
@@ -7,6 +8,10 @@ class ApiError extends Error {
     this.status = status;
     this.message = message;
     this.errorCode = errorCode;
+  }
+
+  get type() {
+    return this.#type;
   }
 }
 
