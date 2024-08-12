@@ -1,5 +1,5 @@
 class ApiError extends Error {
-  #type = "ApiError";
+  _type = "ApiError";
   status;
   errorCode;
 
@@ -11,8 +11,10 @@ class ApiError extends Error {
   }
 
   get type() {
-    return this.#type;
+    return this._type;
   }
+
+
 }
 
 export default ApiError;
