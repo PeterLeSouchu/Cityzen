@@ -26,18 +26,11 @@ router.use('/activity', activityRouter);
 router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
-router.use('/unsubscribe', authenticationCheck, doubleCsrfProtection, unsubscribeRouter);
+router.use('/unsubscribe', authenticationCheck, /*doubleCsrfProtection,*/ unsubscribeRouter);
 router.use( '/profil', authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 router.use('/country', countryRouter);
 router.use('/city', cityRouter);
-console.log('un');
-
-router.get('/', (req, res) => {
-  res.json({"ok": "ok"})
-  console.log('ok');
-  
-})
 
 
 // TODO : Handler error middleware here 👇
