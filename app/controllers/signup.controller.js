@@ -9,6 +9,9 @@ import { hashPassword } from '../utils/bcrypt.js';
 import sendMail from '../utils/send-mail.js';
 import transporter from '../config/transporter.config.js';
 import { htmlCode } from '../config/html-mail.config.js';
+import errors from '../errors/errors.js';
+
+const { internalServerError, userError, forbidden } = errors;
 
 const signupController = {
   async sendOTP(req, res) {
@@ -17,18 +20,29 @@ const signupController = {
 
       const userExist = await userDatamapper.show(email);
       if (userExist) {
-        return res.status(400).json({ error: 'The user already exist' });
+        next(
+          new ApiError(userError.details, userError.message.alreadyStored, null)
+        );
+        return;
       }
 
       if (password !== passwordConfirm) {
-        return res.status(400).json({ error: "passwords don't match" });
+        next(
+          new ApiError(
+            userError.details,
+            userError.message.passwordDontMatch,
+            null
+          )
+        );
+        return;
       }
 
-      const OTP = otpGenerator.generate(6);
+      const hash = await hashPassword(password);
 
+      const OTP = otpGenerator.generate(6);
       console.log(OTP);
 
-      const hash = await hashPassword(password);
+      // sendMail(transporter, htmlCode);
 
       req.session.signupDatas = {
         email,
@@ -37,33 +51,62 @@ const signupController = {
         OTP,
       };
 
-      sendMail(transporter, htmlCode);
-
       res
         .status(200)
         .json({ info: 'OTP sented', session: req.session.signupDatas });
-    } catch (error) {}
+    } catch (error) {
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
+      );
+    }
   },
 
   async checkUserByOTP(req, res) {
-    if (!req.session?.signupDatas) {
-      return res.status(404).json({ error: 'Bad Request' });
+    try {
+      if (!req.session?.signupDatas) {
+        next(
+          new ApiError(
+            forbidden.details,
+            forbidden.message.permissionDenied,
+            null
+          )
+        );
+        return;
+      }
+
+      // Get storing datas
+      const { email, hash, pseudo, OTP } = req.session.signupDatas;
+
+      // Get sended OTP
+      const sendedOTP = req.body.OTP;
+
+      if (OTP !== sendedOTP || sendedOTP.length < 6) {
+        next(
+          new ApiError(
+            userError.details,
+            userError.message.passwordDontMatch,
+            null
+          )
+        );
+        return;
+      }
+
+      const createdUser = await userDatamapper.save(email, hash, pseudo);
+      delete createdUser.password;
+
+      delete req.session.signupDatas;
+      req.session.userId = createdUser.id;
+
+      res.status(200).json({ data: [createdUser] });
+    } catch (error) {
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
+      );
     }
-
-    const { email, hash, pseudo, OTP } = req.session.signupDatas;
-    const sendedOTP = req.body.OTP;
-
-    if (OTP !== sendedOTP || sendedOTP.length < 6) {
-      return res.status(400).json({ error: 'The OTP does not match' });
-    }
-
-    const createdUser = await userDatamapper.save(email, hash, pseudo);
-    delete createdUser.password;
-
-    delete req.session.signupDatas;
-    req.session.userId = createdUser.id;
-
-    res.status(200).json({ data: [createdUser] });
   },
 };
 

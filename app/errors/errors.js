@@ -41,6 +41,7 @@ const errors = {
       notFound: 'User not found',
       alreadyStored: 'User already stored',
       permissionDenied: 'The provided informations is wrong',
+      passwordDontMatch: "Passwords don't match",
     },
   },
   cityError: {
