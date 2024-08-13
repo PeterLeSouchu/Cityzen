@@ -24,8 +24,6 @@ const signupController = {
 
     const OTP = otpGenerator.generate(6);
 
-    console.log(OTP);
-
     const hash = await hashPassword(password);
 
     req.session.signupDatas = {
@@ -36,7 +34,7 @@ const signupController = {
     };
 
     // Make the transporter
-    const transporter = nodemailer.createTransport({
+    const trapnporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,
       auth: {
