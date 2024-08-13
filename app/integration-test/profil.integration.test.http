@@ -49,7 +49,7 @@ Content-Type: application/json
 # }
 
 {
-  "title": "Le bleu top",
+  "title": 45,
   "description": "Une bonne bleu"
 }
 

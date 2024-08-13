@@ -15,11 +15,10 @@ import paramsSchema from '../schema-validations/params.schema.js';
 import updateSchema from '../schema-validations/update.schema.js';
 import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-patch.schema.js';
 import upload from '../config/multer.upload.middlewares.js';
-import { doubleCsrfProtection } from "../config/csrf.config.js";
+import { doubleCsrfProtection } from '../config/csrf.config.js';
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
 import checkFile from '../middlewares/check-file.middleware.js';
-
 
 const profilRouter = Router();
 
@@ -33,7 +32,7 @@ profilRouter.route('/authentication');
 profilRouter
   .route('/favorite')
 
-    /**
+  /**
     * GET /profil/favorite
     * @summary Get all favorite from a profil user
     * @tags Profil-Favorite
@@ -233,7 +232,7 @@ profilRouter
     }
    */
   .delete(
-    // doubleCsrfProtection, 
+    // doubleCsrfProtection,
     validationSchema(profilFavoriteDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.favorites.destroy)
   );
@@ -332,7 +331,10 @@ profilRouter
     upload.single('image'),
     uploadErrorHandler,
     checkFile,
-    (req, res, next) => {console.log('req.body', req.body, req.file, req.session); next()},
+    (req, res, next) => {
+      console.log('req.body', req.body, req.file, req.session);
+      next();
+    },
     validationSchema(profilActivityPostSchema, 'body'),
     catchHandlerController(profilController.activities.store)
   );
@@ -340,7 +342,7 @@ profilRouter
 profilRouter
   .route('/activity/:id(\\d+)')
 
-    /**
+  /**
     * PATCH /profil/activity/{id}
     * @summary Update an activity
     * @tags Profil-Activity
@@ -409,7 +411,7 @@ profilRouter
     catchHandlerController(profilController.activities.update)
   )
 
-    /**
+  /**
     * DELETE profil/activity/{id}
     * @summary Delete one activity by the user
     * @tags Profil-Activity
@@ -454,7 +456,7 @@ profilRouter
     }
    */
   .delete(
-    // doubleCsrfProtection, 
+    // doubleCsrfProtection,
     validationSchema(profilActivityDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.activities.destroy)
   );
@@ -506,7 +508,7 @@ profilRouter
 profilRouter
   .route('/rating/:id(\\d+)') // id refers to an activity
 
-    /**
+  /**
     * GET /profil/rating/{id}
     * @summary Get all user activities rating
     * @tags Profil-Rating
@@ -533,7 +535,7 @@ profilRouter
   */
   .get(catchHandlerController(profilController.ratings.show))
 
-    /**
+  /**
     * PATCH /profil/rating/{id}
     * @summary Update a rating
     * @tags Profil-Rating
@@ -574,7 +576,7 @@ profilRouter
     }
    */
   .patch(
-    // doubleCsrfProtection, 
+    // doubleCsrfProtection,
     validationSchema(
       updateSchema(paramsSchema, profilRatingPatchSchema),
       undefined,
@@ -584,7 +586,7 @@ profilRouter
     catchHandlerController(profilController.ratings.update)
   )
 
-      /**
+  /**
     * POST /profil/rating/{id}
     * @summary Save a rating
     * @tags Profil-Rating
@@ -625,7 +627,7 @@ profilRouter
     }
    */
   .post(
-    // doubleCsrfProtection, 
+    // doubleCsrfProtection,
     validationSchema(profilRatingPostSchema, 'body'),
     catchHandlerController(profilController.ratings.store)
   );
