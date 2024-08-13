@@ -8,7 +8,7 @@ import userDatamapper from '../models/user.datamapper.js';
 import { hashPassword } from '../utils/bcrypt.js';
 import sendMail from '../utils/send-mail.js';
 import transporter from '../config/transporter.config.js';
-import { htmlCode } from '../config/html-mail.config.js';
+import generateHTMLMail from '../config/html-mail.config.js';
 import errors from '../errors/errors.js';
 
 const { internalServerError, userError, forbidden } = errors;
@@ -42,7 +42,9 @@ const signupController = {
       const OTP = otpGenerator.generate(6);
       console.log(OTP);
 
-      // sendMail(transporter, htmlCode);
+      const htmlText = generateHTMLMail(pseudo, OTP);
+
+      // sendMail(transporter, htmlText);
 
       req.session.signupDatas = {
         email,
