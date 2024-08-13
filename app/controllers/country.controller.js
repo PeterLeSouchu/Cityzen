@@ -4,7 +4,7 @@ import countryDatamapper from '../models/country.datamapper.js';
 const { internalServerError, countryError } = errors;
 
 const countryController = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       const { country } = req.params;
 

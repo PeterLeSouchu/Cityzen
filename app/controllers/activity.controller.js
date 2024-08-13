@@ -6,7 +6,7 @@ import activityDatamapper from '../models/activity.datamapper.js';
 const { activityError, internalServerError } = errors;
 
 const activityController = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       const { country, city } = req.params;
 
@@ -38,7 +38,7 @@ const activityController = {
     }
   },
 
-  async show(req, res) {
+  async show(req, res, next) {
     try {
       const id = parseInt(req.params.id);
       const activity = await activityDatamapper.getOne(id);
@@ -64,7 +64,7 @@ const activityController = {
     }
   },
 
-  async showRecent(req, res) {
+  async showRecent(req, res, next) {
     try {
       const recentActivities = await activityDatamapper.getRecents();
 
@@ -89,7 +89,7 @@ const activityController = {
     }
   },
 
-  async showRating(req, res) {
+  async showRating(req, res, next) {
     try {
       const ratingActivities = await activityDatamapper.findActivitiesRating();
 

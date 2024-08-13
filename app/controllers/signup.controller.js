@@ -14,7 +14,7 @@ import errors from '../errors/errors.js';
 const { internalServerError, userError, forbidden } = errors;
 
 const signupController = {
-  async sendOTP(req, res) {
+  async sendOTP(req, res, next) {
     try {
       const { email, password, passwordConfirm, pseudo } = req.body;
 
@@ -65,7 +65,7 @@ const signupController = {
     }
   },
 
-  async checkUserByOTP(req, res) {
+  async checkUserByOTP(req, res, next) {
     try {
       if (!req.session?.signupDatas) {
         next(

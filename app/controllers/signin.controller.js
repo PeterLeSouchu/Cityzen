@@ -8,7 +8,7 @@ import errors from '../errors/errors.js';
 const { internalServerError, userError } = errors;
 
 const signinController = {
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const { email, password } = req.body;
 

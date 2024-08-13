@@ -4,7 +4,7 @@ import cityDatamapper from '../models/city.datamapper.js';
 const { cityError, internalServerError } = errors;
 
 const cityController = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       const { city } = req.params;
 
