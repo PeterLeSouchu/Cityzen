@@ -7,7 +7,7 @@ POST {{url}}/{{mainEndpoint}}
 Content-Type: application/json
 
 {
-  "title": "parc rouge",
+  "title": 45,
   "url": "parc-rouge",
   "description": "il s’agit du parc rouge blabla",
   "avg_rate": 4.8,

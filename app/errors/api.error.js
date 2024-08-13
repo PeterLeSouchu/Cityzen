@@ -3,7 +3,7 @@ class ApiError extends Error {
 
   constructor(errorType, message, causeObj) {
     super();
-    this.errortype = errorType;
+    this.errorType = errorType;
     this.message = message;
     this.causeObj = causeObj;
   }

@@ -36,14 +36,11 @@ router.use('/city', cityRouter);
 // TODO : 404 middleware here 👇
 
 router.use((error, req, res, next) => {
-  let { message, status, name, code } = error;
-  console.log(error.causeObj);
+  let { message, errorType, causeObj, name } = error;
   console.log(error);
   console.log(Object.getOwnPropertyNames(error));
 
-  switch (
-    name // change by 'type'
-  ) {
+  switch (errorType.type || name) {
     case 'ValidationError':
       status = 400;
       message = 'Bad request. Invalid value.';
