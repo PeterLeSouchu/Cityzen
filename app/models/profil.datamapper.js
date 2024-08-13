@@ -315,6 +315,41 @@ const profilDatamapper = {
       return result.rows[0];
     },
   },
+  account: {
+    async getOneUser(userId) {
+      const result = await client.query(
+        `
+        SELECT * FROM "user"
+          WHERE "id" = $1;`,
+        [userId]
+      );
+
+      return result.rows[0];
+    },
+    async updatePseudo(pseudo, userId) {
+      const result = await client.query(
+        `
+        UPDATE "user"
+          SET "pseudo" = $1
+            WHERE "id" = $2
+        RETURNING *
+        ;`,
+        [pseudo, userId]
+      );
+
+      return result.rows[0];
+    },
+    async checkPseudo(pseudo) {
+      const result = await client.query(
+        `
+        SELECT * FROM "user"
+          WHERE "pseudo" = $1;`,
+        [pseudo]
+      );
+
+      return result.rows[0];
+    },
+  },
 };
 
 export default profilDatamapper;

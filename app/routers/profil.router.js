@@ -21,8 +21,7 @@ import setImageInBody from '../utils/set-image.js';
 
 const profilRouter = Router();
 
-profilRouter.route('/pseudo');
-// .patch(profilController.update);
+profilRouter.route('/pseudo').patch(profilController.account.update);
 
 profilRouter.route('/authentication');
 // .patch(profilController.update);

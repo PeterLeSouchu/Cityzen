@@ -8,7 +8,7 @@ import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
-import getCoordinates from "../utils/get-coordinate.js";
+import getCoordinates from '../utils/get-coordinate.js';
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -119,9 +119,7 @@ const profilController = {
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
         ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-        : null
-      ;
-
+        : null;
       // Generate the initial slug
       let slug = encodeURIComponent(title.toLowerCase());
 
@@ -133,7 +131,9 @@ const profilController = {
       }
 
       // Check again if an activity with the slug (including city) exists
-      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(slug);
+      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(
+        slug
+      );
       //console.log(activitesAvecSlugVille);
       if (activitesAvecSlugVille.length > 0) {
         // Add a number to the slug to ensure its uniqueness
@@ -209,10 +209,8 @@ const profilController = {
 
       const { title, address, city } = req.body;
       const imageUrl = req.file
-      ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-      : existActivity.url_image
-      ;
-
+        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+        : existActivity.url_image;
       let slug = existActivity.slug;
       let titleForSlug = existActivity.title;
       let cityForSlug = cityActivity.name;
@@ -239,17 +237,15 @@ const profilController = {
 
       const cityFromDB = city
         ? await cityDatamapper.getOneByName(city)
-        : cityActivity
-      ;
-
+        : cityActivity;
       let latitude = existActivity.latitude;
       let longitude = existActivity.longitude;
-      if(city) {
+      if (city) {
         const coordinates = await getCoordinates(address, cityFromDB.name);
         latitude = coordinates.lat;
         longitude = coordinates.lon;
       }
-// tester avec la modif d'une ville et adresse
+      // tester avec la modif d'une ville et adresse
       const activityToUpdate = {
         ...req.body,
         slug,
@@ -444,6 +440,40 @@ const profilController = {
         );
 
       res.status(200).json({ data: userActivityWithRating });
+    },
+  },
+  account: {
+    async update(req, res) {
+      const { newPseudo } = req.body;
+      const id = req.session.userId;
+
+      try {
+        // Verification if user exist
+        const user = await profilDatamapper.account.getOneUser(id);
+
+        if (!user) {
+          return res.status(404).json({ message: "User doesn't exist" });
+        }
+        console.log('user exit bien');
+
+        const pseudoExist = await profilDatamapper.account.checkPseudo(
+          newPseudo
+        );
+
+        if (pseudoExist) {
+          console.log('pseudo deja pris');
+          return res.status(404).json({ message: 'pseudo already taken' });
+        }
+        console.log('pseudo non pris');
+
+        // Update pseudo
+        await profilDatamapper.account.updatePseudo(newPseudo, id);
+
+        res.status(200).json({ data: [newPseudo] });
+      } catch (error) {
+        console.log('Pseudo non changé');
+        res.status(500).json({ message: 'Erreur serveur' });
+      }
     },
   },
 };
