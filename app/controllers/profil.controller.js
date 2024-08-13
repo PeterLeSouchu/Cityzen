@@ -2,7 +2,6 @@
 import 'dotenv/config';
 
 // EXTERNAL MODULES
-
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';

@@ -40,6 +40,7 @@ const errors = {
     message: {
       notFound: 'User not found',
       alreadyStored: 'User already stored',
+      permissionDenied: 'The provided informations is wrong',
     },
   },
   cityError: {
@@ -50,6 +51,16 @@ const errors = {
     },
     message: {
       notFound: 'City not found',
+    },
+  },
+  countryError: {
+    details: {
+      type: 'Bad Request',
+      status: 404,
+      code: null,
+    },
+    message: {
+      notFound: 'Country not found',
     },
   },
   ratingError: {
