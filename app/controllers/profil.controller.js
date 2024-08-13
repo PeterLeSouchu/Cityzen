@@ -8,442 +8,601 @@ import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
-import getCoordinates from "../utils/get-coordinate.js";
+import getCoordinates from '../utils/get-coordinate.js';
+import errors from '../errors/errors.js';
+import userDatamapper from '../models/user.datamapper.js';
+
+const {
+  internalServerError,
+  activityError,
+  cityError,
+  forbidden,
+  userError,
+  ratingError,
+} = errors;
 
 const profilController = {
   RADIX_NUMBER: 10,
 
   favorites: {
-    async index(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activities = await profilDatamapper.favorites.getAll(userId);
 
-      const activities = await profilDatamapper.favorites.getAll(userId);
-      res.status(200).json({ data: activities });
-    },
-
-    async store(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.body.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-
-        throw requestError;
-      }
-
-      // Check if activity is already saved ti the user's favorites
-      console.log(userId, activityId);
-      const userHasActivity = await profilDatamapper.favorites.getOne(
-        userId,
-        activityId
-      );
-      if (userHasActivity) {
-        const requestError = new ApiError('This activity already saved', {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-        throw requestError;
-      }
-
-      // Save favorite in DB for this user
-      const activityForUser = await profilDatamapper.favorites.saveFavorite(
-        userId,
-        activityId
-      );
-
-      res.status(201).json({ data: [existActivity] });
-    },
-
-    async destroy(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      // Check if activity is already saved in the user's favorites
-      const userHasActivity = await profilDatamapper.favorites.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasActivity) {
-        const requestError = new ApiError(
-          'This activity not saved by the user',
-          { status: 400 }
+        res.status(200).json({ data: activities });
+      } catch (error) {
+        next(
+          new ApiError(
+            internalServerError.details,
+            internalServerError.message.global,
+            null
+          )
         );
-        requestError.name = 'BadRequest';
-        throw requestError;
+        return;
       }
+    },
 
-      const removedFavorite = await profilDatamapper.favorites.removedFavorite(
-        userId,
-        activityId
-      );
+    async store(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.body.id,
+          profilController.RADIX_NUMBER
+        );
 
-      res.status(200).json({ data: [existActivity] });
+        // Check if activity to be store in favorites exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if activity is already store in user's favorites
+        const userHasActivity = await profilDatamapper.favorites.getOne(
+          userId,
+          activityId
+        );
+        if (userHasActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.alreadyStored,
+              null
+            )
+          );
+          return;
+        }
+
+        // Store activity in user's favorites
+        await profilDatamapper.favorites.saveFavorite(userId, activityId);
+
+        res.status(201).json({ data: [existActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async destroy(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+
+        // Check if activity is already exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if the activity is stored in the user's favorites
+        const userHasActivity = await profilDatamapper.favorites.getOne(
+          userId,
+          activityId
+        );
+        if (!userHasActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        await profilDatamapper.favorites.removedFavorite(userId, activityId);
+
+        res.status(200).json({ data: [existActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
 
   activities: {
-    async index(req, res) {
-      console.log(req.body);
-      const userId = req.session.userId;
-      const activities = await profilDatamapper.activities.getAll(userId);
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activities = await profilDatamapper.activities.getAll(userId);
 
-      res.status(200).json({ data: activities });
-    },
-
-    async store(req, res) {
-      const userId = req.session.userId;
-      const { title, description, address, phone, city } = req.body;
-      const imageUrl = req.file
-        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-        : null
-      ;
-
-      // Generate the initial slug
-      let slug = encodeURIComponent(title.toLowerCase());
-
-      // Check if an activity with the same slug already exists
-      const activitesExistantes = await activityDatamapper.getAllBySlug(slug);
-      if (activitesExistantes.length > 0) {
-        // Add city to slug if an activity with the same slug exists
-        slug += `%20${encodeURIComponent(city.toLowerCase())}`;
-      }
-
-      // Check again if an activity with the slug (including city) exists
-      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(slug);
-      //console.log(activitesAvecSlugVille);
-      if (activitesAvecSlugVille.length > 0) {
-        // Add a number to the slug to ensure its uniqueness
-        const nombreActivites = activitesAvecSlugVille.length;
-        slug += `%20${nombreActivites + 1}`;
-      }
-
-      // Found the city by name
-      const cityFromDB = await cityDatamapper.getOneByName(city);
-      // Get latitude and longitude from address user by an external API
-      const coordinates = await getCoordinates(address, cityFromDB.name);
-      const latitude = coordinates.lat;
-      const longitude = coordinates.lon;
-
-      // new activity object
-      const activityToCreate = {
-        slug,
-        title,
-        description,
-        image: imageUrl,
-        address,
-        phone,
-        latitude,
-        longitude,
-        userId,
-        cityId: cityFromDB.id,
-      };
-
-      //console.log(activityToCreate);
-
-      const createdActivity = await profilDatamapper.activities.create(
-        activityToCreate
-      );
-
-      console.log({ data: [createdActivity] });
-      res.status(201).json({ data: [createdActivity] });
-    },
-
-    async update(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      const cityActivity = await cityDatamapper.getOneById(
-        existActivity.id_city
-      );
-
-      // Check if activity is created by this user
-      const createdActivityByUser = await profilDatamapper.activities.getOne(
-        userId,
-        activityId
-      );
-      if (!createdActivityByUser) {
-        const requestError = new ApiError(
-          'This activity not created by this user',
-          { status: 403 }
+        res.status(200).json({ data: activities });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
         );
-        requestError.name = 'Forbidden';
-        throw requestError;
       }
+    },
 
-      const { title, address, city } = req.body;
-      const imageUrl = req.file
-      ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-      : existActivity.url_image
-      ;
+    async store(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const { title, description, address, phone, city } = req.body;
+        const imageUrl = req.file
+          ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+          : null;
+        // Generate the initial slug
+        let slug = encodeURIComponent(title.toLowerCase());
 
-      let slug = existActivity.slug;
-      let titleForSlug = existActivity.title;
-      let cityForSlug = cityActivity.name;
-
-      if (title || city) {
-        titleForSlug = title ? title : titleForSlug;
-        cityForSlug = city ? city : cityForSlug;
-
-        slug = encodeURIComponent(titleForSlug.toLowerCase());
-        const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-        if (sameActivityExist) {
-          slug += `%20${cityForSlug.toLowerCase()}`;
+        // Check if an activity with the same slug already exists
+        const activitesExistantes = await activityDatamapper.getAllBySlug(slug);
+        if (activitesExistantes.length > 0) {
+          // Add city to slug if an activity with the same slug exists
+          slug += `%20${encodeURIComponent(city.toLowerCase())}`;
         }
 
-        const sameActivityExistWithCity = await activityDatamapper.getAllBySlug(
+        // Check again if an activity with the slug (including city) exists
+        const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(
           slug
         );
-        console.log(sameActivityExistWithCity);
-        if (sameActivityExistWithCity.length > 0) {
-          const numberOfActivities = sameActivityExistWithCity.length;
-          slug += `%20${numberOfActivities + 1}`;
+        if (activitesAvecSlugVille.length > 0) {
+          // Add a number to the slug to ensure its uniqueness
+          const nombreActivites = activitesAvecSlugVille.length;
+          slug += `%20${nombreActivites + 1}`;
         }
-      }
 
-      const cityFromDB = city
-        ? await cityDatamapper.getOneByName(city)
-        : cityActivity
-      ;
+        const cityFromDB = await cityDatamapper.getOneByName(city);
+        if (!cityFromDB) {
+          next(
+            new ApiError(cityError.details, cityError.message.notFound, null)
+          );
+          return;
+        }
 
-      let latitude = existActivity.latitude;
-      let longitude = existActivity.longitude;
-      if(city) {
+        // Get latitude and longitude from address user by an external API
         const coordinates = await getCoordinates(address, cityFromDB.name);
-        latitude = coordinates.lat;
-        longitude = coordinates.lon;
+        const latitude = coordinates.lat;
+        const longitude = coordinates.lon;
+
+        const activityToCreate = {
+          slug,
+          title,
+          description,
+          image: imageUrl,
+          address,
+          phone,
+          latitude,
+          longitude,
+          userId,
+          cityId: cityFromDB.id,
+        };
+
+        const createdActivity = await profilDatamapper.activities.create(
+          activityToCreate
+        );
+
+        res.status(201).json({ data: [createdActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
       }
-// tester avec la modif d'une ville et adresse
-      const activityToUpdate = {
-        ...req.body,
-        slug,
-        latitude,
-        longitude,
-        image: imageUrl,
-        title: titleForSlug,
-        cityId: cityFromDB.id,
-      };
-      delete activityToUpdate.city;
-
-      const updatedActivity = await profilDatamapper.activities.update(
-        activityToUpdate,
-        activityId
-      );
-
-      res.status(200).json({ data: [updatedActivity] });
     },
 
-    async destroy(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-
-      if (!existActivity) {
-        const requestError = new ApiError(
-          'The activity is not in the registered activities',
-          { status: 404 }
+    async update(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
         );
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
 
-      // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilDatamapper.activities.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasActivity) {
-        const requestError = new ApiError(
-          'This activity not created by this user',
-          { status: 403 }
+        // Check if activity to be update exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Get city of the activity
+        const cityActivity = await cityDatamapper.getOneById(
+          existActivity.id_city
         );
-        requestError.name = 'Forbidden';
-        throw requestError;
+        if (!cityActivity) {
+          next(
+            new ApiError(cityError.details, cityError.message.notFound, null)
+          );
+          return;
+        }
+
+        // Check if activity is created by this user
+        const createdActivityByUser = await profilDatamapper.activities.getOne(
+          userId,
+          activityId
+        );
+        if (!createdActivityByUser) {
+          next(
+            new ApiError(
+              forbidden.details,
+              forbidden.message.permissionDenied,
+              null
+            )
+          );
+          return;
+        }
+
+        const { title, address, city } = req.body;
+        const imageUrl = req.file
+          ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+          : existActivity.url_image;
+        let slug = existActivity.slug;
+        let titleForSlug = existActivity.title;
+        let cityForSlug = cityActivity.name;
+
+        if (title || city) {
+          titleForSlug = title ? title : titleForSlug;
+          cityForSlug = city ? city : cityForSlug;
+
+          slug = encodeURIComponent(titleForSlug.toLowerCase());
+          const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
+          if (sameActivityExist) {
+            slug += `%20${cityForSlug.toLowerCase()}`;
+          }
+
+          const sameActivityExistWithCity =
+            await activityDatamapper.getAllBySlug(slug);
+          if (sameActivityExistWithCity.length > 0) {
+            const numberOfActivities = sameActivityExistWithCity.length;
+            slug += `%20${numberOfActivities + 1}`;
+          }
+        }
+
+        const cityFromDB = city
+          ? await cityDatamapper.getOneByName(city)
+          : cityActivity;
+        let latitude = existActivity.latitude;
+        let longitude = existActivity.longitude;
+        if (city) {
+          const coordinates = await getCoordinates(address, cityFromDB.name);
+          latitude = coordinates.lat;
+          longitude = coordinates.lon;
+        }
+
+        const activityToUpdate = {
+          ...req.body,
+          slug,
+          latitude,
+          longitude,
+          image: imageUrl,
+          title: titleForSlug,
+          cityId: cityFromDB.id,
+        };
+        delete activityToUpdate.city;
+
+        const updatedActivity = await profilDatamapper.activities.update(
+          activityToUpdate,
+          activityId
+        );
+
+        res.status(200).json({ data: [updatedActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
       }
+    },
 
-      const removedActivity = await profilDatamapper.activities.removeActivity(
-        userId,
-        activityId
-      );
+    async destroy(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
 
-      res.status(200).json({ data: removedActivity });
+        // Check if activity is already exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if the activity to be destroy was created by this user
+        const userHasActivity = await profilDatamapper.activities.getOne(
+          userId,
+          activityId
+        );
+        if (!userHasActivity) {
+          next(
+            new ApiError(
+              forbidden.details,
+              forbidden.message.permissionDenied,
+              null
+            )
+          );
+          return;
+        }
+
+        const removedActivity =
+          await profilDatamapper.activities.removeActivity(userId, activityId);
+
+        res.status(200).json({ data: removedActivity });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
 
   ratings: {
-    async index(req, res) {
-      const userId = req.session.userId;
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
 
-      const userActivitiesRating =
-        await profilDatamapper.ratings.getAllActivities(userId);
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
 
-      const avgRating = await profilDatamapper.ratings.getAvg(userId);
+        const userActivitiesRating =
+          await profilDatamapper.ratings.getAllActivities(userId);
 
-      res.status(200).json({
-        data: userActivitiesRating,
-        avgRating: avgRating.avg,
-      });
-    },
+        const avgRating = await profilDatamapper.ratings.getAvg(userId);
 
-    async show(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
+        res.status(200).json({
+          data: userActivitiesRating,
+          avgRating: avgRating,
         });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasRateActivity) {
-        const requestError = new ApiError("The user don't rate this activity", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      res.status(200).json({ data: [userHasRateActivity] });
-    },
-
-    async store(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-      const userRating = Number.parseInt(
-        req.body.rating,
-        profilController.RADIX_NUMBER
-      );
-
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      // Check if user has already rate this activity
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (userHasRateActivity) {
-        const requestError = new ApiError(
-          'The user has already rate this activity',
-          { status: 400 }
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
         );
-        requestError.name = 'BadRequest';
-        throw requestError;
       }
-
-      const userActivityWithRating = await profilDatamapper.ratings.saveRating(
-        userId,
-        activityId,
-        userRating
-      );
-
-      res.status(201).json({ data: [userActivityWithRating] });
     },
 
-    async update(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-      const userRating = Number.parseInt(
-        req.body.rating,
-        profilController.RADIX_NUMBER
-      );
+    async show(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
 
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
 
-      // Check if user has already rate this activity
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasRateActivity) {
-        const requestError = new ApiError("The user don't rate this activity", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
 
-      const oldUserRating = userHasRateActivity.id_rating;
-
-      const userActivityWithRating =
-        await profilDatamapper.ratings.updateRating(
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
           userId,
-          activityId,
-          userRating,
-          oldUserRating
+          activityId
+        );
+        if (!userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        res.status(200).json({ data: [userHasRateActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async store(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+        const userRating = Number.parseInt(
+          req.body.rating,
+          profilController.RADIX_NUMBER
         );
 
-      res.status(200).json({ data: userActivityWithRating });
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
+
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if user has already rate this activity
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
+          userId,
+          activityId
+        );
+        if (userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.alreadyRated,
+              null
+            )
+          );
+          return;
+        }
+
+        const userActivityWithRating =
+          await profilDatamapper.ratings.saveRating(
+            userId,
+            activityId,
+            userRating
+          );
+
+        res.status(201).json({ data: [userActivityWithRating] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async update(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+        const userRating = Number.parseInt(
+          req.body.rating,
+          profilController.RADIX_NUMBER
+        );
+
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
+
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if user has already rate this activity
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
+          userId,
+          activityId
+        );
+        if (!userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        const oldUserRating = userHasRateActivity.id_rating;
+
+        const userActivityWithRating =
+          await profilDatamapper.ratings.updateRating(
+            userId,
+            activityId,
+            userRating,
+            oldUserRating
+          );
+
+        res.status(200).json({ data: userActivityWithRating });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
 };
