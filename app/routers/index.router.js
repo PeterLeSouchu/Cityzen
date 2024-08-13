@@ -36,55 +36,72 @@ router.use('/city', cityRouter);
 // TODO : 404 middleware here 👇
 
 router.use((error, req, res, next) => {
-  let { message, errorType, causeObj, name } = error;
-  console.log(error);
-  console.log(Object.getOwnPropertyNames(error));
+  let { message, errorType, causeObj, name, code } = error;
+  console.log('Une erreur est survenue: ', error);
+  console.log(
+    "Voici les propriétés de l'erreur disponible: ",
+    Object.getOwnPropertyNames(error)
+  );
 
-  switch (errorType.type || name) {
-    case 'ValidationError':
-      status = 400;
-      message = 'Bad request. Invalid value.';
+  let status = null;
 
-      // If the error comes from adding an activity, we delete the image
-      if (req.session.imageName) {
-        const imageDirname = path.join(
-          import.meta.dirname,
-          '../../public',
-          'images'
-        );
-        const imagePath = path.join(imageDirname, req.file.filename);
-        deleteImage(imagePath);
-      }
-      delete req.session.imageName;
-
-      break;
-
-    case 'InternalServerError':
-      status = 500;
-      break;
-
-    case 'BadRequest':
-      status = 400;
-      message = 'Bad request. Invalid value.';
-      break;
-
-    case 'NotFound':
-      status = 404;
-      message = 'Bad request. Not found.';
-      break;
-
-    case 'Forbidden':
-      status = 403;
-      message = 'Forbidden. You need to be connected to access this route';
-      break;
-
-    default:
-      status = 400;
-      message = 'Bad request. Invalid value.';
-      break;
+  // If the error comes from adding an activity, we delete the image
+  if (req.session.imageName) {
+    const imageDirname = path.join(
+      import.meta.dirname,
+      '../../public',
+      'images'
+    );
+    const imagePath = path.join(imageDirname, req.file.filename);
+    deleteImage(imagePath);
   }
+  delete req.session.imageName;
 
-  if (code) {
+  // switch (errorType.type || name) {
+  //   case 'ValidationError':
+  //     status = 400;
+  //     message = 'Bad request. Invalid value.';
+
+  //     // If the error comes from adding an activity, we delete the image
+  //     if (req.session.imageName) {
+  //       const imageDirname = path.join(
+  //         import.meta.dirname,
+  //         '../../public',
+  //         'images'
+  //       );
+  //       const imagePath = path.join(imageDirname, req.file.filename);
+  //       deleteImage(imagePath);
+  //     }
+  //     delete req.session.imageName;
+
+  //     break;
+
+  //   case 'InternalServerError':
+  //     status = 500;
+  //     break;
+
+  //   case 'BadRequest':
+  //     status = 400;
+  //     message = 'Bad request. Invalid value.';
+  //     break;
+
+  //   case 'NotFound':
+  //     status = 404;
+  //     message = 'Bad request. Not found.';
+  //     break;
+
+  //   case 'Forbidden':
+  //     status = 403;
+  //     message = 'Forbidden. You need to be connected to access this route';
+  //     break;
+
+  //   default:
+  //     status = 400;
+  //     message = 'Bad request. Invalid value.';
+  //     break;
+  // }
+
+  if (errorType.code || code) {
     switch (code) {
       case '23503':
         status = 403;
@@ -97,7 +114,7 @@ router.use((error, req, res, next) => {
     }
   }
 
-  res.status(status).json({ error: message });
+  res.status(errorType.status).json({ error: message });
 });
 
 export default router;

@@ -75,6 +75,16 @@ const errors = {
       alreadyRated: 'Activity already rated',
     },
   },
+  fileError: {
+    details: {
+      type: 'Bad Request',
+      status: 404,
+      code: null,
+    },
+    message: {
+      notAllowed: 'Invalid file type or file too large',
+    },
+  },
 };
 
 export default errors;
