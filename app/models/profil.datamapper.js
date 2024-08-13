@@ -349,6 +349,17 @@ const profilDatamapper = {
 
       return result.rows[0];
     },
+    async savePassword(password, id) {
+      await client.query(
+        `
+        UPDATE "user"
+          SET "password" = $1
+            WHERE "id" = $2
+        RETURNING *
+        ;`,
+        [password, id]
+      );
+    },
   },
 };
 

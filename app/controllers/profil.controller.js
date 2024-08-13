@@ -9,6 +9,8 @@ import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
 import getCoordinates from '../utils/get-coordinate.js';
+import bcrypt from 'bcrypt';
+import { hashPassword } from '../utils/bcrypt.js';
 
 const profilController = {
   RADIX_NUMBER: 10,
@@ -443,28 +445,27 @@ const profilController = {
     },
   },
   account: {
-    async update(req, res) {
+    async updatePseudo(req, res) {
       const { newPseudo } = req.body;
       const id = req.session.userId;
 
       try {
         // Verification if user exist
         const user = await profilDatamapper.account.getOneUser(id);
+        console.log(user.id);
 
         if (!user) {
           return res.status(404).json({ message: "User doesn't exist" });
         }
-        console.log('user exit bien');
 
+        // Verification if pseudo is tused
         const pseudoExist = await profilDatamapper.account.checkPseudo(
           newPseudo
         );
 
         if (pseudoExist) {
-          console.log('pseudo deja pris');
-          return res.status(404).json({ message: 'pseudo already taken' });
+          return res.status(404).json({ message: 'pseudo already used' });
         }
-        console.log('pseudo non pris');
 
         // Update pseudo
         await profilDatamapper.account.updatePseudo(newPseudo, id);
@@ -474,6 +475,36 @@ const profilController = {
         console.log('Pseudo non changé');
         res.status(500).json({ message: 'Erreur serveur' });
       }
+    },
+    async updatePassword(req, res) {
+      console.log('route fonctionelle');
+      const id = req.session.userId;
+      const { oldPassword, newPassword, newPasswordConfirm } = req.body;
+      console.log(id);
+      console.log(oldPassword);
+      console.log(newPassword);
+      console.log(newPasswordConfirm);
+
+      const user = await profilDatamapper.account.getOneUser(id);
+      const passwordHashFromDB = user.password;
+
+      const isGoodPassword = await bcrypt.compare(
+        oldPassword,
+        passwordHashFromDB
+      );
+      if (!isGoodPassword) {
+        return res.status(400).json({ error: "Password doesn't correct" });
+      }
+
+      if (newPassword !== newPasswordConfirm) {
+        return res.status(400).json({ error: "passwords don't match" });
+      }
+
+      const hash = await hashPassword(newPassword);
+
+      await profilDatamapper.account.savePassword(hash, id);
+
+      res.status(200).json({ message: 'password update successfull' });
     },
   },
 };
