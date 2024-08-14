@@ -491,6 +491,10 @@ const profilController = {
         return res.status(400).json({ error: "Password doesn't correct" });
       }
 
+      if (oldPassword === newPassword) {
+        return res.status(400).json({ error: "Don't use same password" });
+      }
+
       if (newPassword !== newPasswordConfirm) {
         return res.status(400).json({ error: "passwords don't match" });
       }
