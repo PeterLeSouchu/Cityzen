@@ -75,7 +75,7 @@ CREATE TABLE "activity" (
     "avg_rating" NUMERIC,
     "latitude" NUMERIC NOT NULL,
     "longitude" NUMERIC NOT NULL,
-    "id_user" INT NOT NULL REFERENCES "user" ("id"),
+    "id_user" INT NOT NULL REFERENCES "user" ("id") ON DELETE CASCADE,
     "id_city" INT NOT NULL REFERENCES "city" ("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ

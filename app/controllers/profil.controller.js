@@ -477,13 +477,8 @@ const profilController = {
       }
     },
     async updatePassword(req, res) {
-      console.log('route fonctionelle');
       const id = req.session.userId;
       const { oldPassword, newPassword, newPasswordConfirm } = req.body;
-      console.log(id);
-      console.log(oldPassword);
-      console.log(newPassword);
-      console.log(newPasswordConfirm);
 
       const user = await profilDatamapper.account.getOneUser(id);
       const passwordHashFromDB = user.password;
@@ -505,6 +500,33 @@ const profilController = {
       await profilDatamapper.account.savePassword(hash, id);
 
       res.status(200).json({ message: 'password update successfull' });
+    },
+    async delete(req, res) {
+      const id = req.session.userId;
+      console.log(id);
+      const { password } = req.body;
+
+      const user = await profilDatamapper.account.getOneUser(id);
+      const passwordHashFromDB = user.password;
+
+      const isGoodPassword = await bcrypt.compare(password, passwordHashFromDB);
+      if (!isGoodPassword) {
+        return res.status(400).json({ error: "Password doesn't correct" });
+      }
+      await profilDatamapper.account.delete(id);
+      console.log('fekelfellelfe,fekfelflefe,fnefjne');
+
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session ', err.message);
+          return res
+            .status(500)
+            .json({ error: 'An error occurred while logging out' });
+        }
+
+        res.clearCookie('connect.sid', { path: '/' });
+        res.status(200).json({ message: 'logged out successfully' });
+      });
     },
   },
 };

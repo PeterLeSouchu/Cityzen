@@ -31,6 +31,8 @@ profilRouter
     profilController.account.updatePassword
   );
 
+profilRouter.route('/unsubscribe').post(profilController.account.delete);
+
 profilRouter.route('/authentication');
 // .patch(profilController.update);
 

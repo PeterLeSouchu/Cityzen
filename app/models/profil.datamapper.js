@@ -360,6 +360,16 @@ const profilDatamapper = {
         [password, id]
       );
     },
+    async delete(id) {
+      await client.query(
+        `
+        DELETE FROM "user"
+          WHERE "id" = $1
+        RETURNING *
+        ;`,
+        [id]
+      );
+    },
   },
 };
 
