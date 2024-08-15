@@ -24,6 +24,19 @@ const userDatamapper = {
       ;`,
       [email]
     );
+    console.log(response.rows[0]);
+    return response.rows[0];
+  },
+
+  async showById(id) {
+    const response = await client.query(
+      `
+      SELECT * FROM "user" 
+        WHERE "id" = $1
+      ;`,
+      [id]
+    );
+    console.log(response.rows[0]);
     return response.rows[0];
   },
 };

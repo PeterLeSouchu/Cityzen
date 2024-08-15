@@ -9,7 +9,7 @@ POST {{url}}/{{mainEndpoint}}/favorite
 Content-Type: application/json
 
 {
-  "id": 17
+  "id": 18
 }
 
 ### GET /profil/favorite
@@ -49,7 +49,7 @@ Content-Type: application/json
 # }
 
 {
-  "title": "Le bleu top",
+  "title": 45,
   "description": "Une bonne bleu"
 }
 

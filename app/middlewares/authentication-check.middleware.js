@@ -1,17 +1,12 @@
 import ApiError from '../errors/api.error.js';
+import errors from '../errors/errors.js';
 
-const authenticationCheck = (req, res, next) => {
+const { forbidden } = errors;
+
+const authenticationCheck = (req, _, next) => {
   if (!req.session.userId) {
-    const requestError = new ApiError(
-      'Forbidden. You need to be connected to access this route',
-      {
-        status: 403,
-      }
-    );
-    requestError.name = 'Forbidden';
-    throw requestError;
+    throw new ApiError(forbidden, null);
   }
-
   next();
 };
 

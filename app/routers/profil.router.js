@@ -19,6 +19,7 @@ import { doubleCsrfProtection } from '../config/csrf.config.js';
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
 import profilPasswordUpdatePatchSchema from '../schema-validations/profil/profil-passwordUpdate-patch.schema.js';
+import checkFile from '../middlewares/check-file.middleware.js';
 
 const profilRouter = Router();
 
@@ -338,6 +339,7 @@ profilRouter
     // doubleCsrfProtection,
     upload.single('image'),
     uploadErrorHandler,
+    checkFile,
     (req, res, next) => {
       console.log('req.body', req.body, req.file, req.session);
       next();
@@ -407,6 +409,7 @@ profilRouter
   .patch(
     // doubleCsrfProtection,
     upload.single('image'),
+    checkFile,
     setImageInBody,
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
