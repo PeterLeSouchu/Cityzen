@@ -122,35 +122,25 @@ const profilController = {
       const imageUrl = req.file
         ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
         : null;
+    
       // Generate the initial slug
-      let slug = encodeURIComponent(title.toLowerCase());
-
+      let slug = encodeURIComponent(`${title}-${city}`.toLowerCase().replace(/\s+/g, '-'));
+    
       // Check if an activity with the same slug already exists
-      const activitesExistantes = await activityDatamapper.getAllBySlug(slug);
-      if (activitesExistantes.length > 0) {
-        // Add city to slug if an activity with the same slug exists
-        slug += `%20${encodeURIComponent(city.toLowerCase())}`;
+      const existingActivities = await activityDatamapper.getAllBySlug(slug);
+      if (existingActivities.length > 0) {
+        // Add a unique suffix to the slug to ensure its uniqueness
+        slug += `-${existingActivities.length + 1}`;
       }
-
-      // Check again if an activity with the slug (including city) exists
-      const activitesAvecSlugVille = await activityDatamapper.getAllBySlug(
-        slug
-      );
-      //console.log(activitesAvecSlugVille);
-      if (activitesAvecSlugVille.length > 0) {
-        // Add a number to the slug to ensure its uniqueness
-        const nombreActivites = activitesAvecSlugVille.length;
-        slug += `%20${nombreActivites + 1}`;
-      }
-
-      // Found the city by name
+    
+      // Find the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
-      // Get latitude and longitude from address user by an external API
+      
+      // Get latitude and longitude from address using an external API
       const coordinates = await getCoordinates(address, cityFromDB.name);
-      const latitude = coordinates.lat;
-      const longitude = coordinates.lon;
-
-      // new activity object
+      const { lat: latitude, lon: longitude } = coordinates;
+    
+      // Create a new activity object
       const activityToCreate = {
         slug,
         title,
@@ -163,91 +153,63 @@ const profilController = {
         userId,
         cityId: cityFromDB.id,
       };
-
-      //console.log(activityToCreate);
-
-      const createdActivity = await profilDatamapper.activities.create(
-        activityToCreate
-      );
-
-      console.log({ data: [createdActivity] });
+    
+      const createdActivity = await profilDatamapper.activities.create(activityToCreate);
+    
       res.status(201).json({ data: [createdActivity] });
     },
+    
 
     async update(req, res) {
       const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
+      const activityId = Number.parseInt(req.params.id, 10);
+    
+      // Check if the activity exists
+      const existingActivity = await activityDatamapper.getOne(activityId);
+      if (!existingActivity) {
+        throw new ApiError("This activity doesn't exist", { status: 404 });
       }
-
-      const cityActivity = await cityDatamapper.getOneById(
-        existActivity.id_city
-      );
-
-      // Check if activity is created by this user
-      const createdActivityByUser = await profilDatamapper.activities.getOne(
-        userId,
-        activityId
-      );
-      if (!createdActivityByUser) {
-        const requestError = new ApiError(
-          'This activity not created by this user',
-          { status: 403 }
-        );
-        requestError.name = 'Forbidden';
-        throw requestError;
+    
+      // Check if the activity was created by this user
+      const userActivity = await profilDatamapper.activities.getOne(userId, activityId);
+      if (!userActivity) {
+        throw new ApiError('This activity was not created by this user', { status: 403 });
       }
-
+    
       const { title, address, city } = req.body;
       const imageUrl = req.file
         ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-        : existActivity.url_image;
-      let slug = existActivity.slug;
-      let titleForSlug = existActivity.title;
-      let cityForSlug = cityActivity.name;
-
+        : existingActivity.url_image;
+    
+      // Start with the existing slug, title, and city
+      let slug = existingActivity.slug;
+      let titleForSlug = existingActivity.title;
+      let cityForSlug = (await cityDatamapper.getOneById(existingActivity.id_city)).name;
+    
+      // If title or city is updated, generate a new slug
       if (title || city) {
-        titleForSlug = title ? title : titleForSlug;
-        cityForSlug = city ? city : cityForSlug;
-
-        slug = encodeURIComponent(titleForSlug.toLowerCase());
-        const sameActivityExist = await activityDatamapper.getAllBySlug(slug);
-        if (sameActivityExist) {
-          slug += `%20${cityForSlug.toLowerCase()}`;
-        }
-
-        const sameActivityExistWithCity = await activityDatamapper.getAllBySlug(
-          slug
-        );
-        console.log(sameActivityExistWithCity);
-        if (sameActivityExistWithCity.length > 0) {
-          const numberOfActivities = sameActivityExistWithCity.length;
-          slug += `%20${numberOfActivities + 1}`;
+        titleForSlug = title || titleForSlug;
+        cityForSlug = city || cityForSlug;
+    
+        slug = encodeURIComponent(`${titleForSlug}-${cityForSlug}`.toLowerCase().replace(/\s+/g, '-'));
+        
+        const existingActivitiesWithNewSlug = await activityDatamapper.getAllBySlug(slug);
+        if (existingActivitiesWithNewSlug.length > 0) {
+          slug += `-${existingActivitiesWithNewSlug.length + 1}`;
         }
       }
-
-      const cityFromDB = city
-        ? await cityDatamapper.getOneByName(city)
-        : cityActivity;
-      let latitude = existActivity.latitude;
-      let longitude = existActivity.longitude;
-      if (city) {
+    
+      const cityFromDB = city ? await cityDatamapper.getOneByName(city) : await cityDatamapper.getOneById(existingActivity.id_city);
+    
+      // Update latitude and longitude if city or address changes
+      let { latitude, longitude } = existingActivity;
+      if (city || address) {
         const coordinates = await getCoordinates(address, cityFromDB.name);
         latitude = coordinates.lat;
         longitude = coordinates.lon;
       }
-      // tester avec la modif d'une ville et adresse
+    
+      // Update the activity object
       const activityToUpdate = {
         ...req.body,
         slug,
@@ -257,13 +219,10 @@ const profilController = {
         title: titleForSlug,
         cityId: cityFromDB.id,
       };
-      delete activityToUpdate.city;
-
-      const updatedActivity = await profilDatamapper.activities.update(
-        activityToUpdate,
-        activityId
-      );
-
+      delete activityToUpdate.city; // remove city from the request body as it has been handled separately
+    
+      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate, activityId);
+    
       res.status(200).json({ data: [updatedActivity] });
     },
 
