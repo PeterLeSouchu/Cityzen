@@ -164,39 +164,39 @@ const profilController = {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, 10);
     
-      // Check if the activity exists
-      const existingActivity = await activityDatamapper.getOne(activityId);
-      if (!existingActivity) {
-        throw new ApiError("This activity doesn't exist", { status: 404 });
-      }
-    
-      // Check if the activity was created by this user
-      const userActivity = await profilDatamapper.activities.getOne(userId, activityId);
-      if (!userActivity) {
-        throw new ApiError('This activity was not created by this user', { status: 403 });
-      }
-    
-      const { title, address, city } = req.body;
-      const imageUrl = req.file
-        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-        : existingActivity.url_image;
-    
-      // Start with the existing slug, title, and city
-      let slug = existingActivity.slug;
-      let titleForSlug = existingActivity.title;
-      let cityForSlug = (await cityDatamapper.getOneById(existingActivity.id_city)).name;
-    
-      // If title or city is updated, generate a new slug
-      if (title || city) {
-        titleForSlug = title || titleForSlug;
-        cityForSlug = city || cityForSlug;
-    
-        slug = encodeURIComponent(`${titleForSlug}-${cityForSlug}`.toLowerCase().replace(/\s+/g, '-'));
-        
-        const existingActivitiesWithNewSlug = await activityDatamapper.getAllBySlug(slug);
-        if (existingActivitiesWithNewSlug.length > 0) {
-          slug += `-${existingActivitiesWithNewSlug.length + 1}`;
+        // Check if the activity exists
+        const existingActivity = await activityDatamapper.getOne(activityId);
+        if (!existingActivity) {
+          throw new ApiError("This activity doesn't exist", { status: 404 });
         }
+    
+        // Check if the activity was created by this user
+        const userActivity = await profilDatamapper.activities.getOne(userId, activityId);
+        if (!userActivity) {
+          throw new ApiError('This activity was not created by this user', { status: 403 });
+        }
+    
+        const { title, address, city } = req.body;
+        const imageUrl = req.file
+          ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+          : existingActivity.url_image;
+      
+        // Start with the existing slug, title, and city
+        let slug = existingActivity.slug;
+        let titleForSlug = existingActivity.title;
+        let cityForSlug = (await cityDatamapper.getOneById(existingActivity.id_city)).name;
+      
+        // If title or city is updated, generate a new slug
+        if (title || city) {
+          titleForSlug = title || titleForSlug;
+          cityForSlug = city || cityForSlug;
+      
+          slug = encodeURIComponent(`${titleForSlug}-${cityForSlug}`.toLowerCase().replace(/\s+/g, '-'));
+          
+          const existingActivitiesWithNewSlug = await activityDatamapper.getAllBySlug(slug);
+          if (existingActivitiesWithNewSlug.length > 0) {
+            slug += `-${existingActivitiesWithNewSlug.length + 1}`;
+          }
       }
     
       const cityFromDB = city ? await cityDatamapper.getOneByName(city) : await cityDatamapper.getOneById(existingActivity.id_city);
