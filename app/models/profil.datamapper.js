@@ -370,6 +370,16 @@ const profilDatamapper = {
         [id]
       );
     },
+    async deleteActivity(id) {
+      await client.query(
+        `
+        DELETE FROM "activity"
+          WHERE "id_user" = $1
+        RETURNING *
+        ;`,
+        [id]
+      );
+    },
   },
 };
 

@@ -160,8 +160,7 @@ const profilController = {
       }
     },
 
-
-       async store(req, res, next) {
+    async store(req, res, next) {
       try {
         const userId = req.session.userId;
         const { title, description, address, phone, city } = req.body;
@@ -681,7 +680,7 @@ const profilController = {
         return res.status(400).json({ error: "Password doesn't correct" });
       }
       await profilDatamapper.account.delete(id);
-      console.log('fekelfellelfe,fekfelflefe,fnefjne');
+      await profilDatamapper.account.deleteActivity(id);
 
       req.session.destroy((err) => {
         if (err) {
