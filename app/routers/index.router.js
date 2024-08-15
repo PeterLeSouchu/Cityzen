@@ -26,79 +26,53 @@ router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use(
   '/unsubscribe',
+  /*doubleCsrfProtection,*/
   authenticationCheck,
-  doubleCsrfProtection,
   unsubscribeRouter
 );
 router.use('/profil', authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 router.use('/country', countryRouter);
 router.use('/city', cityRouter);
+// TODO : 404 middleware here 👇
 
-// TODO : Handler error middleware here 👇
+
+// Error handler middleware
 router.use((error, req, res, next) => {
-  let { message, status, name, code } = error;
-  console.log(status, name, message);
-  console.log(error);
+  let { message, errorType, name } = error;
 
-  switch (name) {
-    case 'ValidationError':
-      status = 400;
-      message = 'Bad request. Invalid value.';
+  console.log('Une erreur est survenue: ', error);
+  console.log(
+    "Voici les propriétés de l'erreur disponible: ",
+    Object.getOwnPropertyNames(error)
+  );
 
-      // If the error comes from adding an activity, we delete the image
-      if (req.session.imageName) {
-        const imageDirname = path.join(
-          import.meta.dirname,
-          '../../public',
-          'images'
-        );
-        const imagePath = path.join(imageDirname, req.file.filename);
-        deleteImage(imagePath);
-      }
-      delete req.session.imageName;
+  // If the error comes from adding an activity, we delete the image
+  if (req.session.imageName) {
+    const imageDirname = path.join(
+      import.meta.dirname,
+      '../../public',
+      'images'
+    );
+    const imagePath = path.join(imageDirname, req.file.filename);
+    deleteImage(imagePath);
+  }
+  delete req.session.imageName;
 
-      break;
-
-    case 'InternalServerError':
-      status = 500;
-      break;
-
-    case 'BadRequest':
-      status = 400;
-      message = 'Bad request. Invalid value.';
-      break;
-
-    case 'NotFound':
-      status = 404;
-      message = 'Bad request. Not found.';
-      break;
-
-    case 'Forbidden':
-      status = 403;
-      message = 'Forbidden. You need to be connected to access this route';
-      break;
-
-    default:
-      status = 400;
-      message = 'Bad request. Invalid value.';
-      break;
+  if (name === 'ValidationError') {
+    res.status(404).json({
+      error: {
+        message: 'The provided information is wrong',
+        originalMessage: error.message,
+      },
+    });
+    return;
   }
 
-  if (code) {
-    switch (code) {
-      case '23503':
-        status = 403;
-        message = 'Forbidden. This element is attached to an other element';
-        break;
-
-      default:
-        message = 'Internal Server Error. Please contact your administrator.';
-        break;
-    }
-  }
-
-  res.status(status).json({ error: message });
+  res.status(errorType?.status || 500).json({
+    error:
+      message || 'Internal Server Error. Please, contact your administrator',
+  });
 });
 
 export default router;

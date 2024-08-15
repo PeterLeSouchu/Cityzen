@@ -1,11 +1,16 @@
 // EXTERNAL MODULES
 import ApiError from '../errors/api.error.js';
+import errors from '../errors/errors.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 
+const { activityError, internalServerError } = errors;
+
 const activityController = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       const { country, city } = req.params;
+
+      // ? Ajouter le check si le pays existe ainsi que la ville ?
 
       const activitiesOfCity = await activityDatamapper.findActivityOfCity(
         country,
@@ -13,100 +18,99 @@ const activityController = {
       );
 
       if (!activitiesOfCity || activitiesOfCity.length === 0) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-
-        throw requestError;
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.notFound,
+            null
+          )
+        );
+        return;
       }
 
       res.status(200).json({ data: activitiesOfCity });
     } catch (error) {
-      const requestError = new ApiError(
-        'Internal Server Error, please contact your administrator',
-        {
-          status: 500,
-        }
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
       );
-      requestError.name = 'InternalServerError';
-      throw requestError;
     }
   },
 
-  async show(req, res) {
+  async show(req, res, next) {
     try {
       const slug = req.params.slug;
-      const activity = await activityDatamapper.getBySlug(slug);
+      const activity = await activityDatamapper.getOneBySlug(slug);
 
       if (!activity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-        throw requestError;
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.notFound,
+            null
+          )
+        );
+        return;
       }
 
       res.status(200).json({ data: [activity] });
     } catch (error) {
-      const requestError = new ApiError(
-        'Internal Server Error, please contact your administrator',
-        {
-          status: 500,
-        }
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
       );
-      requestError.name = 'InternalServerError';
-      throw requestError;
     }
   },
 
-  async showRecent(req, res) {
+  async showRecent(req, res, next) {
     try {
       const recentActivities = await activityDatamapper.getRecents();
 
       if (!recentActivities || recentActivities.length === 0) {
-        const requestError = new ApiError('Recent activities not founds', {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-        throw requestError;
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.notFound,
+            null
+          )
+        );
+        return;
       }
 
       res.status(200).json({ data: recentActivities });
     } catch (error) {
-      const requestError = new ApiError(
-        'Internal Server Error, please contact your administrator',
-        {
-          status: 500,
-        }
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
       );
-      requestError.name = 'InternalServerError';
-      throw requestError;
     }
   },
 
-  async showRating(req, res) {
+  async showRating(req, res, next) {
     try {
       const ratingActivities = await activityDatamapper.findActivitiesRating();
 
       if (!ratingActivities || ratingActivities.length === 0) {
-        const requestError = new ApiError('Rating activities not founds', {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-        throw requestError;
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.notFound,
+            null
+          )
+        );
+        return;
       }
 
       res.status(200).json({ data: ratingActivities });
     } catch (error) {
-      const requestError = new ApiError(
-        'Internal Server Error, please contact your administrator',
-        {
-          status: 500,
-        }
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
       );
-      requestError.name = 'InternalServerError';
-      throw requestError;
     }
   },
 };

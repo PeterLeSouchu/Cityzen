@@ -232,7 +232,7 @@ const profilDatamapper = {
         [userId]
       );
 
-      return result.rows[0];
+      return result.rows[0].avg;
     },
 
     async saveRating(userId, activityId, userRating) {
@@ -365,6 +365,16 @@ const profilDatamapper = {
         `
         DELETE FROM "user"
           WHERE "id" = $1
+        RETURNING *
+        ;`,
+        [id]
+      );
+    },
+    async deleteActivity(id) {
+      await client.query(
+        `
+        DELETE FROM "activity"
+          WHERE "id_user" = $1
         RETURNING *
         ;`,
         [id]

@@ -1,120 +1,165 @@
 // TIERCE MODULES
 import 'dotenv/config';
+import bcrypt from 'bcrypt';
+import { hashPassword } from '../utils/bcrypt.js';
 
 // EXTERNAL MODULES
-
 import ApiError from '../errors/api.error.js';
 import activityDatamapper from '../models/activity.datamapper.js';
 import cityDatamapper from '../models/city.datamapper.js';
 import profilDatamapper from '../models/profil.datamapper.js';
 import userActivityRatingDatamapper from '../models/user-activity-rating.datamapper.js';
 import getCoordinates from '../utils/get-coordinate.js';
-import bcrypt from 'bcrypt';
-import { hashPassword } from '../utils/bcrypt.js';
+import errors from '../errors/errors.js';
+import userDatamapper from '../models/user.datamapper.js';
+
+const {
+  internalServerError,
+  activityError,
+  cityError,
+  forbidden,
+  userError,
+  ratingError,
+} = errors;
 
 const profilController = {
   RADIX_NUMBER: 10,
 
   favorites: {
-    async index(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activities = await profilDatamapper.favorites.getAll(userId);
 
-      const activities = await profilDatamapper.favorites.getAll(userId);
-      res.status(200).json({ data: activities });
-    },
-
-    async store(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.body.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-
-        throw requestError;
-      }
-
-      // Check if activity is already saved ti the user's favorites
-      console.log(userId, activityId);
-      const userHasActivity = await profilDatamapper.favorites.getOne(
-        userId,
-        activityId
-      );
-      if (userHasActivity) {
-        const requestError = new ApiError('This activity already saved', {
-          status: 400,
-        });
-        requestError.name = 'BadRequest';
-        throw requestError;
-      }
-
-      // Save favorite in DB for this user
-      const activityForUser = await profilDatamapper.favorites.saveFavorite(
-        userId,
-        activityId
-      );
-
-      res.status(201).json({ data: [existActivity] });
-    },
-
-    async destroy(req, res) {
-      // const userId = req.cookies.userId;
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      // Check if activity is already saved in the user's favorites
-      const userHasActivity = await profilDatamapper.favorites.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasActivity) {
-        const requestError = new ApiError(
-          'This activity not saved by the user',
-          { status: 400 }
+        res.status(200).json({ data: activities });
+      } catch (error) {
+        next(
+          new ApiError(
+            internalServerError.details,
+            internalServerError.message.global,
+            null
+          )
         );
-        requestError.name = 'BadRequest';
-        throw requestError;
+        return;
       }
+    },
 
-      const removedFavorite = await profilDatamapper.favorites.removedFavorite(
-        userId,
-        activityId
-      );
+    async store(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.body.id,
+          profilController.RADIX_NUMBER
+        );
 
-      res.status(200).json({ data: [existActivity] });
+        // Check if activity to be store in favorites exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if activity is already store in user's favorites
+        const userHasActivity = await profilDatamapper.favorites.getOne(
+          userId,
+          activityId
+        );
+        if (userHasActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.alreadyStored,
+              null
+            )
+          );
+          return;
+        }
+
+        // Store activity in user's favorites
+        await profilDatamapper.favorites.saveFavorite(userId, activityId);
+
+        res.status(201).json({ data: [existActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async destroy(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+
+        // Check if activity is already exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if the activity is stored in the user's favorites
+        const userHasActivity = await profilDatamapper.favorites.getOne(
+          userId,
+          activityId
+        );
+        if (!userHasActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        await profilDatamapper.favorites.removedFavorite(userId, activityId);
+
+        res.status(200).json({ data: [existActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
 
   activities: {
-    async index(req, res) {
-      console.log(req.body);
-      const userId = req.session.userId;
-      const activities = await profilDatamapper.activities.getAll(userId);
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activities = await profilDatamapper.activities.getAll(userId);
 
-      res.status(200).json({ data: activities });
+        res.status(200).json({ data: activities });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
+
 
     async store(req, res) {
       const userId = req.session.userId;
@@ -226,181 +271,273 @@ const profilController = {
       res.status(200).json({ data: [updatedActivity] });
     },
 
-    async destroy(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
 
-      // Check if activity is already exist
-      const existActivity = await activityDatamapper.getOne(activityId);
-
-      if (!existActivity) {
-        const requestError = new ApiError(
-          'The activity is not in the registered activities',
-          { status: 404 }
+    async destroy(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
         );
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
 
-      // Check if activity is already saved ti the user's favorites
-      const userHasActivity = await profilDatamapper.activities.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasActivity) {
-        const requestError = new ApiError(
-          'This activity not created by this user',
-          { status: 403 }
+        // Check if activity is already exist
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if the activity to be destroy was created by this user
+        const userHasActivity = await profilDatamapper.activities.getOne(
+          userId,
+          activityId
         );
-        requestError.name = 'Forbidden';
-        throw requestError;
+        if (!userHasActivity) {
+          next(
+            new ApiError(
+              forbidden.details,
+              forbidden.message.permissionDenied,
+              null
+            )
+          );
+          return;
+        }
+
+        const removedActivity =
+          await profilDatamapper.activities.removeActivity(userId, activityId);
+
+        res.status(200).json({ data: removedActivity });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
       }
-
-      const removedActivity = await profilDatamapper.activities.removeActivity(
-        userId,
-        activityId
-      );
-
-      res.status(200).json({ data: removedActivity });
     },
   },
 
   ratings: {
-    async index(req, res) {
-      const userId = req.session.userId;
+    async index(req, res, next) {
+      try {
+        const userId = req.session.userId;
 
-      const userActivitiesRating =
-        await profilDatamapper.ratings.getAllActivities(userId);
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
 
-      const avgRating = await profilDatamapper.ratings.getAvg(userId);
+        const userActivitiesRating =
+          await profilDatamapper.ratings.getAllActivities(userId);
 
-      res.status(200).json({
-        data: userActivitiesRating,
-        avgRating: avgRating.avg,
-      });
-    },
+        const avgRating = await profilDatamapper.ratings.getAvg(userId);
 
-    async show(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
+        res.status(200).json({
+          data: userActivitiesRating,
+          avgRating: avgRating,
         });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasRateActivity) {
-        const requestError = new ApiError("The user don't rate this activity", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      res.status(200).json({ data: [userHasRateActivity] });
-    },
-
-    async store(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-      const userRating = Number.parseInt(
-        req.body.rating,
-        profilController.RADIX_NUMBER
-      );
-
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
-
-      // Check if user has already rate this activity
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (userHasRateActivity) {
-        const requestError = new ApiError(
-          'The user has already rate this activity',
-          { status: 400 }
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
         );
-        requestError.name = 'BadRequest';
-        throw requestError;
       }
-
-      const userActivityWithRating = await profilDatamapper.ratings.saveRating(
-        userId,
-        activityId,
-        userRating
-      );
-
-      res.status(201).json({ data: [userActivityWithRating] });
     },
 
-    async update(req, res) {
-      const userId = req.session.userId;
-      const activityId = Number.parseInt(
-        req.params.id,
-        profilController.RADIX_NUMBER
-      );
-      const userRating = Number.parseInt(
-        req.body.rating,
-        profilController.RADIX_NUMBER
-      );
+    async show(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
 
-      const existActivity = await activityDatamapper.getOne(activityId);
-      if (!existActivity) {
-        const requestError = new ApiError("This activity don't exist", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
 
-      // Check if user has already rate this activity
-      const userHasRateActivity = await userActivityRatingDatamapper.getOne(
-        userId,
-        activityId
-      );
-      if (!userHasRateActivity) {
-        const requestError = new ApiError("The user don't rate this activity", {
-          status: 404,
-        });
-        requestError.name = 'NotFound';
-        throw requestError;
-      }
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
 
-      const oldUserRating = userHasRateActivity.id_rating;
-
-      const userActivityWithRating =
-        await profilDatamapper.ratings.updateRating(
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
           userId,
-          activityId,
-          userRating,
-          oldUserRating
+          activityId
+        );
+        if (!userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        res.status(200).json({ data: [userHasRateActivity] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async store(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+        const userRating = Number.parseInt(
+          req.body.rating,
+          profilController.RADIX_NUMBER
         );
 
-      res.status(200).json({ data: userActivityWithRating });
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
+
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if user has already rate this activity
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
+          userId,
+          activityId
+        );
+        if (userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.alreadyRated,
+              null
+            )
+          );
+          return;
+        }
+
+        const userActivityWithRating =
+          await profilDatamapper.ratings.saveRating(
+            userId,
+            activityId,
+            userRating
+          );
+
+        res.status(201).json({ data: [userActivityWithRating] });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+
+    async update(req, res, next) {
+      try {
+        const userId = req.session.userId;
+        const activityId = Number.parseInt(
+          req.params.id,
+          profilController.RADIX_NUMBER
+        );
+        const userRating = Number.parseInt(
+          req.body.rating,
+          profilController.RADIX_NUMBER
+        );
+
+        const userFounded = await userDatamapper.showById(userId);
+        if (!userFounded) {
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
+        }
+
+        const existActivity = await activityDatamapper.getOne(activityId);
+        if (!existActivity) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        // Check if user has already rate this activity
+        const userHasRateActivity = await userActivityRatingDatamapper.getOne(
+          userId,
+          activityId
+        );
+        if (!userHasRateActivity) {
+          next(
+            new ApiError(
+              ratingError.details,
+              ratingError.message.notFound,
+              null
+            )
+          );
+          return;
+        }
+
+        const oldUserRating = userHasRateActivity.id_rating;
+
+        const userActivityWithRating =
+          await profilDatamapper.ratings.updateRating(
+            userId,
+            activityId,
+            userRating,
+            oldUserRating
+          );
+
+        res.status(200).json({ data: userActivityWithRating });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
   account: {
@@ -477,7 +614,7 @@ const profilController = {
         return res.status(400).json({ error: "Password doesn't correct" });
       }
       await profilDatamapper.account.delete(id);
-      console.log('fekelfellelfe,fekfelflefe,fnefjne');
+      await profilDatamapper.account.deleteActivity(id);
 
       req.session.destroy((err) => {
         if (err) {

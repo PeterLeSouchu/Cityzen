@@ -1,24 +1,28 @@
-import dataMapper from "../dataMapper/CityDataMapper.js";
+import errors from '../errors/errors.js';
+import cityDatamapper from '../models/city.datamapper.js';
+import ApiError from '../errors/api.error.js';
+
+const { cityError, internalServerError } = errors;
 
 const cityController = {
-  async index(req, res) {
+  async index(req, res, next) {
     try {
       const { city } = req.params;
 
-      const countries = await dataMapper.findCity(
-        city,
-      );
+      const cities = await cityDatamapper.findCity(city.toLowerCase());
 
-      if (!countries || countries.length === 0) {
-        return res
-          .status(404)
-          .json({ message: `No ${city} found` });
+      if (!cities || cities.length === 0) {
+        next(new ApiError(cityError.details, cityError.message.notFound, null));
+        return;
       }
 
-      res.status(200).json(countries);
+      res.status(200).json({ data: cities });
     } catch (error) {
-      console.error('Error in cityController: index method', error.message);
-      res.status(500).json({ error: 'An error occurred' });
+      throw new ApiError(
+        internalServerError.details,
+        internalServerError.message.global,
+        error
+      );
     }
   },
 };
