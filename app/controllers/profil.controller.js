@@ -1,5 +1,7 @@
 // TIERCE MODULES
 import 'dotenv/config';
+import bcrypt from 'bcrypt';
+import { hashPassword } from '../utils/bcrypt.js';
 
 // EXTERNAL MODULES
 import ApiError from '../errors/api.error.js';
@@ -158,7 +160,8 @@ const profilController = {
       }
     },
 
-    async store(req, res, next) {
+
+       async store(req, res, next) {
       try {
         const userId = req.session.userId;
         const { title, description, address, phone, city } = req.body;
@@ -602,6 +605,95 @@ const profilController = {
           error
         );
       }
+    },
+  },
+  account: {
+    async updatePseudo(req, res) {
+      const { newPseudo } = req.body;
+      const id = req.session.userId;
+
+      try {
+        // Verification if user exist
+        const user = await profilDatamapper.account.getOneUser(id);
+        console.log(user.id);
+
+        if (!user) {
+          return res.status(404).json({ message: "User doesn't exist" });
+        }
+
+        // Verification if pseudo is tused
+        const pseudoExist = await profilDatamapper.account.checkPseudo(
+          newPseudo
+        );
+
+        if (pseudoExist) {
+          return res.status(404).json({ message: 'pseudo already used' });
+        }
+
+        // Update pseudo
+        await profilDatamapper.account.updatePseudo(newPseudo, id);
+
+        res.status(200).json({ data: [newPseudo] });
+      } catch (error) {
+        console.log('Pseudo non changé');
+        res.status(500).json({ message: 'Erreur serveur' });
+      }
+    },
+    async updatePassword(req, res) {
+      const id = req.session.userId;
+      const { oldPassword, newPassword, newPasswordConfirm } = req.body;
+
+      const user = await profilDatamapper.account.getOneUser(id);
+      const passwordHashFromDB = user.password;
+
+      const isGoodPassword = await bcrypt.compare(
+        oldPassword,
+        passwordHashFromDB
+      );
+      if (!isGoodPassword) {
+        return res.status(400).json({ error: "Password doesn't correct" });
+      }
+
+      if (oldPassword === newPassword) {
+        return res.status(400).json({ error: "Don't use same password" });
+      }
+
+      if (newPassword !== newPasswordConfirm) {
+        return res.status(400).json({ error: "passwords don't match" });
+      }
+
+      const hash = await hashPassword(newPassword);
+
+      await profilDatamapper.account.savePassword(hash, id);
+
+      res.status(200).json({ message: 'password update successfull' });
+    },
+    async delete(req, res) {
+      const id = req.session.userId;
+      console.log(id);
+      const { password } = req.body;
+
+      const user = await profilDatamapper.account.getOneUser(id);
+      const passwordHashFromDB = user.password;
+
+      const isGoodPassword = await bcrypt.compare(password, passwordHashFromDB);
+      if (!isGoodPassword) {
+        return res.status(400).json({ error: "Password doesn't correct" });
+      }
+      await profilDatamapper.account.delete(id);
+      console.log('fekelfellelfe,fekfelflefe,fnefjne');
+
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session ', err.message);
+          return res
+            .status(500)
+            .json({ error: 'An error occurred while logging out' });
+        }
+
+        res.clearCookie('connect.sid', { path: '/' });
+        res.status(200).json({ message: 'logged out successfully' });
+      });
     },
   },
 };

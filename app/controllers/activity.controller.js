@@ -40,8 +40,8 @@ const activityController = {
 
   async show(req, res, next) {
     try {
-      const id = parseInt(req.params.id);
-      const activity = await activityDatamapper.getOne(id);
+      const slug = req.params.slug;
+      const activity = await activityDatamapper.getOneBySlug(slug);
 
       if (!activity) {
         next(

@@ -18,12 +18,21 @@ import upload from '../config/multer.upload.middlewares.js';
 import { doubleCsrfProtection } from '../config/csrf.config.js';
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
+import profilPasswordUpdatePatchSchema from '../schema-validations/profil/profil-passwordUpdate-patch.schema.js';
 import checkFile from '../middlewares/check-file.middleware.js';
 
 const profilRouter = Router();
 
-profilRouter.route('/pseudo');
-// .patch(profilController.update);
+profilRouter.route('/pseudo').patch(profilController.account.updatePseudo);
+
+profilRouter
+  .route('/updatePassword')
+  .patch(
+    validationSchema(profilPasswordUpdatePatchSchema, 'body', undefined, false),
+    profilController.account.updatePassword
+  );
+
+profilRouter.route('/unsubscribe').post(profilController.account.delete);
 
 profilRouter.route('/authentication');
 // .patch(profilController.update);

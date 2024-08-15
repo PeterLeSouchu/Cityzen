@@ -26,14 +26,16 @@ router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
 router.use(
   '/unsubscribe',
+  /*doubleCsrfProtection,*/
   authenticationCheck,
-  /*doubleCsrfProtection,*/ unsubscribeRouter
+  unsubscribeRouter
 );
 router.use('/profil', authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 router.use('/country', countryRouter);
 router.use('/city', cityRouter);
 // TODO : 404 middleware here 👇
+
 
 // Error handler middleware
 router.use((error, req, res, next) => {
