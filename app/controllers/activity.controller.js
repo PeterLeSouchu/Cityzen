@@ -37,7 +37,7 @@ const activityController = {
   async show(req, res) {
     try {
       const slug = req.params.slug;
-      const activity = await activityDatamapper.getBySlug(slug);
+      const activity = await activityDatamapper.getOneBySlug(slug);
 
       if (!activity) {
         const requestError = new ApiError("This activity don't exist", {

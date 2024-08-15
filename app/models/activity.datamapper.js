@@ -26,15 +26,16 @@ const activityDatamapper = {
 
     return result.rows[0];
   },
-  async getBySlug(slug) {
+  async getOneBySlug(slug) {
     const result = await client.query(
       `
-    SELECT * FROM "activity" 
-      WHERE "slug" = $1
+    SELECT "activity".*, "city"."name" AS "city_name" FROM "activity"
+      JOIN "city"
+        ON "activity"."id_city" = "city"."id"
+      WHERE "activity"."slug" = $1
     ;`,
       [slug]
     );
-
     return result.rows[0];
   },
 
