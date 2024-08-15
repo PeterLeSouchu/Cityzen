@@ -1,5 +1,6 @@
 import errors from '../errors/errors.js';
 import countryDatamapper from '../models/country.datamapper.js';
+import ApiError from '../errors/api.error.js';
 
 const { internalServerError, countryError } = errors;
 

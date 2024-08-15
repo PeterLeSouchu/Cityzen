@@ -1,3 +1,8 @@
+import ApiError from '../errors/api.error.js';
+import errors from '../errors/errors.js';
+
+const { internalServerError } = errors;
+
 async function sendMail(transporter, htmlCode) {
   // Send mail with defined transporter object
   try {

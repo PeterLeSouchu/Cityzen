@@ -10,7 +10,6 @@ import router from './routers/index.router.js';
 import { generateToken, getTokenFromRequest } from './config/csrf.config.js';
 import apiDocumentation from './config/swagger.config.js';
 
-
 const app = express();
 
 const __dirname = path.resolve();

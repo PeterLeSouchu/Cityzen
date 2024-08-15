@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 // EXTERNAL MODULES
 import userDatamapper from '../models/user.datamapper.js';
 import errors from '../errors/errors.js';
+import ApiError from '../errors/api.error.js';
 
 const { internalServerError, userError } = errors;
 

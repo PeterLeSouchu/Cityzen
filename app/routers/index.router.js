@@ -35,6 +35,7 @@ router.use('/country', countryRouter);
 router.use('/city', cityRouter);
 // TODO : 404 middleware here 👇
 
+// Error handler middleware
 router.use((error, req, res, next) => {
   let { message, errorType, name } = error;
 

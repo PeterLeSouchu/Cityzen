@@ -1,5 +1,6 @@
 import errors from '../errors/errors.js';
 import cityDatamapper from '../models/city.datamapper.js';
+import ApiError from '../errors/api.error.js';
 
 const { cityError, internalServerError } = errors;
 
