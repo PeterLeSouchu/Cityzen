@@ -36,7 +36,6 @@ router.use('/country', countryRouter);
 router.use('/city', cityRouter);
 // TODO : 404 middleware here 👇
 
-
 // Error handler middleware
 router.use((error, req, res, next) => {
   let { message, errorType, name } = error;
@@ -62,7 +61,7 @@ router.use((error, req, res, next) => {
   if (name === 'ValidationError') {
     res.status(404).json({
       error: {
-        message: 'The provided information is wrong',
+        message: 'Validation input error',
         originalMessage: error.message,
       },
     });
@@ -70,8 +69,7 @@ router.use((error, req, res, next) => {
   }
 
   res.status(errorType?.status || 500).json({
-    error:
-      message || 'Internal Server Error. Please, contact your administrator',
+    error: { message },
   });
 });
 

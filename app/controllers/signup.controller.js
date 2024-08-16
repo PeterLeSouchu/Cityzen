@@ -10,6 +10,7 @@ import sendMail from '../utils/send-mail.js';
 import transporter from '../config/transporter.config.js';
 import generateHTMLMail from '../config/html-mail.config.js';
 import errors from '../errors/errors.js';
+import ApiError from '../errors/api.error.js';
 
 const { internalServerError, userError, forbidden } = errors;
 

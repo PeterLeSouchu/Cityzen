@@ -29,7 +29,7 @@ profilRouter
   .route('/updatePassword')
   .patch(
     validationSchema(profilPasswordUpdatePatchSchema, 'body', undefined, false),
-    profilController.account.updatePassword
+    catchHandlerController(profilController.account.updatePassword)
   );
 
 profilRouter.route('/unsubscribe').post(profilController.account.delete);
