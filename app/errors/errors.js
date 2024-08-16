@@ -43,6 +43,9 @@ const errors = {
       alreadyStored: 'User already stored',
       permissionDenied: 'The provided information is wrong',
       passwordDontMatch: "Passwords don't match",
+      passwordNotGood: 'Invalid password',
+      pseudoExist: 'Pseudo already used',
+      samePAsswords: "Don't use same password",
     },
   },
   cityError: {

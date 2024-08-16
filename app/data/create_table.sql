@@ -91,7 +91,7 @@ CREATE TABLE "rating" (
 -- Tables de liaison
 CREATE TABLE "favorite_activity" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "id_user" INTEGER NOT NULL REFERENCES "user" ("id"),
+    "id_user" INTEGER NOT NULL REFERENCES "user" ("id") ON DELETE CASCADE,
     "id_activity" INTEGER NOT NULL REFERENCES "activity" ("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ,

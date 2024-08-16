@@ -160,31 +160,32 @@ const profilController = {
       }
     },
 
-
     async store(req, res) {
       const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
         ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
         : null;
-    
+
       // Generate the initial slug
-      let slug = encodeURIComponent(`${title}-${city}`.toLowerCase().replace(/\s+/g, '-'));
-    
+      let slug = encodeURIComponent(
+        `${title}-${city}`.toLowerCase().replace(/\s+/g, '-')
+      );
+
       // Check if an activity with the same slug already exists
       const existingActivities = await activityDatamapper.getAllBySlug(slug);
       if (existingActivities.length > 0) {
         // Add a unique suffix to the slug to ensure its uniqueness
         slug += `-${existingActivities.length + 1}`;
       }
-    
+
       // Find the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
-      
+
       // Get latitude and longitude from address using an external API
       const coordinates = await getCoordinates(address, cityFromDB.name);
       const { lat: latitude, lon: longitude } = coordinates;
-    
+
       // Create a new activity object
       const activityToCreate = {
         slug,
@@ -198,54 +199,67 @@ const profilController = {
         userId,
         cityId: cityFromDB.id,
       };
-    
-      const createdActivity = await profilDatamapper.activities.create(activityToCreate);
-    
+
+      const createdActivity = await profilDatamapper.activities.create(
+        activityToCreate
+      );
+
       res.status(201).json({ data: [createdActivity] });
     },
-    
 
     async update(req, res) {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, 10);
-    
-        // Check if the activity exists
-        const existingActivity = await activityDatamapper.getOne(activityId);
-        if (!existingActivity) {
-          throw new ApiError("This activity doesn't exist", { status: 404 });
-        }
-    
-        // Check if the activity was created by this user
-        const userActivity = await profilDatamapper.activities.getOne(userId, activityId);
-        if (!userActivity) {
-          throw new ApiError('This activity was not created by this user', { status: 403 });
-        }
-    
-        const { title, address, city } = req.body;
-        const imageUrl = req.file
-          ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
-          : existingActivity.url_image;
-      
-        // Start with the existing slug, title, and city
-        let slug = existingActivity.slug;
-        let titleForSlug = existingActivity.title;
-        let cityForSlug = (await cityDatamapper.getOneById(existingActivity.id_city)).name;
-      
-        // If title or city is updated, generate a new slug
-        if (title || city) {
-          titleForSlug = title || titleForSlug;
-          cityForSlug = city || cityForSlug;
-      
-          slug = encodeURIComponent(`${titleForSlug}-${cityForSlug}`.toLowerCase().replace(/\s+/g, '-'));
-          
-          const existingActivitiesWithNewSlug = await activityDatamapper.getAllBySlug(slug);
-          if (existingActivitiesWithNewSlug.length > 0) {
-            slug += `-${existingActivitiesWithNewSlug.length + 1}`;
-          }
+
+      // Check if the activity exists
+      const existingActivity = await activityDatamapper.getOne(activityId);
+      if (!existingActivity) {
+        throw new ApiError("This activity doesn't exist", { status: 404 });
       }
-    
-      const cityFromDB = city ? await cityDatamapper.getOneByName(city) : await cityDatamapper.getOneById(existingActivity.id_city);
-    
+
+      // Check if the activity was created by this user
+      const userActivity = await profilDatamapper.activities.getOne(
+        userId,
+        activityId
+      );
+      if (!userActivity) {
+        throw new ApiError('This activity was not created by this user', {
+          status: 403,
+        });
+      }
+
+      const { title, address, city } = req.body;
+      const imageUrl = req.file
+        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+        : existingActivity.url_image;
+
+      // Start with the existing slug, title, and city
+      let slug = existingActivity.slug;
+      let titleForSlug = existingActivity.title;
+      let cityForSlug = (
+        await cityDatamapper.getOneById(existingActivity.id_city)
+      ).name;
+
+      // If title or city is updated, generate a new slug
+      if (title || city) {
+        titleForSlug = title || titleForSlug;
+        cityForSlug = city || cityForSlug;
+
+        slug = encodeURIComponent(
+          `${titleForSlug}-${cityForSlug}`.toLowerCase().replace(/\s+/g, '-')
+        );
+
+        const existingActivitiesWithNewSlug =
+          await activityDatamapper.getAllBySlug(slug);
+        if (existingActivitiesWithNewSlug.length > 0) {
+          slug += `-${existingActivitiesWithNewSlug.length + 1}`;
+        }
+      }
+
+      const cityFromDB = city
+        ? await cityDatamapper.getOneByName(city)
+        : await cityDatamapper.getOneById(existingActivity.id_city);
+
       // Update latitude and longitude if city or address changes
       let { latitude, longitude } = existingActivity;
       if (city || address) {
@@ -253,7 +267,7 @@ const profilController = {
         latitude = coordinates.lat;
         longitude = coordinates.lon;
       }
-    
+
       // Update the activity object
       const activityToUpdate = {
         ...req.body,
@@ -265,12 +279,14 @@ const profilController = {
         cityId: cityFromDB.id,
       };
       delete activityToUpdate.city; // remove city from the request body as it has been handled separately
-    
-      const updatedActivity = await profilDatamapper.activities.update(activityToUpdate, activityId);
-    
+
+      const updatedActivity = await profilDatamapper.activities.update(
+        activityToUpdate,
+        activityId
+      );
+
       res.status(200).json({ data: [updatedActivity] });
     },
-
 
     async destroy(req, res, next) {
       try {
@@ -541,7 +557,7 @@ const profilController = {
     },
   },
   account: {
-    async updatePseudo(req, res) {
+    async updatePseudo(req, res, next) {
       const { newPseudo } = req.body;
       const id = req.session.userId;
 
@@ -551,7 +567,10 @@ const profilController = {
         console.log(user.id);
 
         if (!user) {
-          return res.status(404).json({ message: "User doesn't exist" });
+          next(
+            new ApiError(userError.details, userError.message.notFound, null)
+          );
+          return;
         }
 
         // Verification if pseudo is tused
@@ -560,7 +579,10 @@ const profilController = {
         );
 
         if (pseudoExist) {
-          return res.status(404).json({ message: 'pseudo already used' });
+          next(
+            new ApiError(userError.details, userError.message.pseudoExist, null)
+          );
+          return;
         }
 
         // Update pseudo
@@ -568,65 +590,116 @@ const profilController = {
 
         res.status(200).json({ data: [newPseudo] });
       } catch (error) {
-        console.log('Pseudo non changé');
-        res.status(500).json({ message: 'Erreur serveur' });
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
       }
     },
-    async updatePassword(req, res) {
-      const id = req.session.userId;
-      const { oldPassword, newPassword, newPasswordConfirm } = req.body;
+    async updatePassword(req, res, next) {
+      try {
+        const id = req.session.userId;
+        const { oldPassword, newPassword, newPasswordConfirm } = req.body;
 
-      const user = await profilDatamapper.account.getOneUser(id);
-      const passwordHashFromDB = user.password;
+        const user = await profilDatamapper.account.getOneUser(id);
+        const passwordHashFromDB = user.password;
 
-      const isGoodPassword = await bcrypt.compare(
-        oldPassword,
-        passwordHashFromDB
-      );
-      if (!isGoodPassword) {
-        return res.status(400).json({ error: "Password doesn't correct" });
-      }
-
-      if (oldPassword === newPassword) {
-        return res.status(400).json({ error: "Don't use same password" });
-      }
-
-      if (newPassword !== newPasswordConfirm) {
-        return res.status(400).json({ error: "passwords don't match" });
-      }
-
-      const hash = await hashPassword(newPassword);
-
-      await profilDatamapper.account.savePassword(hash, id);
-
-      res.status(200).json({ message: 'password update successfull' });
-    },
-    async delete(req, res) {
-      const id = req.session.userId;
-      console.log(id);
-      const { password } = req.body;
-
-      const user = await profilDatamapper.account.getOneUser(id);
-      const passwordHashFromDB = user.password;
-
-      const isGoodPassword = await bcrypt.compare(password, passwordHashFromDB);
-      if (!isGoodPassword) {
-        return res.status(400).json({ error: "Password doesn't correct" });
-      }
-      await profilDatamapper.account.delete(id);
-      await profilDatamapper.account.deleteActivity(id);
-
-      req.session.destroy((err) => {
-        if (err) {
-          console.error('Error destroying session ', err.message);
-          return res
-            .status(500)
-            .json({ error: 'An error occurred while logging out' });
+        const isGoodPassword = await bcrypt.compare(
+          oldPassword,
+          passwordHashFromDB
+        );
+        if (!isGoodPassword) {
+          next(
+            new ApiError(
+              userError.details,
+              userError.message.passwordNotGood,
+              null
+            )
+          );
+          return;
         }
 
-        res.clearCookie('connect.sid', { path: '/' });
-        res.status(200).json({ message: 'logged out successfully' });
-      });
+        if (oldPassword === newPassword) {
+          next(
+            new ApiError(
+              userError.details,
+              userError.message.samePAsswords,
+              null
+            )
+          );
+          return;
+        }
+
+        if (newPassword !== newPasswordConfirm) {
+          next(
+            new ApiError(
+              userError.details,
+              userError.message.passwordDontMatch,
+              null
+            )
+          );
+          return;
+        }
+
+        const hash = await hashPassword(newPassword);
+
+        await profilDatamapper.account.savePassword(hash, id);
+
+        res.status(200).json({ message: 'password update successfull' });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
+    },
+    async delete(req, res, next) {
+      try {
+        console.log('Oh ouiiiiiiiiiii');
+        const id = req.session.userId;
+        console.log(id);
+        const { password } = req.body;
+
+        const user = await profilDatamapper.account.getOneUser(id);
+        const passwordHashFromDB = user.password;
+
+        const isGoodPassword = await bcrypt.compare(
+          password,
+          passwordHashFromDB
+        );
+        if (!isGoodPassword) {
+          next(
+            new ApiError(
+              userError.details,
+              userError.message.passwordNotGood,
+              null
+            )
+          );
+          return;
+        }
+        await profilDatamapper.account.delete(id);
+        await profilDatamapper.account.deleteActivity(id);
+
+        req.session.destroy((err) => {
+          if (err) {
+            console.error('Error destroying session ', err.message);
+            return res
+              .status(500)
+              .json({ error: 'An error occurred while logging out' });
+          }
+
+          res.clearCookie('connect.sid', { path: '/' });
+          res.status(200).json({ message: 'logged out successfully' });
+        });
+      } catch (error) {
+        throw new ApiError(
+          internalServerError.details,
+          internalServerError.message.global,
+          error
+        );
+      }
     },
   },
 };

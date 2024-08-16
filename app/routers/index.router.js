@@ -24,12 +24,7 @@ router.use('/activity', activityRouter);
 router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
 router.use('/signout', signoutRouter);
-router.use(
-  '/unsubscribe',
-  /*doubleCsrfProtection,*/
-  authenticationCheck,
-  unsubscribeRouter
-);
+
 router.use('/profil', authenticationCheck, profilRouter);
 router.use('/forgot-password', forgotPasswordRouter);
 router.use('/country', countryRouter);
