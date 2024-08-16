@@ -8,9 +8,9 @@ const pool = new Pool({
   host: process.env.PG_HOST || 'localhost',
   port: process.env.PG_PORT || 5432,
   database: process.env.PG_DB_NAME || 'cityzen',
-  ssl: {
-    rejectUnauthorized: false, // Ceci permet d'accepter les certificats auto-signés ou non validés
-  },
+  // ssl: {
+  //   rejectUnauthorized: false, // Ceci permet d'accepter les certificats auto-signés ou non validés
+  // },
 });
 
 let client = null;

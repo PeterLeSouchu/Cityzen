@@ -29,6 +29,7 @@ const errors = {
     message: {
       notFound: 'Activity not found',
       alreadyStored: 'Activity already stored',
+      input: 'Invalid input',
     },
   },
   userError: {

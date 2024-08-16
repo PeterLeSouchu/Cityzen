@@ -1,3 +1,8 @@
+import errors from '../errors/errors.js';
+import ApiError from '../errors/api.error.js';
+
+const { activityError } = errors;
+
 const validationSchema =
   (
     schema,
@@ -18,7 +23,9 @@ const validationSchema =
       return next();
     } catch (err) {
       console.log('Provenant du validateur :', err.name, err.message);
-      next(err);
+      next(
+        new ApiError(activityError.details, activityError.message.input, null)
+      );
     }
   };
 
