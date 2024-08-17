@@ -30,6 +30,7 @@ const errors = {
       notFound: 'Activity not found',
       alreadyStored: 'Activity already stored',
       input: 'Invalid input',
+      addressFalse: 'Invalid localisation',
     },
   },
   userError: {

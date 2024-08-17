@@ -160,7 +160,7 @@ const profilController = {
       }
     },
 
-    async store(req, res) {
+    async store(req, res, next) {
       const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
@@ -182,8 +182,28 @@ const profilController = {
       // Find the city by name
       const cityFromDB = await cityDatamapper.getOneByName(city);
 
+      if (!cityFromDB) {
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.addressFalse,
+            null
+          )
+        );
+      }
+
       // Get latitude and longitude from address using an external API
       const coordinates = await getCoordinates(address, cityFromDB.name);
+
+      if (!coordinates) {
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.addressFalse,
+            null
+          )
+        );
+      }
       const { lat: latitude, lon: longitude } = coordinates;
 
       // Create a new activity object
@@ -584,7 +604,6 @@ const profilController = {
         //   );
         //   return;
         // }
-        // console.log('byby');
 
         // Update pseudo
         await profilDatamapper.account.updatePseudo(newPseudo, id);
@@ -658,9 +677,8 @@ const profilController = {
     },
     async delete(req, res, next) {
       try {
-        console.log('Oh ouiiiiiiiiiii');
         const id = req.session.userId;
-        console.log(id);
+
         const { password } = req.body;
 
         const user = await profilDatamapper.account.getOneUser(id);
