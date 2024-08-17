@@ -44,7 +44,7 @@ const errors = {
       permissionDenied: 'The provided information is wrong',
       passwordDontMatch: "Passwords don't match",
       passwordNotGood: 'Invalid password',
-      pseudoExist: 'Pseudo already used',
+      // pseudoExist: 'Pseudo already used',
       samePAsswords: "Don't use same password",
     },
   },

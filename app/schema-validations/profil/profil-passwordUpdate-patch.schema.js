@@ -5,7 +5,7 @@ const PASSWORD_REGEX = new RegExp(
 
 const profilPasswordUpdatePatchSchema = Joi.alternatives().try(
   Joi.object({
-    oldPassword: Joi.string().pattern(PASSWORD_REGEX).required(),
+    oldPassword: Joi.string().required(),
 
     newPassword: Joi.string().pattern(PASSWORD_REGEX).required(),
 

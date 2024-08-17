@@ -564,7 +564,6 @@ const profilController = {
       try {
         // Verification if user exist
         const user = await profilDatamapper.account.getOneUser(id);
-        console.log(user.id);
 
         if (!user) {
           next(
@@ -573,17 +572,19 @@ const profilController = {
           return;
         }
 
-        // Verification if pseudo is tused
-        const pseudoExist = await profilDatamapper.account.checkPseudo(
-          newPseudo
-        );
+        // // Verification if pseudo is used
+        // const pseudoExist = await profilDatamapper.account.checkPseudo(
+        //   newPseudo
+        // );
 
-        if (pseudoExist) {
-          next(
-            new ApiError(userError.details, userError.message.pseudoExist, null)
-          );
-          return;
-        }
+        // if (pseudoExist) {
+        //   console.log('pseudo exist');
+        //   next(
+        //     new ApiError(userError.details, userError.message.pseudoExist, null)
+        //   );
+        //   return;
+        // }
+        // console.log('byby');
 
         // Update pseudo
         await profilDatamapper.account.updatePseudo(newPseudo, id);

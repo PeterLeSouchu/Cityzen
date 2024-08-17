@@ -63,6 +63,9 @@ router.use((error, req, res, next) => {
     return;
   }
 
+  console.log("dernier controller de gestion d'erreur");
+  console.log(message);
+
   res.status(errorType?.status || 500).json({
     error: { message },
   });

@@ -13,7 +13,7 @@ import apiDocumentation from './config/swagger.config.js';
 const app = express();
 
 const __dirname = path.resolve();
-// app.use(express.static(path.join(__dirname, 'public/dist')));
+app.use(express.static(path.join(__dirname, 'public/dist')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 
 // ? Comment rendre les fichiers static du front qui ont leur propre repo ?
@@ -69,8 +69,8 @@ apiDocumentation(app);
 // Router
 app.use(router);
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
+});
 
 export default app;

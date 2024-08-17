@@ -23,7 +23,9 @@ import checkFile from '../middlewares/check-file.middleware.js';
 
 const profilRouter = Router();
 
-profilRouter.route('/pseudo').patch(profilController.account.updatePseudo);
+profilRouter
+  .route('/pseudo')
+  .patch(catchHandlerController(profilController.account.updatePseudo));
 
 profilRouter
   .route('/updatePassword')
@@ -32,7 +34,9 @@ profilRouter
     catchHandlerController(profilController.account.updatePassword)
   );
 
-profilRouter.route('/unsubscribe').post(profilController.account.delete);
+profilRouter
+  .route('/unsubscribe')
+  .post(catchHandlerController(profilController.account.delete));
 
 profilRouter.route('/authentication');
 // .patch(profilController.update);
