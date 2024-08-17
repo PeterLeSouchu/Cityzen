@@ -190,6 +190,7 @@ const profilController = {
             null
           )
         );
+        return;
       }
 
       // Get latitude and longitude from address using an external API
@@ -203,6 +204,7 @@ const profilController = {
             null
           )
         );
+        return;
       }
       const { lat: latitude, lon: longitude } = coordinates;
 
@@ -227,7 +229,7 @@ const profilController = {
       res.status(201).json({ data: [createdActivity] });
     },
 
-    async update(req, res) {
+    async update(req, res, next) {
       const userId = req.session.userId;
       const activityId = Number.parseInt(req.params.id, 10);
 
@@ -280,10 +282,31 @@ const profilController = {
         ? await cityDatamapper.getOneByName(city)
         : await cityDatamapper.getOneById(existingActivity.id_city);
 
+      if (!cityFromDB) {
+        next(
+          new ApiError(
+            activityError.details,
+            activityError.message.addressFalse,
+            null
+          )
+        );
+        return;
+      }
+
       // Update latitude and longitude if city or address changes
       let { latitude, longitude } = existingActivity;
       if (city || address) {
         const coordinates = await getCoordinates(address, cityFromDB.name);
+        if (!coordinates) {
+          next(
+            new ApiError(
+              activityError.details,
+              activityError.message.addressFalse,
+              null
+            )
+          );
+          return;
+        }
         latitude = coordinates.lat;
         longitude = coordinates.lon;
       }
