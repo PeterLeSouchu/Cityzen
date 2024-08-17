@@ -48,8 +48,10 @@ router.use((error, req, res, next) => {
       '../../public',
       'images'
     );
-    const imagePath = path.join(imageDirname, req.file.filename);
-    deleteImage(imagePath);
+    if (req.file.filename) {
+      const imagePath = path.join(imageDirname, req.file.filename);
+      deleteImage(imagePath);
+    }
   }
   delete req.session.imageName;
 
