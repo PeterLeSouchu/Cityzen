@@ -164,7 +164,7 @@ const profilController = {
       const userId = req.session.userId;
       const { title, description, address, phone, city } = req.body;
       const imageUrl = req.file
-        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+        ? `${process.env.HOST}/uploads/${req.file.filename}`
         : null;
 
       // Generate the initial slug
@@ -252,7 +252,7 @@ const profilController = {
 
       const { title, address, city } = req.body;
       const imageUrl = req.file
-        ? `${process.env.HOST}:${process.env.PORT}/uploads/${req.file.filename}`
+        ? `${process.env.HOST}/uploads/${req.file.filename}`
         : existingActivity.url_image;
 
       // Start with the existing slug, title, and city
