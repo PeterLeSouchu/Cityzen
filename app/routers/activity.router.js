@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import activityController from '../controllers/activity.controller.js';
 import catchHandlerController from '../middlewares/error-handler.middleware.js';
-import { doubleCsrfProtection } from '../config/csrf.config.js';
 
 // import validationMiddleware from '../../middlewares/validation.middleware.js';
 

@@ -14,13 +14,13 @@ import apiDocumentation from './config/swagger.config.js';
 const app = express();
 
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'public/dist')));
+// app.use(express.static(path.join(__dirname, 'public/dist')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 
 // CORS handler
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000'],
+    origin: 'https://projet-4-cityzen-back.onrender.com',
     credentials: true,
     withCredentials: true,
   })
@@ -46,8 +46,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/csrf-token', (req, res) => {
-  const csrfToken = generateToken(req, res);
+  const csrfToken = generateToken(req);
   console.log('voici le token ');
+  console.log(req.session);
   console.log(csrfToken);
   res.json({ csrfToken });
 });
@@ -58,8 +59,8 @@ apiDocumentation(app);
 // Router
 app.use(router);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
+// });
 
 export default app;

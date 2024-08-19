@@ -1,18 +1,13 @@
-import { doubleCsrf } from 'csrf-csrf';
-import 'dotenv/config';
-console.log(process.env.CSRF_SECRET);
+import { csrfSync } from 'csrf-sync';
 
-const { doubleCsrfProtection, generateToken } = doubleCsrf({
-  getSecret: () => process.env.CSRF_SECRET,
-  // ne fonctionne pas en dev sur chromium __Host-psifi.x-csrf-token
-  cookieName: '__Host-psifi.x-csrf-token',
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-    path: '/',
-  },
-  secret: process.env.CSRF_SIGNING_SECRET, // Clé secrète pour signer le cookie CSRF
-});
+const {
+  invalidCsrfTokenError, // This is just for convenience if you plan on making your own middleware.
+  generateToken, // Use this in your routes to generate, store, and get a CSRF token.
+  getTokenFromRequest, // use this to retrieve the token submitted by a user
+  getTokenFromState, // The default method for retrieving a token from state.
+  storeTokenInState, // The default method for storing a token in state.
+  revokeToken, // Revokes/deletes a token by calling storeTokenInState(undefined)
+  csrfSynchronisedProtection, // This is the default CSRF protection middleware.
+} = csrfSync();
 
-export { generateToken, doubleCsrfProtection };
+export { generateToken, csrfSynchronisedProtection };

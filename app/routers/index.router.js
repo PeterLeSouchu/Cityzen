@@ -15,7 +15,7 @@ import signupRouter from './signup.router.js';
 import authenticationCheck from '../middlewares/authentication-check.middleware.js';
 import countryRouter from './country.router.js';
 import cityRouter from './city.router.js';
-import { doubleCsrfProtection } from '../config/csrf.config.js';
+
 import deleteImage from '../utils/delete-image.js';
 
 const router = Router();

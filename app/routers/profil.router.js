@@ -20,7 +20,7 @@ import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
 import profilPasswordUpdatePatchSchema from '../schema-validations/profil/profil-passwordUpdate-patch.schema.js';
 import checkFile from '../middlewares/check-file.middleware.js';
-import { doubleCsrfProtection } from '../config/csrf.config.js';
+import { csrfSynchronisedProtection } from '../config/csrf.config.js';
 
 const profilRouter = Router();
 
@@ -29,7 +29,7 @@ profilRouter.route('/pseudo').patch(
     console.log(req.cookies);
     next();
   },
-  doubleCsrfProtection,
+  csrfSynchronisedProtection,
   catchHandlerController(profilController.account.updatePseudo)
 );
 
@@ -38,7 +38,7 @@ profilRouter.route('/updatePassword').patch(
     console.log(req.cookies);
     next();
   },
-  doubleCsrfProtection,
+  csrfSynchronisedProtection,
   validationSchema(profilPasswordUpdatePatchSchema, 'body', undefined, false),
   catchHandlerController(profilController.account.updatePassword)
 );
@@ -48,7 +48,7 @@ profilRouter.route('/unsubscribe').post(
     console.log(req.cookies);
     next();
   },
-  doubleCsrfProtection,
+  csrfSynchronisedProtection,
   catchHandlerController(profilController.account.delete)
 );
 
@@ -354,7 +354,7 @@ profilRouter
     }
   */
   .post(
-    doubleCsrfProtection,
+    csrfSynchronisedProtection,
     upload.single('image'),
     uploadErrorHandler,
     checkFile,
@@ -425,7 +425,7 @@ profilRouter
     }
   */
   .patch(
-    doubleCsrfProtection,
+    csrfSynchronisedProtection,
     upload.single('image'),
     checkFile,
     setImageInBody,
@@ -483,7 +483,7 @@ profilRouter
     }
    */
   .delete(
-    doubleCsrfProtection,
+    csrfSynchronisedProtection,
     validationSchema(profilActivityDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.activities.destroy)
   );
