@@ -1,7 +1,6 @@
 const signoutController = {
   async index(req, res) {
     try {
-      console.log('Cookies:', req.cookies);
       // On commence par détruire la session sur le serveur
       req.session.destroy((err) => {
         if (err) {

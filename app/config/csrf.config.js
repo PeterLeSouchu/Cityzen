@@ -1,28 +1,19 @@
 import { doubleCsrf } from 'csrf-csrf';
+import 'dotenv/config';
+console.log(process.env.CSRF_SECRET);
 
-const {
-  invalidCsrfTokenError, // * This is just for convenience if you plan on making your own middleware.
-  generateToken, // * Use this in your routes to provide a CSRF hash + token cookie and token.
-  validateRequest, // * Also a convenience if you plan on making your own middleware.
-  doubleCsrfProtection, // * This is the default CSRF protection middleware.
-  getTokenFromRequest,
-} = doubleCsrf({
-  getSecret: () => process.env.SECRET_TOKEN_CSRF, // A function that optionally takes the request and returns a secret
-  cookieName: '__Host-psifi.x-csrf-token', // The name of the cookie to be used, recommend using Host prefix.
-  cookieOptions: {
-      sameSite: 'lax', // Recommend you make this strict if posible
-      path: '/',
-      maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-      secure: false, // * false car on n'a pas https
-      httpOnly: true, // par défaut, ce package transmet des cookies par le protocole http : on ne pourra pas modifier ce cookie depuis le navigateur
-  },
-  size: 64, // The size of the generated tokens in bits
-  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'], // A list of request methods that will not be protected.
-  getTokenFromRequest: req => req.headers['x-csrf-token'], // A function that returns the token from the request
+const { doubleCsrfProtection, generateToken } = doubleCsrf({
+  getSecret: () => process.env.CSRF_SECRET,
+  // ne fonctionne pas en dev sur chromium __Host-psifi.x-csrf-token
+  cookieName: 'psifi.x-csrf-token',
+  cookie: {
+    httpOnly: true, // Essayez sans httpOnly
+    secure: false, // Essayez sans secure
+    sameSite: 'Lax', // Essayez Lax pour tester
+    path: '/', // Assurez-vous que le cookie est accessible sur le bon chemin
+  }, // Utiliser des cookies pour stocker le token
+  secret: process.env.CSRF_SIGNING_SECRET, // Clé secrète pour signer le cookie CSRF
+  // Autres options de configuration selon vos besoins
 });
 
-export {
-  generateToken,
-  doubleCsrfProtection,
-  getTokenFromRequest,
-}
+export { generateToken, doubleCsrfProtection };

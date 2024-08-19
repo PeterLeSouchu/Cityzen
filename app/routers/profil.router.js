@@ -15,28 +15,42 @@ import paramsSchema from '../schema-validations/params.schema.js';
 import updateSchema from '../schema-validations/update.schema.js';
 import profilRatingPatchSchema from '../schema-validations/profil/profil-rating-patch.schema.js';
 import upload from '../config/multer.upload.middlewares.js';
-import { doubleCsrfProtection } from '../config/csrf.config.js';
+// import { doubleCsrfProtection } from '../config/csrf.config.js';
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
 import profilPasswordUpdatePatchSchema from '../schema-validations/profil/profil-passwordUpdate-patch.schema.js';
 import checkFile from '../middlewares/check-file.middleware.js';
+import { doubleCsrfProtection } from '../config/csrf.config.js';
 
 const profilRouter = Router();
 
-profilRouter
-  .route('/pseudo')
-  .patch(catchHandlerController(profilController.account.updatePseudo));
+profilRouter.route('/pseudo').patch(
+  (req, res, next) => {
+    console.log(req.cookies);
+    next();
+  },
+  doubleCsrfProtection,
+  catchHandlerController(profilController.account.updatePseudo)
+);
 
-profilRouter
-  .route('/updatePassword')
-  .patch(
-    validationSchema(profilPasswordUpdatePatchSchema, 'body', undefined, false),
-    catchHandlerController(profilController.account.updatePassword)
-  );
+profilRouter.route('/updatePassword').patch(
+  (req, res, next) => {
+    console.log(req.cookies);
+    next();
+  },
+  doubleCsrfProtection,
+  validationSchema(profilPasswordUpdatePatchSchema, 'body', undefined, false),
+  catchHandlerController(profilController.account.updatePassword)
+);
 
-profilRouter
-  .route('/unsubscribe')
-  .post(catchHandlerController(profilController.account.delete));
+profilRouter.route('/unsubscribe').post(
+  (req, res, next) => {
+    console.log(req.cookies);
+    next();
+  },
+  doubleCsrfProtection,
+  catchHandlerController(profilController.account.delete)
+);
 
 profilRouter.route('/authentication');
 // .patch(profilController.update);
@@ -340,7 +354,7 @@ profilRouter
     }
   */
   .post(
-    // doubleCsrfProtection,
+    doubleCsrfProtection,
     upload.single('image'),
     uploadErrorHandler,
     checkFile,
@@ -411,7 +425,7 @@ profilRouter
     }
   */
   .patch(
-    // doubleCsrfProtection,
+    doubleCsrfProtection,
     upload.single('image'),
     checkFile,
     setImageInBody,
@@ -469,7 +483,7 @@ profilRouter
     }
    */
   .delete(
-    // doubleCsrfProtection,
+    doubleCsrfProtection,
     validationSchema(profilActivityDeleteSchema, 'params', undefined, true),
     catchHandlerController(profilController.activities.destroy)
   );

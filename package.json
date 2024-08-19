@@ -10,7 +10,6 @@
     "start": "node server.js",
     "db:create": "psql -p 5432 -U cityzen -d cityzen -f ./app/data/create_table.sql",
     "db:seeding": "node ./app/data/seedding/index.seeding.js"
-
   },
   "author": "",
   "license": "ISC",
