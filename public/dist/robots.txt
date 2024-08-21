@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /index.html
 
-Sitemap: https://projet-4-cityzen-back.onrender.com/sitemap.xml
+Sitemap: https://cityzen.onrender.com/sitemap.xml
