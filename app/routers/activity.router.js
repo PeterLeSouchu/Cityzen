@@ -1,30 +1,30 @@
-// TIERCE MODULES
-import { Router } from "express";
+import { Router } from 'express';
+import activityController from '../controllers/activity.controller.js';
+import catchHandlerController from '../middlewares/error-handler.middleware.js';
 
-// EXTERNAL MODULES
-import Controller from "../controllers/index.controller.js";
-
-// TODO : The core datamapper
-const activityController = new Controller({datamapper: 'to do'})
+// import validationMiddleware from '../../middlewares/validation.middleware.js';
 
 const activityRouter = Router();
 
-activityRouter.route('/')
-  .post(activityController.store);
+// Route pour obtenir les activités récentes
+activityRouter.route('/recent').get(
+  // doubleCsrfProtection,
+  catchHandlerController(activityController.showRecent)
+);
 
-activityRouter.route('/:id')
-  .patch(activityController.update)
-  .delete(activityController.destroy);
+activityRouter.route('/rating').get(
+  // doubleCsrfProtection,
+  catchHandlerController(activityController.showRating)
+);
 
-activityRouter.route('/:country/:city')
-  .get(activityController.index);
+// Route pour obtenir les activités d'une ville et d'un pays spécifiques
+activityRouter
+  .route('/:country/:city')
+  .get(catchHandlerController(activityController.index));
 
-activityRouter.route('/rating')
-  .get(activityController.index);
-
-
-activityRouter.route('/recent')
-  .get(activityController.index);
-
+// Route pour obtenir une activité par son ID
+activityRouter
+  .route('/:slug')
+  .get(catchHandlerController(activityController.show));
 
 export default activityRouter;

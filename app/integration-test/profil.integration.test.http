@@ -1,0 +1,106 @@
+@url = http://localhost:{{$dotenv PORT}}
+# @url = http://localhost:3000
+@mainEndpoint = profil
+
+# FAVORITES
+
+### POST /profil/favorite
+POST {{url}}/{{mainEndpoint}}/favorite
+Content-Type: application/json
+
+{
+  "id": 18
+}
+
+### GET /profil/favorite
+GET {{url}}/{{mainEndpoint}}/favorite
+
+### DELETE /profil/favorite/:id
+DELETE {{url}}/{{mainEndpoint}}/favorite/17
+
+
+# ACTIVITIES
+
+### GET /profil/activity
+GET {{url}}/{{mainEndpoint}}/activity
+
+### POST profil/activity
+POST {{url}}/{{mainEndpoint}}/activity
+Content-Type: application/json
+
+{
+  "title": "La pizza du coin",
+  "description": "Une bonne pizza au fromage",
+  "image": "http://cityzen.fr/upload/fnikrefvnipndxpmpi", 
+  "address": "5 place paul demange ",
+  "phone": "0654748965",
+  "city": "Montesson"
+}
+
+### PATCH profil/activity
+PATCH {{url}}/{{mainEndpoint}}/activity/38
+Content-Type: application/json
+
+# {
+#   "image": "blabla",
+#   "address": "rue du Ruby ",
+#   "phone": "0657847596",
+#   "city": "Marseille"
+# }
+
+{
+  "title": 45,
+  "description": "Une bonne bleu"
+}
+
+# {
+#   "title": "L'attraction 9999 & top",
+#   "description": "Une bonne attraction",
+#   "image": "blabla",
+#   "address": "rue du PHP ",
+#   "phone": "0654748965",
+#   "longitude": 45.326359,
+#   "latitude": 12.25489,
+#   "city": "Lyon"
+# }
+
+### DELETE /profil/activity/:id
+DELETE {{url}}/{{mainEndpoint}}/activity/12
+
+
+# RATINGS
+
+### GET /profil/rating
+GET {{url}}/{{mainEndpoint}}/rating
+
+### POST profil/rating
+POST {{url}}/{{mainEndpoint}}/rating/9
+Content-Type: application/json
+
+{
+  "rating": 4
+}
+
+### GET /profil/rating/:id
+GET {{url}}/{{mainEndpoint}}/rating/20
+
+### PATCH /profil/rating/:id
+PATCH {{url}}/{{mainEndpoint}}/rating/20
+Content-Type: application/json
+
+{
+  "rating": 2
+}
+
+# {
+#   "id": 1,
+#   "title": "attraction 2000",
+#   "slug": "attraction-2000-lyon-3",
+#   "description": "Une bonne attraction",
+#   "image": "blabla",
+#   "address": "rue du PHP ",
+#   "phone": "0654748965",
+#   "longitude": 45.326359,
+#   "latitude": 12.25489,
+#   "city": "lyon"
+# }

@@ -1,0 +1,13 @@
+@url = http://localhost:{{$dotenv PORT}}
+# @url = http://localhost:3000
+@mainEndpoint = signin
+
+### POST /signin
+POST {{url}}/{{mainEndpoint}}
+Content-Type: application/json
+
+{
+
+  "email": "samy@samy.fr",
+  "password": "Samy@936"
+}

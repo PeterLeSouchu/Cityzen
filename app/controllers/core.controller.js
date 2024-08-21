@@ -1,3 +1,4 @@
+// !!! NOUBLIE PAS DE CREER LA BRANCHE ET DE PUSH
 
 class CoreController {
   RADIX_PARSEINT= 10;
@@ -5,9 +6,18 @@ class CoreController {
 
   index = async (req, res) => {
     const endpointsArray = req.path.split('/').slice(1);
+
+    const params = {
+      endpoints: endpointsArray,
+    }
+
+    if(endpointsArray.includes('favorite')) {
+      // Specially for the favorite route. We get the id user to return its datas
+      params.idUserSession = req.session.userId; 
+    }
     
     // TODO : The core datamapper
-    // const data = await this.datamapper.getAll(endpointsArray);
+    // const data = await this.datamapper.getAll(params);
 
     res.status(200).json({data: 
       [
@@ -43,10 +53,21 @@ class CoreController {
 
   store = async (req, res) => {
     const requestData = req.body;
+    const endpointsArray = req.path.split('/').slice(1);
+
     console.log(requestData);
 
+    const params = {
+      endpoints: endpointsArray,
+    }
+
+    if(endpointsArray.includes('favorite')) {
+      // Specially for the favorite route. We get the id user to return its datas
+      params.idUserSession = req.session.userId; 
+    }
+
     // TODO : The core datamapper
-    // const data = await this.datamapper.create(requestData);
+    // const data = await this.datamapper.create(requestData, params);
 
     // ! Simulated data
     const data = {
@@ -67,9 +88,20 @@ class CoreController {
 
   destroy = async (req, res) => {
     const id = Number.parseInt(req.params.id, this.RADIX_PARSEINT);
+    const endpointsArray = req.path.split('/').slice(1);
+
+    const params = {
+      endpoints: endpointsArray,
+    }
+
+    if(endpointsArray.includes('favorite')) {
+      // Specially for the favorite route. We get the id user to return its datas
+      params.idUserSession = req.session.userId; 
+    }
+
 
     // TODO : The core datamapper
-    // const findedData = await this.datamapper.getOne(id);
+    // const findedData = await this.datamapper.getOne(id, params);
     const findedData = 1;
     console.log(findedData);
 

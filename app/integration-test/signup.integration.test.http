@@ -1,0 +1,29 @@
+@url = http://localhost:{{$dotenv PORT}}
+# @url = http://localhost:3000
+@mainEndpoint = signup
+
+### POST /signup
+POST {{url}}/{{mainEndpoint}}
+Content-Type: application/json
+
+{
+  "email": "megatesteur@gmail.com",
+  "password": "megaTesteur.1",
+  "passwordConfirm": "megaTesteur.1",
+  "pseudo": "mega"
+}
+
+# {
+#   "email": "cityzen@cityzen.fr",
+#   "password": "cityzenD     6 ",
+#   "passwordConfirm": "cityzenD     6 ",
+#   "pseudo": "cityZen"
+# }
+
+### POST /signup/confirmation
+POST {{url}}/{{mainEndpoint}}/confirmation
+Content-Type: application/json
+
+{
+  "OTP": "LHOOR4"
+}
