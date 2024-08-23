@@ -148,13 +148,11 @@ const profilController = {
     async index(req, res, next) {
       try {
         const userId = req.session.userId;
-        console.log(`voici l'id de l'utilisateur : ${userId}`);
+
         const activities = await profilDatamapper.activities.getAll(userId);
-        console.log(`Voici ces activité : ${activities}`);
 
         res.status(200).json({ data: activities });
       } catch (error) {
-        console.log('Je suis le catch du controller activities.index');
         throw new ApiError(
           internalServerError.details,
           internalServerError.message.global,
