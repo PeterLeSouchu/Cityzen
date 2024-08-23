@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /index.html
-
-Sitemap: https://cityzen.onrender.com/sitemap.xml
