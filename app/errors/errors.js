@@ -86,7 +86,7 @@ const errors = {
       code: null,
     },
     message: {
-      notAllowed: 'Le fichier image est incorrect ou trop volumineuse',
+      notAllowed: 'Le fichier image est incorrect ou trop volumineux',
     },
   },
 };
