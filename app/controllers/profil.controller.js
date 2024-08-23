@@ -148,6 +148,7 @@ const profilController = {
     async index(req, res, next) {
       try {
         const userId = req.session.userId;
+        console.log(`voici l'id de l'utilisateur : ${userId}`);
         const activities = await profilDatamapper.activities.getAll(userId);
 
         res.status(200).json({ data: activities });
