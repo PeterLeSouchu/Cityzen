@@ -37,8 +37,6 @@ app.use(
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // 24h de validité
       sameSite: 'lax',
-      domain: '.cityzen.onrender.com',
-      secure: true,
     },
   })
 );
