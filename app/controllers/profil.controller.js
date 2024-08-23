@@ -154,6 +154,7 @@ const profilController = {
 
         res.status(200).json({ data: activities });
       } catch (error) {
+        console.log('Je suis le catch du controller activities.index');
         throw new ApiError(
           internalServerError.details,
           internalServerError.message.global,
