@@ -15,7 +15,7 @@ const signinController = {
 
       const userExist = await userDatamapper.show(email);
       if (!userExist) {
-        next(new ApiError(userError.details, userError.message.notFound, null));
+        next(new ApiError(userError.details, userError.message.notOk, null));
         return;
       }
 
@@ -23,13 +23,7 @@ const signinController = {
 
       const isGoodPassword = await bcrypt.compare(password, passwordHashFromDB);
       if (!isGoodPassword) {
-        next(
-          new ApiError(
-            userError.details,
-            userError.message.permissionDenied,
-            null
-          )
-        );
+        next(new ApiError(userError.details, userError.message.notOk, null));
         return;
       }
 

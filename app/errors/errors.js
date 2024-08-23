@@ -6,8 +6,8 @@ const errors = {
       code: null,
     },
     message: {
-      global: 'You need to be connected to access this route',
-      permissionDenied: 'This activity not created by this user',
+      global: "Vous avez besoin d'être connecté pour accéder à cette route",
+      permissionDenied: "Vous n'êtes pas propriétaire de cette activité",
     },
   },
   internalServerError: {
@@ -17,7 +17,7 @@ const errors = {
       code: null,
     },
     message: {
-      global: 'Internal Server Error. An internal error has occurred',
+      global: 'Erreur serveur interne',
     },
   },
   activityError: {
@@ -27,10 +27,10 @@ const errors = {
       code: null,
     },
     message: {
-      notFound: 'Activity not found',
-      alreadyStored: 'Activity already stored',
-      input: 'Invalid input',
-      addressFalse: 'Invalid localisation',
+      notFound: 'Activité non trouvée',
+      alreadyStored: 'Acitivité déja créée',
+      input: 'Valeur incorrecte',
+      addressFalse: 'Localisation incorrecte',
     },
   },
   userError: {
@@ -40,13 +40,12 @@ const errors = {
       code: null,
     },
     message: {
-      notFound: 'User not found',
-      alreadyStored: 'User already stored',
+      notOk: 'Les identifiants ne correspondent pas',
+      alreadyStored: 'Utilisateur déja inscrit',
       permissionDenied: 'The provided information is wrong',
-      passwordDontMatch: "Passwords don't match",
-      passwordNotGood: 'Invalid password',
-      // pseudoExist: 'Pseudo already used',
-      samePAsswords: "Don't use same password",
+      passwordDontMatch: 'Les mots de passe ne correspondent pas',
+      passwordNotGood: 'Mot  de passe incorrect',
+      samePAsswords: "N'utiliser pas le même mot de passe",
     },
   },
   cityError: {
@@ -56,7 +55,7 @@ const errors = {
       code: null,
     },
     message: {
-      notFound: 'City not found',
+      notFound: 'Ville non trouvée',
     },
   },
   countryError: {
@@ -66,7 +65,7 @@ const errors = {
       code: null,
     },
     message: {
-      notFound: 'Country not found',
+      notFound: 'Pays non trouvé',
     },
   },
   ratingError: {
@@ -76,8 +75,8 @@ const errors = {
       code: null,
     },
     message: {
-      notFound: "User don't rate this activity",
-      alreadyRated: 'Activity already rated',
+      notFound: "L'utilisateur n'a pas noté cette activité",
+      alreadyRated: "L'activité est déja notée",
     },
   },
   fileError: {
@@ -87,7 +86,7 @@ const errors = {
       code: null,
     },
     message: {
-      notAllowed: 'Invalid file type or file too large',
+      notAllowed: 'Le fichier image est incorrect ou trop volumineuse',
     },
   },
 };
