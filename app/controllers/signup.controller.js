@@ -64,6 +64,8 @@ const signupController = {
         subject: 'OTP Code', // Subject line
         html: `<h1> CityZen </h1>
             <p>Bonjour ${pseudo},</p>
+            <img src="../../assets/CITYZEN.png" alt="logo-cityzen" style="max-width: 5rem; height: 5rem;">
+            <p>Bonjour ${pseudo},</p>
             <p>Nous vous souhaitons la bienvenue chez CityZen! </p>
             <p>Pour valider votre inscription, il ne vous suffit plus qu'à renseigner le code suivant sur la plateforme: <span> ${OTP}</span></p>
             <p>À tout de suite !</p>
