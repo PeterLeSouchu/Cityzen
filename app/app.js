@@ -33,7 +33,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      domain: 'your-domain.com', // Configure le domaine ici
+      // domain: 'your-domain.com', // Configure le domaine ici
       secure: true, // Assure-toi que le cookie est envoyé uniquement via HTTPS
       httpOnly: true, // Rend le cookie inaccessible via JavaScript (par sécurité)
       sameSite: 'strict', // Configure SameSite ('Lax', 'Strict' ou 'None')
