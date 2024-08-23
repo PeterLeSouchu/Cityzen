@@ -36,7 +36,7 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-      sameSite: 'none',
+      sameSite: 'lax',
     },
   })
 );
