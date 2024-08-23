@@ -21,6 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 app.use(
   cors({
     origin: 'https://cityzen.onrender.com',
+    // origin: 'http://localhost:5173',
     credentials: true,
     withCredentials: true,
   })
@@ -32,17 +33,10 @@ app.use(
     secret: process.env.SESSION_PASSWORD,
     resave: false,
     saveUninitialized: true,
-    // cookie: {
-    //   domain: 'cityzen.onrender.com', // Configure le domaine ici
-    //   secure: true, // Assure-toi que le cookie est envoyé uniquement via HTTPS
-    //   httpOnly: true, // Rend le cookie inaccessible via JavaScript (par sécurité)
-    //   sameSite: 'strict', // Configure SameSite ('Lax', 'Strict' ou 'None')
-    //   maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-    // },
     cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-      sameSite: 'strict',
+      sameSite: 'none',
     },
   })
 );
