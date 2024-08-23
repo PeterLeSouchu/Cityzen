@@ -32,18 +32,18 @@ app.use(
     secret: process.env.SESSION_PASSWORD,
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      domain: 'cityzen.onrender.com', // Configure le domaine ici
-      secure: true, // Assure-toi que le cookie est envoyé uniquement via HTTPS
-      httpOnly: true, // Rend le cookie inaccessible via JavaScript (par sécurité)
-      sameSite: 'strict', // Configure SameSite ('Lax', 'Strict' ou 'None')
-      maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-    },
     // cookie: {
-    //   httpOnly: true,
+    //   domain: 'cityzen.onrender.com', // Configure le domaine ici
+    //   secure: true, // Assure-toi que le cookie est envoyé uniquement via HTTPS
+    //   httpOnly: true, // Rend le cookie inaccessible via JavaScript (par sécurité)
+    //   sameSite: 'strict', // Configure SameSite ('Lax', 'Strict' ou 'None')
     //   maxAge: 1000 * 60 * 60 * 24, // 24h de validité
-    //   sameSite: 'strict',
     // },
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 24h de validité
+      sameSite: 'strict',
+    },
   })
 );
 
