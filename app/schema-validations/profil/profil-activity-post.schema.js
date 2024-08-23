@@ -7,10 +7,7 @@ const profilActivityPostSchema = Joi.object({
 
   address: Joi.string().min(2).required(),
 
-  phone: Joi.string()
-    .pattern(/^0[1-9]{1}[0-9]{8}$/)
-    .required(),
-
+  phone: Joi.string().pattern(/^0[1-9]{1}[0-9]{8}$/),
   city: Joi.string().min(2).required(),
 })
   .min(4)
