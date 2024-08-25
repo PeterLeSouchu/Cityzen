@@ -42,10 +42,10 @@ const errors = {
     message: {
       notOk: 'Les identifiants ne correspondent pas',
       alreadyStored: 'Utilisateur déja inscrit',
-      permissionDenied: 'The provided information is wrong',
+      permissionDenied: 'Accès refusé',
       passwordDontMatch: 'Les mots de passe ne correspondent pas',
-      passwordNotGood: 'Mot  de passe incorrect',
-      samePAsswords: "N'utiliser pas le même mot de passe",
+      passwordNotGood: 'Mot de passe incorrect',
+      samePAsswords: "N'utilisez pas le même mot de passe",
     },
   },
   cityError: {

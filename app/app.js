@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: 'https://cityzen.onrender.com',
     // origin: 'http://localhost:5173',
-    credentials: true,
+    // credentials: true,
     withCredentials: true,
   })
 );

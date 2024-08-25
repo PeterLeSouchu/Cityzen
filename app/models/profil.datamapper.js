@@ -355,7 +355,6 @@ const profilDatamapper = {
         UPDATE "user"
           SET "password" = $1
             WHERE "id" = $2
-        RETURNING *
         ;`,
         [password, id]
       );

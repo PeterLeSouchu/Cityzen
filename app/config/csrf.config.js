@@ -7,7 +7,7 @@ const {
   getTokenFromState, // The default method for retrieving a token from state.
   storeTokenInState, // The default method for storing a token in state.
   revokeToken, // Revokes/deletes a token by calling storeTokenInState(undefined)
-  csrfSynchronisedProtection, // This is the default CSRF protection middleware.
+  csrfSynchronisedProtection,
 } = csrfSync();
 
 export { generateToken, csrfSynchronisedProtection };
