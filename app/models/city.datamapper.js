@@ -1,35 +1,42 @@
-import client from "../config/pg.client.js";
+import client from '../config/pg.client.js';
 
 const cityDatamapper = {
   async getOneByName(name) {
-    const city = await client.query(`
+    const city = await client.query(
+      `
      SELECT * FROM "city" 
       WHERE "name" = $1
-    ;`, [name]);
+    ;`,
+      [name]
+    );
 
     return city.rows[0];
   },
 
   async getOneById(id) {
-    const city = await client.query(`
+    const city = await client.query(
+      `
      SELECT * FROM "city" 
       WHERE "id" = $1
-    ;`, [id]);
+    ;`,
+      [id]
+    );
 
     return city.rows[0];
   },
 
   async findCity(city) {
-    const citiesFounded = await client.query(`
+    const citiesFounded = await client.query(
+      `
       SELECT * FROM "city"
-      	JOIN "zip_code"
-		      ON "city"."id" = "zip_code"."id_city"
 	      WHERE LOWER("city"."name") LIKE $1
       LIMIT 13;
-     ;`, [city + '%']);
- 
-     return citiesFounded.rows;
-  }
+     ;`,
+      [city + '%']
+    );
+
+    return citiesFounded.rows;
+  },
 };
 
 export default cityDatamapper;

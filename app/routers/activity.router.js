@@ -19,7 +19,7 @@ activityRouter.route('/rating').get(
 
 // Route pour obtenir les activités d'une ville et d'un pays spécifiques
 activityRouter
-  .route('/:country/:city')
+  .route('/search/:city')
   .get(catchHandlerController(activityController.index));
 
 // Route pour obtenir une activité par son ID

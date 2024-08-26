@@ -8,12 +8,11 @@ const { activityError, internalServerError } = errors;
 const activityController = {
   async index(req, res, next) {
     try {
-      const { country, city } = req.params;
+      const { city } = req.params;
 
       // ? Ajouter le check si le pays existe ainsi que la ville ?
 
       const activitiesOfCity = await activityDatamapper.findActivityOfCity(
-        country,
         city
       );
 

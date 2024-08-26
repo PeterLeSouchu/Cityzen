@@ -72,16 +72,14 @@ const activityDatamapper = {
     return result.rows;
   },
 
-  async findActivityOfCity(country, city) {
+  async findActivityOfCity(city) {
     const result = await client.query(
       `
-    SELECT * FROM "country"
-      JOIN "city" ON "country".id = "city"."id_country"
+    SELECT * FROM "city"
       JOIN "activity" ON "city".id = "activity"."id_city"
-        WHERE "country".name = $1
-        AND "city".name = $2
+        WHERE "city".name = $1
     ;`,
-      [country, city]
+      [city]
     );
 
     return result.rows;
