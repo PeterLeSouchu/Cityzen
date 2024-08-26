@@ -21,7 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 app.use(
   cors({
     origin: 'https://cityzen.onrender.com',
-    // origin: 'http://localhost:5173',
+    // origin: 'http://localhost:3000',
     // credentials: true,
     withCredentials: true,
   })
