@@ -227,6 +227,7 @@ const profilController = {
         activityToCreate
       );
 
+      req.session.imageName = null;
       res.status(201).json({ data: [createdActivity] });
     },
 
