@@ -30,7 +30,7 @@ const cityDatamapper = {
       `
       SELECT * FROM "city"
 	      WHERE LOWER("city"."name") LIKE $1
-      LIMIT 13;
+      ;
      ;`,
       [city + '%']
     );

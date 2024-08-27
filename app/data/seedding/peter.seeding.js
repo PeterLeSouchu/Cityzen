@@ -15,9 +15,12 @@ async function getAllFrenchCities() {
 }
 
 async function insertCity(city) {
-  const { name } = city;
+  const { name, zip_code } = city;
   try {
-    await client.query('INSERT INTO city (name) VALUES ($1)', [name]);
+    await client.query('INSERT INTO city (name, zip_code) VALUES ($1, $2)', [
+      name,
+      zip_code,
+    ]);
     console.log(`Ville ${name} insérée`);
   } catch (error) {
     console.error("Erreur lors de l'insertion de la ville :", error);
@@ -31,6 +34,7 @@ export async function main() {
     for (const city of cities) {
       await insertCity({
         name: city.nom,
+        zip_code: city.code,
       });
     }
   } catch (error) {
