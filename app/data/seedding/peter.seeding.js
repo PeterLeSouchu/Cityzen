@@ -15,12 +15,12 @@ async function getAllFrenchCities() {
 }
 
 async function insertCity(city) {
-  const { name, zip_code } = city;
+  const { name, department_code } = city;
   try {
-    await client.query('INSERT INTO city (name, zip_code) VALUES ($1, $2)', [
-      name,
-      zip_code,
-    ]);
+    await client.query(
+      'INSERT INTO city (name, department_code) VALUES ($1, $2)',
+      [name, department_code]
+    );
     console.log(`Ville ${name} insérée`);
   } catch (error) {
     console.error("Erreur lors de l'insertion de la ville :", error);
@@ -34,7 +34,8 @@ export async function main() {
     for (const city of cities) {
       await insertCity({
         name: city.nom,
-        zip_code: city.code,
+        //Here we have the INSEE code only so we slice this sting in order to keep only 2 first numbers
+        department_code: city.code.slice(0, 2),
       });
     }
   } catch (error) {

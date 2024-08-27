@@ -17,15 +17,13 @@ CREATE TABLE "user" (
     "updated_at" TIMESTAMPTZ
 );
 
-
 CREATE TABLE "city" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "zip_code" INTEGER NOT NULL,
+    "department_code" INTEGER NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ
 );
-
 
 CREATE TABLE "activity" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -44,7 +42,6 @@ CREATE TABLE "activity" (
     "updated_at" TIMESTAMPTZ
 );
 
-
 -- Tables de liaison
 CREATE TABLE "favorite_activity" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -54,7 +51,6 @@ CREATE TABLE "favorite_activity" (
     "updated_at" TIMESTAMPTZ,
     UNIQUE (id_user, id_activity)
 );
-
 
 ALTER SEQUENCE "user_id_seq" RESTART WITH 1;
 ALTER SEQUENCE "city_id_seq" RESTART WITH 1;

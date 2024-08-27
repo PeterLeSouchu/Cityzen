@@ -29,7 +29,7 @@ const activityDatamapper = {
   async getOneBySlug(slug) {
     const result = await client.query(
       `
-    SELECT "activity".*, "city"."name" AS "city_name", "city"."zip_code" AS "zip_code" FROM "activity"
+    SELECT "activity".*, "city"."name" AS "city_name", "city"."department_code" AS "department_code" FROM "activity"
       JOIN "city"
         ON "activity"."id_city" = "city"."id"
       WHERE "activity"."slug" = $1
