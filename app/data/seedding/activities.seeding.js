@@ -55,7 +55,6 @@ async function fetchActivitiesFromCity(cityName) {
 async function formatingActivity(client, activityFromFetch, cityId, userId) {
   const formatedActivity = {
     slug: activityFromFetch.alias,
-    // url: activityFromFetch.url,
     title: activityFromFetch.name,
     description: activityFromFetch.name,
     url_image: activityFromFetch.image_url,

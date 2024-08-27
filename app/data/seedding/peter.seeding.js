@@ -3,7 +3,6 @@ import client from '../../config/pg.client.js';
 
 async function getAllFrenchCities() {
   try {
-    // Faire une requête pour récupérer une page de villes
     const response = await axios.get(
       'https://geo.api.gouv.fr/communes?fields=nom,codePostal&format=json&geometry=centre&limit=34935'
     );
@@ -25,11 +24,10 @@ async function insertCity(city) {
   }
 }
 
-// Utilisation de la fonction avec async/await
 export async function main() {
   try {
     const cities = await getAllFrenchCities();
-    console.log(cities); // Liste complète des villes de France avec leur code postal
+    console.log(cities);
     for (const city of cities) {
       await insertCity({
         name: city.nom,
@@ -42,6 +40,3 @@ export async function main() {
     );
   }
 }
-
-// Appel de la fonction main
-// main();

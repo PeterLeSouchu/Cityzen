@@ -56,12 +56,7 @@ CREATE TABLE "favorite_activity" (
 
 
 ALTER SEQUENCE "user_id_seq" RESTART WITH 1;
-
 ALTER SEQUENCE "city_id_seq" RESTART WITH 1;
-
 ALTER SEQUENCE "activity_id_seq" RESTART WITH 1;
-
 ALTER SEQUENCE "favorite_activity_id_seq" RESTART WITH 1;
-
-
 COMMIT;
