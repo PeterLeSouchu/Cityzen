@@ -3,7 +3,7 @@ async function fetchActivitiesFromCity(cityName) {
   const activities = await fetch(API_ACTIVITY_URL, {
     headers: {
       Authorization:
-        'Bearer 51kfSDpxvKMra_GlVWtEMDscBY2qHIwcqNig3ngxjreRomPBjdcz9JtGPvfNi-x0hR-oyEFQS-olKG1NPdig9d030OXcGUanlagMTC8rQWAVkqM6CxHMKA3vr7a5ZnYx',
+        'Bearer 683Q6sgnhSR2bcRl9Z563XK809bK1uaPOQQ_yQW62mbv4o4dSIb2_SYSnu9EYJsXx0r9SynaDXU1u105xaPt2s0lyqD-bZYNM1moyV9JZiQaGwgpd5bsn8i1XCFFZ3Yx',
       'Content-Type': 'application/json',
     },
   })
