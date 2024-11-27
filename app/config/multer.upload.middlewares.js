@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../../public/images'));
   },
-  
+
   filename: (req, file, cb) => {
     const filename = Date.now() + '_' + file.originalname;
     req.session.imageName = filename;
@@ -27,14 +27,13 @@ function fileFilter(req, file, cb) {
   } else {
     cb(null, false);
   }
-};
-
+}
 
 const upload = multer({
   storage: storage,
   limits: {
     files: 1,
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 5 * 1024 * 1024, // 2MB
   },
   fileFilter,
 });
