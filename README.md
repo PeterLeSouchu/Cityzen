@@ -65,7 +65,7 @@
 - Script de seeding pour stocker toutes les villes de France avec leur code postal avec l'API Géo, + ajout d'activités provenant de l'API Yelp pour "fournir" l'application car c'est un projet portfolio.
 
 ### 🧪 8. Tests unitaires
-- Mise en place de tests unitairse sur les fonctions de seeding.
+- Mise en place de tests unitaires sur les fonctions de seeding.
 
 ### 💻 9. Technologies utilisées
 
