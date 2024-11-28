@@ -65,7 +65,7 @@
 - Script de seeding pour stocker toutes les villes de France avec leur code postal avec l'API Géo, + ajout d'activités provenant de l'API Yelp pour "fournir" l'application car c'est un projet portfolio.
 
 ### 🧪 8. Tests unitaires
-- Mise en place de tests unitaires sur les fonctions de seeding d'activités avec l'API Yelp (si les tests ne fonctionnent pas, il est fort possible que la clé de l'API Yelp n'est plus valide, il faut alors se créer un compte Yelp et générer une clé que vous insérerez dans les headers de la requête, plus précisement dans 'Authorization', précédé par 'Bearer').
+- Mise en place de tests unitaires avec JEST sur les fonctions de seeding d'activités avec l'API Yelp (si les tests ne fonctionnent pas, il est fort possible que la clé de l'API Yelp n'est plus valide, il faut alors se créer un compte Yelp et générer une clé que vous insérerez dans les headers de la requête, plus précisement dans 'Authorization', précédé par 'Bearer').
 
 ### 💻 9. Technologies utilisées
 
@@ -82,6 +82,7 @@
 - [API Yelp](https://docs.developer.yelp.com/docs/fusion-intro) pour le seeding des activités
 - [API Géo](https://geo.api.gouv.fr/) pour le seeding des villes + code postal
 - [API Géocoding Google](https://geo.api.gouv.fr/) pour avoir la longitude et latitude
+- [Jest](https://jestjs.io/fr/) pour les tests unitaires
 
 
 ### ⬇️ 10. Points à ajouter ou améliorer :
