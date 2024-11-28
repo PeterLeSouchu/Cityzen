@@ -100,10 +100,11 @@
 🚨: Cityzen est un projet réalisé en groupe ( mais aussi mon tout premier projet ) durant mon bootcamp chez O'Clock. Le projet n'est pas encore totalement complet, je pense notamment à la gestion d'erreurs, à l'upload d'image ou encore l'utilisation de express-session au lieu du JWT. Cependant ce dernier m'a permis de découvrir beaucoup de technologies et de notions, et ce en grande partie grâce à l'équipe du projet.
 
 Collaborateurs : 
-[Ryad](https://github.com/RyadC)
-[Emmanuel](https://github.com/CHARLESEmmanuel-25)
-[Ziad](https://github.com/ziadelidrissi)
-[Wilson](https://github.com/SemedoWilson)
+
+- [Ryad](https://github.com/RyadC)
+- [Emmanuel](https://github.com/CHARLESEmmanuel-25)
+- [Ziad](https://github.com/ziadelidrissi)
+- [Wilson](https://github.com/SemedoWilson)
 
 
 
