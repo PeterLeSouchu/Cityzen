@@ -51,7 +51,7 @@
 - Utilisation de multer pour lire les données au format multipart/form-data et vérifie la validité de l'image selon une taille maximale et certains types de fichier.
 - Stockage des images sur le serveur avec génération unique d'url. 
 
-### 🗺️ 5. API Géocoding Gooble
+### 🗺️ 5. API Géocoding Google
 - Utilisation de cette API pour avoir la latitude et longitude en fonction d'un adresse et d'une ville données par l'utilisateur.
 - Renvoie de la longitude + latitude pour l'API Leaflet du front.
 
