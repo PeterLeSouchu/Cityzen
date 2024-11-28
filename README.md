@@ -17,7 +17,7 @@
 - Modifier son mot de passe
 - Supprimer son compte
 
-**Ce repo contient le code back-end de Develup et est dédié à la partie technique de ses fonctionnalités, si vous souhaitez voir la partie technique du front-end [cliquez-ici](https://github.com/PeterLeSouchu/Cityzen-front)**
+**Ce repo contient le code back-end de Cityzen et est dédié à la partie technique de ses fonctionnalités, si vous souhaitez voir la partie technique du front-end [cliquez-ici](https://github.com/PeterLeSouchu/Cityzen-front)**
 
 ## 🛠️ Fonctionnement du back-end :
 
