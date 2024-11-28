@@ -21,7 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/images')));
 app.use(
   cors({
     // origin: 'https://cityzen.up.railway.app',
-    // origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173',
     credentials: true,
     withCredentials: true,
   })
@@ -60,8 +60,8 @@ apiDocumentation(app);
 // Router
 app.use(router);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
+// });
 
 export default app;

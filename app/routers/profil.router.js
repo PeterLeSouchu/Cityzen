@@ -19,7 +19,7 @@ import upload from '../config/multer.upload.middlewares.js';
 import uploadErrorHandler from '../middlewares/upload-files.middleware.js';
 import setImageInBody from '../utils/set-image.js';
 import profilPasswordUpdatePatchSchema from '../schema-validations/profil/profil-passwordUpdate-patch.schema.js';
-import checkFile from '../middlewares/check-file.middleware.js';
+import { cloudinaryMiddleware } from '../middlewares/check-file.middleware.js';
 import { csrfSynchronisedProtection } from '../config/csrf.config.js';
 
 const profilRouter = Router();
@@ -357,11 +357,7 @@ profilRouter
     csrfSynchronisedProtection,
     upload.single('image'),
     uploadErrorHandler,
-    checkFile,
-    (req, res, next) => {
-      console.log('req.body', req.body, req.file, req.session);
-      next();
-    },
+    cloudinaryMiddleware,
     validationSchema(profilActivityPostSchema, 'body'),
     catchHandlerController(profilController.activities.store)
   );
@@ -427,7 +423,7 @@ profilRouter
   .patch(
     csrfSynchronisedProtection,
     upload.single('image'),
-    checkFile,
+    cloudinaryMiddleware,
     setImageInBody,
     validationSchema(
       updateSchema(paramsSchema, profilActivityPatchSchema),
