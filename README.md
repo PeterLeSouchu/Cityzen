@@ -2,6 +2,8 @@
 
 **Cityzen est une application web réalisé en groupe dans le cadre du projet de fin de formation de l'école O'clock. Cette dernière a été conçue pour informer sur les activités locales. Son fonctionnement est simple : l’utilisateur saisit le nom d’une ville, et l’application lui propose une liste des activités disponibles dans cette localité, accompagnée d’une carte interactive pour une navigation facile.**
 
+L'application est accessible à l'adresse suivante: https://cityzen.up.railway.app/
+
 ![Screenshot de l'application](/assets/screenshot-home.png)
 
 
