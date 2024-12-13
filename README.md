@@ -1,6 +1,6 @@
 # 🌟 [Projet Cityzen](https://cityzen.up.railway.app)
 
-**Cityzen est une application web réalisé en groupe dans le cadre du projet de fin de formation de l'école O'clock. Cette dernière a été conçue pour informer sur les activités locales. Son fonctionnement est simple : l’utilisateur saisit le nom d’une ville, et l’application lui propose une liste des activités disponibles dans cette localité, accompagnée d’une carte interactive pour une navigation facile.**
+**Cityzen est une application web réalisée en groupe dans le cadre du projet de fin de formation à l'école O'clock. Cette dernière a été conçue pour informer sur les activités locales. Son fonctionnement est simple : l’utilisateur saisit le nom d’une ville, et l’application lui propose une liste des activités disponibles dans cette localité, accompagnée d’une carte interactive pour une navigation facile.**
 
 L'application est accessible à l'adresse suivante: https://cityzen.up.railway.app/
 
@@ -100,7 +100,7 @@ L'application est accessible à l'adresse suivante: https://cityzen.up.railway.a
 - Ré-organiser et nettoyer le code pour une meilleure lisibilité.
 
 
-🚨: Cityzen est un projet réalisé en groupe ( mais aussi mon tout premier projet fullstack) durant mon bootcamp chez O'Clock. Le projet n'est pas encore totalement complet, je pense notamment à la gestion d'erreurs, à l'upload d'image ou encore l'utilisation de express-session au lieu du JWT. Cependant ce dernier m'a permis de découvrir beaucoup de technologies et de notions, et ce en grande partie grâce à l'équipe du projet.
+🚨: Cityzen est un projet réalisé en groupe ( mais aussi mon tout premier (gros) projet fullstack) durant mon bootcamp chez O'Clock. Le projet n'est pas encore totalement complet, je pense notamment à la gestion d'erreurs, à l'upload d'image ou encore l'utilisation de express-session au lieu du JWT. Cependant ce dernier m'a permis de découvrir beaucoup de technologies et de notions, et ce en grande partie grâce à l'équipe du projet.
 
 Collaborateurs : 
 
